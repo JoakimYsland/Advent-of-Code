@@ -3,7 +3,6 @@
 
 input_file = open('input.txt', 'r').readlines()
 gamma_rate_bits = ''
-
 bit_balances = {}
 
 for line in input_file:
