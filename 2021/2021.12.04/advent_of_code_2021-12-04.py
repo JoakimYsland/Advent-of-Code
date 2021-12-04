@@ -37,8 +37,7 @@ def run():
 	input_file = open('input.txt', 'r').readlines()
 	number_pool = [int(n.strip()) for n in input_file[0].split(',')]
 	boards = [[]]
-
-	print("number_pool", number_pool)
+	drawn_numbers = []
 
 	for line in input_file[2:]: 
 		numbers = [int(n.strip()) for n in line.split(' ') if n.strip().isdigit()]
@@ -48,11 +47,6 @@ def run():
 			continue
 
 		boards[-1].append(numbers)
-
-	for i, board in enumerate(boards):
-		print("board", i, board)
-
-	drawn_numbers = []
 
 	for i in range(0, len(number_pool), 1):
 		drawn_numbers.append(number_pool[i])
