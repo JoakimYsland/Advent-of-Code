@@ -41,6 +41,4 @@ print("oxygen_generator_rating:", oxygen_generator_rating)
 print("co2_scrubber_rating:", co2_scrubber_rating)
 print("life_support_rating:", life_support_rating)
 
-# oxygen_generator_rating: 825
-# co2_scrubber_rating: 3375
-# life_support_rating: 2784375
+# 825 * 3375 = 2784375
