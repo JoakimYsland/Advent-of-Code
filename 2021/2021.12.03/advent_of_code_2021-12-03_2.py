@@ -20,10 +20,10 @@ def get_rating(lines, checker_func, bits_per_line):
 		for line in lines.values(): 
 			bit_balance += 1 if line[bit] == '1' else -1
 
-		for key in list(lines.keys()):
-			is_match = checker_func(bit_balance, lines[key][bit])
+		for i in list(lines.keys()):
+			is_match = checker_func(bit_balance, lines[i][bit])
 			if not is_match and len(lines) > 1:
-				del lines[key]
+				del lines[i]
 
 	rating_string = ''.join(list(lines.values())[0])
 	return int(rating_string, 2)
