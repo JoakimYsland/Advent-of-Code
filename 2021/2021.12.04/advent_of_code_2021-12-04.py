@@ -13,7 +13,6 @@ def check_for_bingo(board, drawn_numbers):
 			return True
 		return False
 
-	# for board in boards: 
 	for row in board: 
 		if line_is_bingo(row): 
 			return True
@@ -22,14 +21,6 @@ def check_for_bingo(board, drawn_numbers):
 		if line_is_bingo(column): 
 			return True
 	return False
-
-def get_sum_of_unmarked_numbers(board, drawn_numbers):
-	sum = 0
-	for row in board: 
-		for n in row:
-			if not n in drawn_numbers:
-				sum += n
-	return sum
 
 # --------------------------------------------------------------------------------
 
@@ -54,7 +45,7 @@ def run():
 		for board in boards: 
 			is_bingo = check_for_bingo(board, drawn_numbers)
 			if (is_bingo): 
-				sum_of_unmarked_numbers = get_sum_of_unmarked_numbers(board, drawn_numbers)
+				sum_of_unmarked_numbers = sum(n for row in board for n in row if not n in drawn_numbers)
 				print("Answer", sum_of_unmarked_numbers * drawn_numbers[-1])
 				return
 
