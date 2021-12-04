@@ -36,9 +36,8 @@ bits_per_line = len(lines[0])
 oxygen_generator_rating = get_rating(lines, check_oxygen_match, bits_per_line)
 co2_scrubber_rating 	= get_rating(lines, check_co2_match, bits_per_line)
 
-life_support_rating = oxygen_generator_rating * co2_scrubber_rating
 print("oxygen_generator_rating:", oxygen_generator_rating)
 print("co2_scrubber_rating:", co2_scrubber_rating)
-print("life_support_rating:", life_support_rating)
+print("life_support_rating:", oxygen_generator_rating * co2_scrubber_rating)
 
 # 825 * 3375 = 2784375
