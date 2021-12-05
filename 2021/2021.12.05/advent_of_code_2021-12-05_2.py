@@ -3,7 +3,7 @@
 
 import re # Split string with multiple delimiters
 
-def get_overlap_matrix(vent_lines):
+def get_vent_line_overlaps(vent_lines):
 
 	def plot(x, y):
 		c = "{x},{y}".format(x=x, y=y)
@@ -35,7 +35,7 @@ def run():
 		vent_lines.append(vent_line)
 	
 	# non_diagional_vent_lines = [v for v in vent_lines if v[0] == v[2] or v[1] == v[3]]
-	overlap_matrix = get_overlap_matrix(vent_lines)
+	overlap_matrix = get_vent_line_overlaps(vent_lines)
 	overlaps = len([o for o in overlap_matrix.values() if o > 1])
 	print("overlaps:", overlaps)
 
