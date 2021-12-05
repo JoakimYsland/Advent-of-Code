@@ -12,7 +12,7 @@ def get_overlap_matrix(vent_lines):
 	def traverse(p, p2):
 		if 	 (p < p2): return p+1
 		elif (p > p2): return p-1
-		return p
+		else: return p
 
 	matrix = {}
 	for vl in vent_lines:
@@ -21,7 +21,6 @@ def get_overlap_matrix(vent_lines):
 			vl[0] = traverse(vl[0], vl[2])
 			vl[1] = traverse(vl[1], vl[3])
 			plot(vl[0], vl[1])
-
 	return matrix
 
 # --------------------------------------------------------------------------------
