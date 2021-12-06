@@ -5,8 +5,7 @@ from collections import deque
 
 # --------------------------------------------------------------------------------
 
-# Test: 	26984457539
-# Answer: 	1622533344325
+# Test / Real – 26984457539 / 1622533344325
 
 def run(run_title, input_file):
 	input_fish = [int(f) for f in input_file[0].split(',')]
