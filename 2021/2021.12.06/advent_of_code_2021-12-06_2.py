@@ -17,13 +17,9 @@ def run(run_title, input_file):
 	
 	for day in range(0, 256):
 		
-		hatchings = fish_data[0]
-		fish_data[0] = 0
-		
+		hatchings = fish_data[0]	
 		fish_data.rotate(-1)
-
 		fish_data[6] += hatchings
-		fish_data[-1] += hatchings
 
 	print(run_title, "Fish Count:", sum(fish_data))
 
