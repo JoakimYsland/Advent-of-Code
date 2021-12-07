@@ -17,18 +17,18 @@ def run(run_title, input_file):
 	crab_submarines = [int(f) for f in input_file[0].split(',')]
 
 	crab_data = {}
-	for pos in crab_submarines: 
-		crab_data[pos] = crab_data[pos] + 1 if pos in crab_data else 1
-	
+	for p in crab_submarines: 
+		crab_data[p] = crab_data[p] + 1 if p in crab_data else 1
+
 	pos_min, pos_max = min(crab_submarines), max(crab_submarines)
 	best_fuel = evaluate_position(pos_min, crab_data)
 	best_position = pos_min
 
-	for pos in range(pos_min + 1, pos_max): 
-		fuel = evaluate_position(pos, crab_data)
+	for eval_pos in range(pos_min, pos_max): 
+		fuel = evaluate_position(eval_pos, crab_data)
 		if (fuel < best_fuel):
 			best_fuel = fuel
-			best_position = pos
+			best_position = eval_pos
 
 	print(run_title, "best_fuel:", best_fuel)
 	print(run_title, "best_position:", best_position)
