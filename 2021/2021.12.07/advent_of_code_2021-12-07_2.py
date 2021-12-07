@@ -20,17 +20,18 @@ def run(run_title, input_file):
 	for pos in crab_submarines: 
 		crab_data[pos] = crab_data[pos] + 1 if pos in crab_data else 1
 	
-	fuel_consumption = -1
-	position = -1
+	pos_min, pos_max = min(crab_submarines), max(crab_submarines)
+	best_fuel = evaluate_position(pos_min, crab_data)
+	best_position = pos_min
 
-	for pos in range(min(crab_submarines), max(crab_submarines)): 
+	for pos in range(pos_min + 1, pos_max): 
 		fuel = evaluate_position(pos, crab_data)
-		if (fuel_consumption == -1 or fuel < fuel_consumption):
-			fuel_consumption = fuel
-			position = pos
+		if (fuel < best_fuel):
+			best_fuel = fuel
+			best_position = pos
 
-	print(run_title, "fuel_consumption:", fuel_consumption)
-	print(run_title, "position:", position)
+	print(run_title, "best_fuel:", best_fuel)
+	print(run_title, "best_position:", best_position)
 
 run("[Test]", open('input_test.txt', 'r').readlines())
 run("[Real]", open('input.txt', 'r').readlines())
