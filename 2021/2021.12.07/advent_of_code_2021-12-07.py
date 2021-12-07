@@ -5,7 +5,7 @@ import statistics
 
 # --------------------------------------------------------------------------------
 
-# Test / Real – 37 / 326132
+# Test / Real – 37(2) / 326132
 
 def run(run_title, input_file):
 	crab_submarines = [int(f) for f in input_file[0].split(',')]
