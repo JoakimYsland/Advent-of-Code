@@ -12,10 +12,10 @@ def run(run_title, input_file):
 	least_fuel_consumption = 0
 
 	crab_submarines.sort()
-	media_position = int(statistics.median(crab_submarines))
+	median_position = int(statistics.median(crab_submarines))
 
 	for sub_pos in crab_submarines: 
-		least_fuel_consumption += abs(sub_pos - media_position)
+		least_fuel_consumption += abs(sub_pos - median_position)
 
 	print(run_title, "least_fuel_consumption:", least_fuel_consumption)
 
