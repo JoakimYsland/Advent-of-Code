@@ -31,7 +31,6 @@ def run(run_title, input_file):
 		height_map.append([int(c) for c in line.strip()])
 
 	risk_level = 0
-	low_points = 0
 	map_size = Vec2(len(height_map[0]), len(height_map))
 
 	for y, row in enumerate(height_map): 
@@ -39,9 +38,7 @@ def run(run_title, input_file):
 			adjacent = get_adjacent(height_map, x, y, map_size)
 			if is_low_point(cell, adjacent):
 				risk_level += cell + 1
-				low_points += 1
 
-	print(run_title, "low_points:", low_points)
 	print(run_title, "risk_level:", risk_level)
 
 run("[Test]", open('input_test.txt', 'r').readlines())
