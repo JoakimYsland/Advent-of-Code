@@ -5,18 +5,7 @@ import re # Split string with multiple delimiters
 
 # --------------------------------------------------------------------------------
 
-# Test / Real – 61229 / ???
-
-# 0: 123-456 = 6
-# 1: --3--5- = 2 *
-# 2: 1-345-7 = 5
-# 3: 1-34-67 = 5
-# 4: -234-6- = 4 *
-# 5: 12-4-67 = 5
-# 6: 12-4567 = 6
-# 7: 1-3--6- = 3 *
-# 8: 1234567 = 7 *
-# 9: 1234-67 = 6
+# Test / Real – 61229 / 1091609
 
 def subtract_segments(subtraction, string):
 	return re.sub('[' + subtraction + ']', '', string)
@@ -27,6 +16,8 @@ def get_shared_segments(patterns):
 	return ''.join(set(shared))
 
 def run(run_title, input_file):
+
+	total = 0
 
 	for line in input_file:
 		solution = [''] * 7
@@ -66,24 +57,25 @@ def run(run_title, input_file):
 
 		solution[2] = subtract_segments(''.join(solution), 'abcdefg')
 
-		mapping = [
-			''.join(sorted(s for i, s in enumerate(solution) if i in [0,1,2,  4,5,6])), 
-			''.join(sorted(s for i, s in enumerate(solution) if i in [    2,    5  ])), 
-			''.join(sorted(s for i, s in enumerate(solution) if i in [0,  2,3,4,  6])), 
-			''.join(sorted(s for i, s in enumerate(solution) if i in [0,  2,3,  5,6])), 
-			''.join(sorted(s for i, s in enumerate(solution) if i in [1,  2,3,  5  ])), 
-			''.join(sorted(s for i, s in enumerate(solution) if i in [0,1,  3,  5,6])), 
-			''.join(sorted(s for i, s in enumerate(solution) if i in [0,1,  3,4,5,6])), 
-			''.join(sorted(s for i, s in enumerate(solution) if i in [0,  2,    5  ])), 
-			''.join(sorted(s for i, s in enumerate(solution) if i in [0,1,2,3,4,5,6])), 
-			''.join(sorted(s for i, s in enumerate(solution) if i in [0,1,2,3,  5,6])), 
-		]
+		mapping = {
+			''.join(sorted(s for i, s in enumerate(solution) if i in [0,1,2,  4,5,6])): '0', 
+			''.join(sorted(s for i, s in enumerate(solution) if i in [    2,    5  ])): '1', 
+			''.join(sorted(s for i, s in enumerate(solution) if i in [0,  2,3,4,  6])): '2', 
+			''.join(sorted(s for i, s in enumerate(solution) if i in [0,  2,3,  5,6])): '3', 
+			''.join(sorted(s for i, s in enumerate(solution) if i in [1,  2,3,  5  ])): '4', 
+			''.join(sorted(s for i, s in enumerate(solution) if i in [0,1,  3,  5,6])): '5', 
+			''.join(sorted(s for i, s in enumerate(solution) if i in [0,1,  3,4,5,6])): '6', 
+			''.join(sorted(s for i, s in enumerate(solution) if i in [0,  2,    5  ])): '7', 
+			''.join(sorted(s for i, s in enumerate(solution) if i in [0,1,2,3,4,5,6])): '8', 
+			''.join(sorted(s for i, s in enumerate(solution) if i in [0,1,2,3,  5,6])): '9', 
+		}
 
-		print(signal_patterns, output_value)
-		print(solution)
-		print(mapping)
+		value = ''
+		for digit in output_value:
+			value += mapping[''.join(sorted(digit))]
+		total += int(value)
 
-	# print(run_title, "unique_segment_digits:", unique_segment_digits)
+	print(run_title, "total:", total)
 
 run("[Test]", open('input_test.txt', 'r').readlines())
-# run("[Real]", open('input.txt', 'r').readlines())
+run("[Real]", open('input.txt', 'r').readlines())
