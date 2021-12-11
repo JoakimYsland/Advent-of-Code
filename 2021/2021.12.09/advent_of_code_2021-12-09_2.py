@@ -23,11 +23,11 @@ def run(run_title, input_file):
 				return False
 		return True
 
-	def get_basin(basin, cell_pos):
-		pos = ("{0},{1}").format(cell_pos.x, cell_pos.y)
+	def get_basin(basin, x, y):
+		pos = ("{0},{1}").format(x, y)
 		if not pos in basin:
 			basin.append(pos)
-		adjacent = get_adjacent(cell_pos.x, cell_pos.y)
+		adjacent = get_adjacent(x, y)
 		adjacent_spread = []
 		for c in adjacent.values():
 			if (c != None):
@@ -36,7 +36,7 @@ def run(run_title, input_file):
 				if not pos in basin and height < 9:
 					adjacent_spread.append(c)
 		for c in adjacent_spread: 
-			get_basin(basin, Vec2(c.x, c.y))
+			get_basin(basin, c.x, c.y)
 
 		return basin
 
@@ -57,7 +57,7 @@ def run(run_title, input_file):
 			adjacent = get_adjacent(x, y)
 			if is_low_point(cell_height, adjacent):
 				risk_level += cell_height + 1
-				basin = get_basin([], Vec2(x, y))
+				basin = get_basin([], x, y)
 				basins.append(basin)
 
 	basins = sorted(basins, key=len, reverse=True)
