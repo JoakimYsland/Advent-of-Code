@@ -21,7 +21,6 @@ def run(run_title, input_file):
 	unique_segment_digits = 0
 
 	for line in input_file:
-		mapping = ['abcdefg'] * 7
 		entry = line.split(' | ')
 		signal_patterns = entry[0].split(' ')
 		output_value = entry[1].strip().split(' ')
