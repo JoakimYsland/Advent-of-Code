@@ -1,5 +1,5 @@
 
-# https://adventofcode.com/2021/day/8
+# https://adventofcode.com/2021/day/9
 
 # import re # Split string with multiple delimiters
 from collections import namedtuple
