@@ -24,19 +24,20 @@ def run(run_title, input_file):
 		return True
 
 	def get_basin(basin, x, y):
-		pos = ("{0},{1}").format(x, y)
-		if not pos in basin:
-			basin.append(pos)
+		coords = ("{0},{1}").format(x, y)
+		if not coords in basin:
+			basin.append(coords)
+
 		adjacent = get_adjacent(x, y)
 		adjacent_spread = []
-		for c in adjacent.values():
-			if (c != None):
-				pos = ("{0},{1}").format(c.x, c.y)
-				height = height_map[c.y][c.x]
-				if not pos in basin and height < 9:
-					adjacent_spread.append(c)
-		for c in adjacent_spread: 
-			get_basin(basin, c.x, c.y)
+		for cell in (c for c in adjacent.values() if c != None): 
+			coords = ("{0},{1}").format(cell.x, cell.y)
+			height = height_map[cell.y][cell.x]
+			if not coords in basin and height < 9:
+				adjacent_spread.append(cell)
+
+		for cell in adjacent_spread: 
+			get_basin(basin, cell.x, cell.y)
 
 		return basin
 
