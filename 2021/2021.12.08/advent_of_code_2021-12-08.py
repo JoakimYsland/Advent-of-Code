@@ -20,9 +20,9 @@
 
 def run(run_title, input_file):
 
-	# Given n number of segments, which segment
-	# could the potential digits not fill
-	asd = [
+	# Given <index> number of segments in the digit, 
+	# which segments can never be in the potential digit(s)
+	digit_mask = [
 		[0,1,2,3,4,5,6], 	# 0
 		[0,1,2,3,4,5,6], 	# 1
 		[0,1,3,4,6], 		# 2
@@ -40,7 +40,7 @@ def run(run_title, input_file):
 		output_value = entry[1].strip().split(' ')
 		
 		for pattern in signal_patterns:
-			for i in asd[len(pattern)]:
+			for i in digit_mask[len(pattern)]:
 				for char in pattern: 
 					mapping[i] = mapping[i].replace(char, '')
 		
