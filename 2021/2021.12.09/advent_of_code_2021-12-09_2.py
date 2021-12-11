@@ -17,13 +17,13 @@ def run(run_title, input_file):
 		if (y < map_size.y - 1):  	adjacent['down'] 	= Vec2(x, y+1)
 		return adjacent
 
-	def is_low_point(cell, adjacent, height_map): 
+	def is_low_point(cell_height, adjacent): 
 		for c in adjacent.values():
-			if c != None and height_map[c.y][c.x] <= cell: 
+			if c != None and height_map[c.y][c.x] <= cell_height: 
 				return False
 		return True
 
-	def get_basin(basin, cell_pos, height_map):
+	def get_basin(basin, cell_pos):
 		pos = ("{0},{1}").format(cell_pos.x, cell_pos.y)
 		if not pos in basin:
 			basin.append(pos)
@@ -36,7 +36,7 @@ def run(run_title, input_file):
 				if not pos in basin and height < 9:
 					adjacent_spread.append(c)
 		for c in adjacent_spread: 
-			get_basin(basin, Vec2(c.x, c.y), height_map)
+			get_basin(basin, Vec2(c.x, c.y))
 
 		return basin
 
@@ -53,11 +53,11 @@ def run(run_title, input_file):
 	map_size = Vec2(len(height_map[0]), len(height_map))
 
 	for y, row in enumerate(height_map): 
-		for x, cell in enumerate(row): 
+		for x, cell_height in enumerate(row): 
 			adjacent = get_adjacent(x, y)
-			if is_low_point(cell, adjacent, height_map):
-				risk_level += cell + 1
-				basin = get_basin([], Vec2(x, y), height_map)
+			if is_low_point(cell_height, adjacent):
+				risk_level += cell_height + 1
+				basin = get_basin([], Vec2(x, y))
 				basins.append(basin)
 
 	basins = sorted(basins, key=len, reverse=True)
