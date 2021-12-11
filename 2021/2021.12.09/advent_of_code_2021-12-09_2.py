@@ -20,11 +20,24 @@ def is_low_point(cell, adjacent, height_map):
 			return False
 	return True
 
-# def get_basin(basin, cell, height_map, map_size):
-# 	if not cell in basin:
-# 		basin.append(cell)
-# 	adjacent = get_adjacent(height_map, x, y, map_size)
-# 	spread = [c for c in ]
+def get_basin(basin, cell_pos, height_map, map_size):
+	pos = ("{0},{1}").format(cell_pos.x, cell_pos.y)
+	if not pos in basin:
+		basin.append(pos)
+		print("append", pos)
+	adjacent = get_adjacent(cell_pos.x, cell_pos.y, map_size)
+	adjacent_spread = []
+	for c in adjacent.values():
+		if (c != None):
+			pos = ("{0},{1}").format(c.x, c.y)
+			height = height_map[c.y][c.x]
+			if not pos in basin and height < 9:
+				adjacent_spread.append(c)
+	if len(adjacent_spread) == 0:
+		return basin
+	else:
+		for c in adjacent_spread: 
+			return get_basin(basin, Vec2(c.x, c.y), height_map, map_size)
 
 # --------------------------------------------------------------------------------
 
@@ -45,11 +58,10 @@ def run(run_title, input_file):
 			adjacent = get_adjacent(x, y, map_size)
 			if is_low_point(cell, adjacent, height_map):
 				risk_level += cell + 1
-				# basin = []
-				# get_basin(basin, Vec2(x, y), height_map, map_size)
-				# print("asd")
+				basin = get_basin([], Vec2(x, y), height_map, map_size)
+				print(len (basin))
 
 	print(run_title, "risk_level:", risk_level)
 
 run("[Test]", open('input_test.txt', 'r').readlines())
-run("[Real]", open('input.txt', 'r').readlines())
+# run("[Real]", open('input.txt', 'r').readlines())
