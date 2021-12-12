@@ -25,11 +25,12 @@ def run(run_title, input_file):
 
 	# --------------------------------------------------------------------------------
 
-	# Test / Real – 1656 / ???
+	# Test / Real – 195 / 268
 
-	steps = 100
+	steps = 300
 	total_flashes = 0
 	octopi = []
+	synchronized_flash_step = 0
 
 	for line in input_file: 
 		octopi.append([int(o) for o in line.strip()])
@@ -60,9 +61,11 @@ def run(run_title, input_file):
 		for o in flashing_octopi:
 			octopi[o.x][o.y] = 0
 
-		total_flashes += len(flashing_octopi)
-	
-	print(run_title, "total_flashes:", total_flashes)
+		if (len(flashing_octopi) == grid_size.x * grid_size.y):
+			synchronized_flash_step = step + 1
+			break
+
+	print(run_title, "synchronized_flash_step:", synchronized_flash_step)
 
 run("[Test]", open('input_test.txt', 'r').readlines())
 run("[Real]", open('input.txt', 'r').readlines())
