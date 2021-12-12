@@ -1,49 +1,64 @@
 
 # https://adventofcode.com/2021/day/10
 
-import re # Split string with multiple delimiters
-import math
+import statistics
 from collections import deque
 from collections import namedtuple
 
-# Vec2 = namedtuple("Vec2", ['x', 'y'])
+BracketScore = namedtuple("BracketScore", ['repair', 'error'])
 
 def run(run_title, input_file):
 
-	def is_matching_bracket(open, close): 
-		if open == '(' and close == ')': return True
-		if open == '[' and close == ']': return True
-		if open == '{' and close == '}': return True
-		if open == '<' and close == '>': return True
-		return False
-
-	def get_syntax_error_score(illegal_bracket): 
-		if (illegal_bracket == ')'): return 3
-		if (illegal_bracket == ']'): return 57
-		if (illegal_bracket == '}'): return 1197
-		if (illegal_bracket == '>'): return 25137
-		return 0
-
+	def get_repair_score(repairs): 
+		repair_score = 0
+		for bracket in repairs:
+			repair_score *= 5
+			repair_score += bracket_score[bracket].repair
+		return repair_score
+	
 	# --------------------------------------------------------------------------------
 
-	# Test / Real – 26397 / 299793
+	# Test / Real – 288957 / 3654963618
 
 	opening_brackets = ['(', '[', '{', '<']
+	corresponding_brackets = {
+		'(':')', ')':'(', 
+		'[':']', ']':'[', 
+		'{':'}', '}':'{', 
+		'<':'>', '>':'<', 
+		}
+	bracket_score = {
+		')': BracketScore(1, 3), 
+		']': BracketScore(2, 57), 
+		'}': BracketScore(3, 1197), 
+		'>': BracketScore(4, 25137), 
+	}
 	syntax_error_score = 0
+	repair_scores = []
 
 	for line in input_file: 
 		chunks = deque()
-		for char in [c for c in line]:
-			if char in opening_brackets: 
-				chunks.append(char)
+		is_corrupted = False
+		for bracket in [b for b in line.strip()]:
+			if bracket in opening_brackets: 
+				chunks.append(bracket)
 			else: 
-				if is_matching_bracket(chunks[-1], char):
+				if bracket == corresponding_brackets[chunks[-1]]:
 					chunks.pop()
 				else: 
-					syntax_error_score += get_syntax_error_score(char)
+					syntax_error_score += bracket_score[bracket].error
+					is_corrupted = True
 					break
+		if not is_corrupted: 
+			repairs = []
+			chunks.reverse()
+			for bracket in chunks:
+				repairs.append(corresponding_brackets[bracket])
+			repair_score = get_repair_score(repairs)
+			repair_scores.append(repair_score)
 
 	print(run_title, "syntax_error_score:", syntax_error_score)
+	print(run_title, "repair_score:", statistics.median(repair_scores))
 
 run("[Test]", open('input_test.txt', 'r').readlines())
 run("[Real]", open('input.txt', 'r').readlines())
