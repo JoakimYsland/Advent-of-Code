@@ -65,4 +65,4 @@ def run(run_title, input_file):
 	print(run_title, "total_flashes:", total_flashes)
 
 run("[Test]", open('input_test.txt', 'r').readlines())
-# run("[Real]", open('input.txt', 'r').readlines())
+run("[Real]", open('input.txt', 'r').readlines())
