@@ -23,17 +23,12 @@ def run(run_title, input_file):
 			if x < grid_size.x - 1: adjacent.append(Vec2(x + 1, y + 1)) # SE
 		return adjacent
 
-	def regen_energy(e):
-		for x, _ in enumerate(octopi): 
-			for y, _ in enumerate(octopi[x]): 
-				octopi[x][y] += e
-
 	# --------------------------------------------------------------------------------
 
 	# Test / Real – 1656 / ???
 
 	steps = 100
-	flashes = 0
+	total_flashes = 0
 	octopi = []
 
 	for line in input_file: 
@@ -44,7 +39,9 @@ def run(run_title, input_file):
 
 	for step in range(0, steps):
 
-		regen_energy(1)
+		for x, _ in enumerate(octopi): 
+			for y, _ in enumerate(octopi[x]): 
+				octopi[x][y] += 1
 
 		new_flash = True
 		flashing_octopi = []
@@ -52,20 +49,20 @@ def run(run_title, input_file):
 			new_flash = False
 			for x, _ in enumerate(octopi): 
 				for y, _ in enumerate(octopi[x]): 
-					coords = Vec2(x,y)
-					if octopi[x][y] > 9 and not coords in flashing_octopi:
-						flashing_octopi.append(coords)
+					pos_vec = Vec2(x,y)
+					if octopi[x][y] > 9 and not pos_vec in flashing_octopi:
+						flashing_octopi.append(pos_vec)
 						adjacent = get_adjacent(x, y)
 						for a in adjacent:
 							octopi[a.x][a.y] += 1
 						new_flash = True
 		
-		for c in flashing_octopi:
-			octopi[c.x][c.y] = 0
+		for o in flashing_octopi:
+			octopi[o.x][o.y] = 0
 
-		flashes += len(flashing_octopi)
+		total_flashes += len(flashing_octopi)
 	
-	print(run_title, "flashes:", flashes)
+	print(run_title, "total_flashes:", total_flashes)
 
 run("[Test]", open('input_test.txt', 'r').readlines())
 # run("[Real]", open('input.txt', 'r').readlines())
