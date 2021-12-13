@@ -25,7 +25,7 @@ def run(run_title, input_file):
 
 	# --------------------------------------------------------------------------------
 
-	# Test / Real – 19 / 268
+	# Test / Real – 19 / 4749
 
 	total_paths = 0
 	network = {}
