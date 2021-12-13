@@ -17,11 +17,11 @@ def run(run_title, input_file):
 			size_x = max(dot.x, size_x)
 			size_y = max(dot.y, size_y)
 
-		paper = [['.' for i in range(size_x + 1)] for j in range(size_y + 1)]
+		grid = [['.' for i in range(size_x + 1)] for j in range(size_y + 1)]
 		for dot in manual:
-			paper[dot.y][dot.x] = '#'
-		
-		for line in paper: 
+			grid[dot.y][dot.x] = '#'
+
+		for line in grid: 
 			print(''.join(line))
 
 	# --------------------------------------------------------------------------------
