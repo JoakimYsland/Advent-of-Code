@@ -17,9 +17,9 @@ def run(run_title, input_file):
 			size_x = max(dot.x, size_x)
 			size_y = max(dot.y, size_y)
 
-		grid = [['.' for i in range(size_x + 1)] for j in range(size_y + 1)]
+		grid = [['   ' for i in range(size_x + 1)] for j in range(size_y + 1)]
 		for dot in manual:
-			grid[dot.y][dot.x] = '#'
+			grid[dot.y][dot.x] = '|||'
 
 		for line in grid: 
 			print(''.join(line))
