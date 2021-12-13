@@ -11,9 +11,22 @@ Fold = namedtuple("Fold", ['axis', 'pos'])
 
 def run(run_title, input_file):
 
+	def visualize():
+		size_x, size_y = 0, 0
+		for dot in manual:
+			size_x = max(dot.x, size_x)
+			size_y = max(dot.y, size_y)
+		
+		paper = [['.' for i in range(size_x + 1)] for j in range(size_y + 1)]
+		for dot in manual:
+			paper[dot.y][dot.x] = '#'
+
+		for line in paper: 
+			print(''.join(line))
+
 	# --------------------------------------------------------------------------------
 
-	# Test / Real – n/a / ???
+	# Test / Real – n/a / HECRZKPR
 
 	visible_dots = 0
 	manual = {}
@@ -26,7 +39,7 @@ def run(run_title, input_file):
 		elif (len(split) == 4):
 			folds.append(Fold(split[2], int(split[3])))
 	
-	for fold in folds[0:1]: 
+	for fold in folds: 
 		if fold.axis == 'x': 
 			affected_dots = [d for d in manual if d.x > fold.pos]
 			for dot in affected_dots: 
@@ -41,6 +54,7 @@ def run(run_title, input_file):
 				del manual[dot]
 
 	visible_dots = len(manual)
+	visualize()
 
 	print(run_title, "visible_dots:", visible_dots)
 
