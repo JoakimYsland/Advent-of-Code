@@ -7,20 +7,6 @@ import re
 
 def run(run_title, input_file):
 
-	def process_input_file():
-		for line in input_file: 
-			split = re.split(' -> ', line.strip())
-			if len(split) == 1:
-				if len(split[0]) > 1:
-					for element in split[0]: 
-						count_element(element, 1)
-					for i in range(0, len(split[0]) - 1):
-						pair = line[i] + line[i+1]
-						add_pair(pair, 1)
-			else: 
-				pair, new_element = split[0], split[1]
-				pair_insertion_rules[pair] = new_element
-
 	def add_pair(pair, count):
 		polymer_pairs.setdefault(pair, 0)
 		polymer_pairs[pair] += count
@@ -43,7 +29,18 @@ def run(run_title, input_file):
 	polymer_elements = {}
 	pair_insertion_rules = {}
 
-	process_input_file()
+	for line in input_file: 
+		split = re.split(' -> ', line.strip())
+		if len(split) == 1:
+			if len(split[0]) > 1:
+				for element in split[0]: 
+					count_element(element, 1)
+				for i in range(0, len(split[0]) - 1):
+					pair = line[i] + line[i+1]
+					add_pair(pair, 1)
+		else: 
+			pair, new_element = split[0], split[1]
+			pair_insertion_rules[pair] = new_element
 
 	for step in range(0, 40): 
 		for pair, count in polymer_pairs.copy().items(): 
