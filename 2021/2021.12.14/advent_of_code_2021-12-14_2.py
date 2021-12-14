@@ -2,8 +2,6 @@
 # https://adventofcode.com/2021/day/14
 
 import re
-# import statistics
-# from collections import deque
 
 def run(run_title, input_file):
 
@@ -39,7 +37,7 @@ def run(run_title, input_file):
 					pair = line[i] + line[i+1]
 					add_pair(pair, 1)
 		else: 
-			pair, new_element = split[0], split[1]
+			pair, new_element = split[0:2]
 			pair_insertion_rules[pair] = new_element
 
 	for step in range(0, 40): 
