@@ -4,9 +4,6 @@
 # import re
 # import statistics
 # from collections import deque
-# from collections import namedtuple
-
-# Vec2 = namedtuple("Vec2", ['x', 'y'])
 
 def run(run_title, input_file):
 
