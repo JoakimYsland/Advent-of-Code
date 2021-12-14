@@ -33,10 +33,10 @@ def run(run_title, input_file):
 			pair, new_element = split[0:2]
 			pair_insertion_rules[pair] = new_element
 		elif len(split[0]) > 1:
-			# init_polymer = split[0]
-			for element in split[0]: 
+			init_polymer = split[0]
+			for element in init_polymer: 
 				count_element(element, 1)
-			for i in range(0, len(split[0]) - 1):
+			for i in range(0, len(init_polymer) - 1):
 				pair = line[i] + line[i+1]
 				add_pair(pair, 1)
 
