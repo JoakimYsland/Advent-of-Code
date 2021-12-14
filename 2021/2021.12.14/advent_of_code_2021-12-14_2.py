@@ -29,16 +29,16 @@ def run(run_title, input_file):
 
 	for line in input_file: 
 		split = re.split(' -> ', line.strip())
-		if len(split) == 1:
-			if len(split[0]) > 1:
-				for element in split[0]: 
-					count_element(element, 1)
-				for i in range(0, len(split[0]) - 1):
-					pair = line[i] + line[i+1]
-					add_pair(pair, 1)
-		else: 
+		if len(split) > 1:
 			pair, new_element = split[0:2]
 			pair_insertion_rules[pair] = new_element
+		elif len(split[0]) > 1:
+			# init_polymer = split[0]
+			for element in split[0]: 
+				count_element(element, 1)
+			for i in range(0, len(split[0]) - 1):
+				pair = line[i] + line[i+1]
+				add_pair(pair, 1)
 
 	for step in range(0, 40): 
 		for pair, count in polymer_pairs.copy().items(): 
