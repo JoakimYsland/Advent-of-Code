@@ -12,7 +12,7 @@ def run(run_title, input_file):
 
 	# --------------------------------------------------------------------------------
 
-	# Test / Real – 1588 / ???
+	# Test / Real – 1588 / 3906
 
 	polymer_template = ''
 	pair_insertion_rules = {}
