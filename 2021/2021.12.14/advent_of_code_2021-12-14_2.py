@@ -18,15 +18,15 @@ def run(run_title, input_file):
 				del polymer_pairs[pair]
 
 	def count_element(element, count): 
-		polymer_elements.setdefault(element, 0)
-		polymer_elements[element] += count
+		element_count.setdefault(element, 0)
+		element_count[element] += count
 
 	# --------------------------------------------------------------------------------
 
 	# Test / Real – 2188189693529 / 4441317262452
 
 	polymer_pairs = {}
-	polymer_elements = {}
+	element_count = {}
 	pair_insertion_rules = {}
 
 	for line in input_file: 
@@ -50,9 +50,8 @@ def run(run_title, input_file):
 			add_pair(pair[0] + new_element, count)
 			add_pair(new_element + pair[1], count)
 
-	min_max_element_difference = max(polymer_elements.values()) - min(polymer_elements.values())
-
-	print(run_title, "min_max_element_difference:", min_max_element_difference)
+	element_count_range = max(element_count.values()) - min(element_count.values())
+	print(run_title, "element_count_range:", element_count_range)
 
 run("[Test]", open('input_test.txt', 'r').readlines())
 run("[Real]", open('input.txt', 'r').readlines())
