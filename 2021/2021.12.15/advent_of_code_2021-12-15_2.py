@@ -34,20 +34,17 @@ def run(run_title, input_file):
 				risk -= 9
 			return risk
 
-		# Horizontal
 		map_copy = deepcopy(risk_map)
 		for i in range(0, expansions): 
 			for j, line in enumerate(map_copy): 
-				risk_map[j] += [expand(r+i) for r in line]
+				risk_map[j] += [expand(r+i) for r in line] # Horizontal
 
-		# Vertical
 		map_copy = deepcopy(risk_map)
 		for i in range(0, expansions): 
 			for j, line in enumerate(map_copy): 
-				risk_map.append([expand(r+i) for r in line])
+				risk_map.append([expand(r+i) for r in line]) # Vertical
 
 	def a_star_search(start, goal): 
-
 		def get_adjacent(node):
 			adjacent = []
 			if (node.x > 0): 			adjacent.append(Vec2(node.x-1, node.y))
