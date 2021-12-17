@@ -9,12 +9,15 @@ from collections import namedtuple
 Vec2 = namedtuple("Vec2", ['x', 'y'])
 
 class Node: 
-	def __init__(self, x, y, parent=None, cost=0, total_cost=0): 
+	def __init__(self, x, y, parent=None, cost=0, heuristic=0): 
 		self.x = x
 		self.y = y
 		self.parent = parent
 		self.cost = cost
-		self.total_cost = total_cost
+		self.heuristic = heuristic
+
+	def get_total_cost(self):
+		return self.cost + self.heuristic
 
 def run(run_title, input_file):
 
@@ -59,7 +62,14 @@ def run(run_title, input_file):
 			return adjacent
 
 		def get_frontier_best(): 
-			return min(frontier.items(), key=lambda x: x[1].total_cost) 
+			return min(frontier.items(), key=lambda x: x[1].get_total_cost())
+
+		def get_heuristic(pos): 
+			if pos in frontier: 
+				return frontier[pos].heuristic
+			else: 
+				return ((map_size.x-1) - pos.x) + ((map_size.y-1) - pos.y)
+
 
 		frontier = { start: Node(0, 0, None) }
 		closed = {}
@@ -76,15 +86,15 @@ def run(run_title, input_file):
 				if child in closed: 
 					continue
 
-				heuristic = ((map_size.x-1) - child.x) + ((map_size.y-1) - child.y)
+				heuristic = get_heuristic(child)
 				child_cost = current_node.cost + risk_map[child.x][child.y]
 				child_total_cost = child_cost + heuristic
 
 				if child in frontier: 
-					if frontier[child].total_cost < child_total_cost:
+					if frontier[child].get_total_cost() < child_total_cost:
 						continue
 				
-				frontier[child] = Node(child.x, child.y, current, child_cost, child_total_cost)
+				frontier[child] = Node(child.x, child.y, current, child_cost, heuristic)
 
 		return closed
 
