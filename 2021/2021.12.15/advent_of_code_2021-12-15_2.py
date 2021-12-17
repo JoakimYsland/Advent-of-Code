@@ -2,6 +2,7 @@
 # https://adventofcode.com/2021/day/15
 
 import re
+from copy import deepcopy
 from collections import namedtuple
 
 Vec2 = namedtuple("Vec2", ['x', 'y'])
@@ -21,13 +22,14 @@ def run(run_title, input_file):
 		path = reconstruct_path(goal, closed)
 
 		visualization = [['.' for x in range(map_size.x)] for y in range(map_size.y)]
+		# visualization = [[str(risk_map[y][x]) for x in range(map_size.x)] for y in range(map_size.y)]
 		for pos in path: 
 			visualization[pos.x][pos.y] = str(risk_map[pos.x][pos.y])
 		
 		for line in visualization: 
 			print(''.join(line))
 
-	def expand_map(risk_map): 
+	def expand_risk_map(): 
 
 		def expand(risk):
 			risk += 1
@@ -35,14 +37,19 @@ def run(run_title, input_file):
 				risk -= 9
 			return risk
 
-		init_map_size = Vec2(len(risk_map[0]), len(risk_map))
-		for i in range(0, 5): 
-			for j in range(0, init_map_size.y):
-				risk_map.append([expand(r+i) for r in risk_map[j]])
+		exp = 4
 
-		# for i in range(0, 5): 
-		# 	for j in range(0, init_map_size.y):
-		# 		risk_map.append([expand(r+i) for r in risk_map[j]])
+		# Horizontal
+		map_copy = deepcopy(risk_map)
+		for i in range(0, exp): 
+			for j, line in enumerate(map_copy): 
+				risk_map[j] += [expand(r+i) for r in line]
+
+		# Vertical
+		map_copy = deepcopy(risk_map)
+		for i in range(0, exp): 
+			for j, line in enumerate(map_copy): 
+				risk_map.append([expand(r+i) for r in line])
 
 	def a_star_search(start, goal): 
 
@@ -97,20 +104,15 @@ def run(run_title, input_file):
 	for line in input_file: 
 		risk_map.append([int(c) for c in line.strip()])
 
-	for line in risk_map:
-		print(''.join(str(line)))
-	expand_map(risk_map)
-	print('--')
-	for line in risk_map:
-		print(''.join(str(line)))
-	return
+	expand_risk_map()
 	map_size = Vec2(len(risk_map[0]), len(risk_map))
+
 	start = Vec2(0,0)
 	goal = Vec2(map_size.x-1, map_size.y-1)
 	closed = a_star_search(start, goal)
 
 	# for node in closed: 
-		# print(node, closed[node])
+	# 	print(node, closed[node])
 
 	visualize()	
 	print(closed[goal])
