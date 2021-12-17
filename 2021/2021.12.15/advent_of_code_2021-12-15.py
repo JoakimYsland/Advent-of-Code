@@ -21,9 +21,9 @@ def run(run_title, input_file):
 
 		def get_frontier_best(): 
 			frontier_best = list(frontier.keys())[0]
-			for node in frontier: 
-				if frontier[node].total_cost < frontier[frontier_best].total_cost: 
-					frontier_best = node
+			for pos, node in frontier.items():
+				if node.total_cost < frontier[frontier_best].total_cost:
+					frontier_best = pos
 			return frontier_best
 
 		frontier = { start: Node(0,0) }
