@@ -9,13 +9,23 @@ Node = namedtuple("Node", ['parent', 'cost', 'total_cost'])
 
 def run(run_title, input_file):
 
-	def reconstruct_path(current, closed): 
-		path = []
-		while current != None: 
-			path.append(current)
-			current = closed[current].parent
-		path.reverse()
-		return path
+	def visualize():
+		def reconstruct_path(current, closed): 
+			path = []
+			while current != None: 
+				path.append(current)
+				current = closed[current].parent
+			path.reverse()
+			return path
+
+		path = reconstruct_path(goal, closed)
+
+		visualization = [['.' for x in range(map_size.x)] for y in range(map_size.y)]
+		for pos in path: 
+			visualization[pos.x][pos.y] = str(risk_map[pos.x][pos.y])
+		
+		for line in visualization: 
+			print(''.join(line))
 
 	def a_star_search(start, goal): 
 
@@ -70,23 +80,16 @@ def run(run_title, input_file):
 	for line in input_file: 
 		risk_map.append([int(c) for c in line.strip()])
 
-	# risk_map = [list(x) for x in zip(*risk_map)] # Transpose
 	map_size = Vec2(len(risk_map[0]), len(risk_map))
 	start = Vec2(0,0)
 	goal = Vec2(map_size.x-1, map_size.y-1)
 	closed = a_star_search(start, goal)
 
-	for node in closed: 
-		print(node, closed[node])
+	# for node in closed: 
+		# print(node, closed[node])
 
-	path = reconstruct_path(goal, closed)
+	visualize()	
+	print(closed[goal])
 
-	visualization = [['.' for x in range(map_size.x)] for y in range(map_size.y)]
-	for pos in path: 
-		visualization[pos.x][pos.y] = str(risk_map[pos.x][pos.y])
-	
-	for line in visualization: 
-		print(''.join(line))
-
-# run("[Test]", open('input_test.txt', 'r').readlines())
-run("[Real]", open('input.txt', 'r').readlines())
+run("[Test]", open('input_test.txt', 'r').readlines())
+# run("[Real]", open('input.txt', 'r').readlines())
