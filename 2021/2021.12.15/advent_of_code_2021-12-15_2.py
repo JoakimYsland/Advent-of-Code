@@ -19,35 +19,30 @@ def run(run_title, input_file):
 			path.reverse()
 			return path
 
-		path = reconstruct_path(goal, closed)
-
 		visualization = [['.' for x in range(map_size.x)] for y in range(map_size.y)]
-		# visualization = [[str(risk_map[y][x]) for x in range(map_size.x)] for y in range(map_size.y)]
-		for pos in path: 
+
+		for pos in reconstruct_path(goal, closed): 
 			visualization[pos.x][pos.y] = str(risk_map[pos.x][pos.y])
 		
 		for line in visualization: 
 			print(''.join(line))
 
-	def expand_risk_map(): 
-
+	def expand_risk_map(expansions): 
 		def expand(risk):
 			risk += 1
 			if risk > 9:
 				risk -= 9
 			return risk
 
-		exp = 4
-
 		# Horizontal
 		map_copy = deepcopy(risk_map)
-		for i in range(0, exp): 
+		for i in range(0, expansions): 
 			for j, line in enumerate(map_copy): 
 				risk_map[j] += [expand(r+i) for r in line]
 
 		# Vertical
 		map_copy = deepcopy(risk_map)
-		for i in range(0, exp): 
+		for i in range(0, expansions): 
 			for j, line in enumerate(map_copy): 
 				risk_map.append([expand(r+i) for r in line])
 
@@ -104,15 +99,12 @@ def run(run_title, input_file):
 	for line in input_file: 
 		risk_map.append([int(c) for c in line.strip()])
 
-	expand_risk_map()
+	expand_risk_map(4)
 	map_size = Vec2(len(risk_map[0]), len(risk_map))
 
 	start = Vec2(0,0)
 	goal = Vec2(map_size.x-1, map_size.y-1)
 	closed = a_star_search(start, goal)
-
-	# for node in closed: 
-	# 	print(node, closed[node])
 
 	visualize()	
 	print(closed[goal])
