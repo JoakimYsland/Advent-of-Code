@@ -4,6 +4,7 @@
 import re
 from copy import deepcopy
 from collections import namedtuple
+from collections import OrderedDict
 
 Vec2 = namedtuple("Vec2", ['x', 'y'])
 Node = namedtuple("Node", ['parent', 'cost', 'total_cost'])
@@ -51,11 +52,7 @@ def run(run_title, input_file):
 			return adjacent
 
 		def get_frontier_best(): 
-			best = list(frontier.keys())[0]
-			for pos, node in frontier.items():
-				if node.total_cost < frontier[best].total_cost:
-					best = pos
-			return best, frontier[best]
+			return min(frontier.items(), key=lambda x: x[1].total_cost) 
 
 		frontier = { start: Node(None, 0,0) }
 		closed = {}
@@ -100,8 +97,8 @@ def run(run_title, input_file):
 	goal = Vec2(map_size.x-1, map_size.y-1)
 	closed = a_star_search(start, goal)
 
-	visualize()	
+	# visualize()	
 	print(closed[goal])
 
-run("[Test]", open('input_test.txt', 'r').readlines())
-# run("[Real]", open('input.txt', 'r').readlines())
+# run("[Test]", open('input_test.txt', 'r').readlines())
+run("[Real]", open('input.txt', 'r').readlines())
