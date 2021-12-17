@@ -2,6 +2,7 @@
 # https://adventofcode.com/2021/day/15
 
 import re
+import time
 from copy import deepcopy
 from collections import namedtuple
 
@@ -92,6 +93,7 @@ def run(run_title, input_file):
 	# Test / Real – 315 / ???
 
 	risk_map = []
+	start_time_ms = round(time.time() * 1000)
 
 	for line in input_file: 
 		risk_map.append([int(c) for c in line.strip()])
@@ -106,6 +108,9 @@ def run(run_title, input_file):
 	# visualize()	
 	goal = closed[end]
 	print(run_title, "goal.cost:", goal.cost)
+
+	end_time_ms = round(time.time() * 1000)
+	print("time:", end_time_ms - start_time_ms)
 
 run("[Test]", open('input_test.txt', 'r').readlines())
 # run("[Real]", open('input.txt', 'r').readlines())
