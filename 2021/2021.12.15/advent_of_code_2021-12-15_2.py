@@ -4,7 +4,6 @@
 import re
 from copy import deepcopy
 from collections import namedtuple
-from collections import OrderedDict
 
 Vec2 = namedtuple("Vec2", ['x', 'y'])
 Node = namedtuple("Node", ['parent', 'cost', 'total_cost'])
