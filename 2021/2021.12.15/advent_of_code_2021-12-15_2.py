@@ -16,7 +16,6 @@ def run(run_title, input_file):
 			while current != None: 
 				path.append(current)
 				current = closed[current].parent
-			path.reverse()
 			return path
 
 		visualization = [['.' for x in range(map_size.x)] for y in range(map_size.y)]
@@ -29,20 +28,18 @@ def run(run_title, input_file):
 
 	def expand_risk_map(expansions): 
 		def expand(risk):
-			risk += 1
-			if risk > 9:
-				risk -= 9
-			return risk
+			r = risk % 9
+			return r if r != 0 else 9
 
 		map_copy = deepcopy(risk_map)
 		for i in range(0, expansions): 
 			for j, line in enumerate(map_copy): 
-				risk_map[j] += [expand(r+i) for r in line] # Horizontal
+				risk_map[j] += [expand(r+1+i) for r in line] # Horizontal
 
 		map_copy = deepcopy(risk_map)
 		for i in range(0, expansions): 
 			for j, line in enumerate(map_copy): 
-				risk_map.append([expand(r+i) for r in line]) # Vertical
+				risk_map.append([expand(r+1+i) for r in line]) # Vertical
 
 	def a_star_search(start, goal): 
 		def get_adjacent(node):
