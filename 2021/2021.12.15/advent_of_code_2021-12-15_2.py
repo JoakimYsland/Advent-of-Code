@@ -112,7 +112,7 @@ def run(run_title, input_file):
 
 	# --------------------------------------------------------------------------------
 
-	# Test / Real – 315 / ???
+	# Test / Real – 315 / 2925 (3838ms)
 
 	risk_map = []
 	start_time_ms = round(time.time() * 1000)
