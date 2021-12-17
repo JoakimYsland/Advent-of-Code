@@ -20,11 +20,11 @@ def run(run_title, input_file):
 			return adjacent
 
 		def get_frontier_best(): 
-			frontier_best = list(frontier.keys())[0]
+			best = list(frontier.keys())[0]
 			for pos, node in frontier.items():
-				if node.total_cost < frontier[frontier_best].total_cost:
-					frontier_best = pos
-			return frontier_best
+				if node.total_cost < frontier[best].total_cost:
+					best = pos
+			return best
 
 		frontier = { start: Node(0,0) }
 		closed = {}
