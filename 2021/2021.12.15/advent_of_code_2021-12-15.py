@@ -38,7 +38,6 @@ def run(run_title, input_file):
 		closed = {}
 
 		while len(frontier) > 0: 
-			
 			current, current_node = get_frontier_best()
 			closed[current] = current_node
 			del frontier[current]
@@ -75,7 +74,6 @@ def run(run_title, input_file):
 	map_size = Vec2(len(risk_map[0]), len(risk_map))
 	start = Vec2(0,0)
 	goal = Vec2(map_size.x-1, map_size.y-1)
-
 	closed = a_star_search(start, goal)
 
 	for node in closed: 
@@ -83,11 +81,11 @@ def run(run_title, input_file):
 
 	path = reconstruct_path(goal, closed)
 
-	viz = [['-' for x in range(map_size.x)] for y in range(map_size.y)]
+	visualization = [['.' for x in range(map_size.x)] for y in range(map_size.y)]
 	for pos in path: 
-		viz[pos.x][pos.y] = str(risk_map[pos.x][pos.y])
+		visualization[pos.x][pos.y] = str(risk_map[pos.x][pos.y])
 	
-	for line in viz: 
+	for line in visualization: 
 		print(''.join(line))
 
 run("[Test]", open('input_test.txt', 'r').readlines())
