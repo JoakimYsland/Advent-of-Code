@@ -31,43 +31,26 @@ def run(run_title, input_file):
 
 		while len(frontier) > 0: 
 			
-			# current = node in open with best value
 			current = get_frontier_best()
-
-			# Add current to closed
 			closed[current] = frontier[current]
-
-			# Remove current from open
 			del frontier[current]
 
-			# if current is the goal, break
 			if current == goal: 
 				break
 
-			# for each child in children
 			for child in get_adjacent(current): 
-
-				# if the child in in closed: 
 				if child in closed: 
 					continue
 
-				# distance_from_start = current.distance_from_start + distance between child and current
-				distance_from_start = closed[current].cost + risk_map[child.x][child.y]
-				# heuristic = distance from child to goal
-				pyth_a = (map_size.x-1) - child.x
-				pyth_b = (map_size.y-1) - child.y
-				heuristic = pyth_a + pyth_b
-				# child_total_cost = distance_from_start + heuristic
-				child_total_cost = distance_from_start + heuristic
+				heuristic = ((map_size.x-1) - child.x) + ((map_size.y-1) - child.y)
+				child_cost = closed[current].cost + risk_map[child.x][child.y]
+				child_total_cost = child_cost + heuristic
 
-				# if child is in open: 
 				if child in frontier: 
-					# if child is already in open with a lower distance_from_start: 
 					if frontier[child].total_cost < child_total_cost:
 						continue
 				
-				# Add child to open
-				frontier[child] = Node(distance_from_start, child_total_cost)
+				frontier[child] = Node(child_cost, child_total_cost)
 
 		return closed
 
