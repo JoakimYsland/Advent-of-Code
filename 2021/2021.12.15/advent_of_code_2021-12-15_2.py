@@ -6,7 +6,14 @@ from copy import deepcopy
 from collections import namedtuple
 
 Vec2 = namedtuple("Vec2", ['x', 'y'])
-Node = namedtuple("Node", ['parent', 'cost', 'total_cost'])
+
+class Node: 
+	def __init__(self, x, y, parent=None, cost=0, total_cost=0): 
+		self.x = x
+		self.y = y
+		self.parent = parent
+		self.cost = cost
+		self.total_cost = total_cost
 
 def run(run_title, input_file):
 
@@ -42,18 +49,18 @@ def run(run_title, input_file):
 				risk_map.append([expand(r+1+i) for r in line]) # Vertical
 
 	def a_star_search(start, goal): 
-		def get_adjacent(node):
+		def get_adjacent(pos):
 			adjacent = []
-			if (node.x > 0): 			adjacent.append(Vec2(node.x-1, node.y))
-			if (node.x < map_size.x-1): adjacent.append(Vec2(node.x+1, node.y))
-			if (node.y > 0): 			adjacent.append(Vec2(node.x, node.y-1))
-			if (node.y < map_size.y-1): adjacent.append(Vec2(node.x, node.y+1))
+			if (pos.x > 0): 			adjacent.append(Vec2(pos.x-1, pos.y))
+			if (pos.x < map_size.x-1): 	adjacent.append(Vec2(pos.x+1, pos.y))
+			if (pos.y > 0): 			adjacent.append(Vec2(pos.x, pos.y-1))
+			if (pos.y < map_size.y-1): 	adjacent.append(Vec2(pos.x, pos.y+1))
 			return adjacent
 
 		def get_frontier_best(): 
 			return min(frontier.items(), key=lambda x: x[1].total_cost) 
 
-		frontier = { start: Node(None, 0,0) }
+		frontier = { start: Node(0, 0, None) }
 		closed = {}
 
 		while len(frontier) > 0: 
@@ -76,7 +83,7 @@ def run(run_title, input_file):
 					if frontier[child].total_cost < child_total_cost:
 						continue
 				
-				frontier[child] = Node(current, child_cost, child_total_cost)
+				frontier[child] = Node(child.x, child.y, current, child_cost, child_total_cost)
 
 		return closed
 
@@ -93,11 +100,12 @@ def run(run_title, input_file):
 	map_size = Vec2(len(risk_map[0]), len(risk_map))
 
 	start = Vec2(0,0)
-	goal = Vec2(map_size.x-1, map_size.y-1)
-	closed = a_star_search(start, goal)
+	end = Vec2(map_size.x-1, map_size.y-1)
+	closed = a_star_search(start, end)
 
 	# visualize()	
-	print(closed[goal])
+	goal = closed[end]
+	print(run_title, "goal.cost:", goal.cost)
 
-# run("[Test]", open('input_test.txt', 'r').readlines())
-run("[Real]", open('input.txt', 'r').readlines())
+run("[Test]", open('input_test.txt', 'r').readlines())
+# run("[Real]", open('input.txt', 'r').readlines())
