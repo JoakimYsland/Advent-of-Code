@@ -63,7 +63,7 @@ def run(run_title, input_file):
 
 	# --------------------------------------------------------------------------------
 
-	# Test / Real – 40 / 609
+	# Test / Real – 315 / ???
 
 	risk_map = []
 
@@ -88,5 +88,5 @@ def run(run_title, input_file):
 	for line in visualization: 
 		print(''.join(line))
 
-run("[Test]", open('input_test.txt', 'r').readlines())
-# run("[Real]", open('input.txt', 'r').readlines())
+# run("[Test]", open('input_test.txt', 'r').readlines())
+run("[Real]", open('input.txt', 'r').readlines())
