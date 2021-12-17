@@ -27,6 +27,23 @@ def run(run_title, input_file):
 		for line in visualization: 
 			print(''.join(line))
 
+	def expand_map(risk_map): 
+
+		def expand(risk):
+			risk += 1
+			if risk > 9:
+				risk -= 9
+			return risk
+
+		init_map_size = Vec2(len(risk_map[0]), len(risk_map))
+		for i in range(0, 5): 
+			for j in range(0, init_map_size.y):
+				risk_map.append([expand(r+i) for r in risk_map[j]])
+
+		# for i in range(0, 5): 
+		# 	for j in range(0, init_map_size.y):
+		# 		risk_map.append([expand(r+i) for r in risk_map[j]])
+
 	def a_star_search(start, goal): 
 
 		def get_adjacent(node):
@@ -80,6 +97,13 @@ def run(run_title, input_file):
 	for line in input_file: 
 		risk_map.append([int(c) for c in line.strip()])
 
+	for line in risk_map:
+		print(''.join(str(line)))
+	expand_map(risk_map)
+	print('--')
+	for line in risk_map:
+		print(''.join(str(line)))
+	return
 	map_size = Vec2(len(risk_map[0]), len(risk_map))
 	start = Vec2(0,0)
 	goal = Vec2(map_size.x-1, map_size.y-1)
