@@ -24,15 +24,15 @@ def run(run_title, input_file):
 			for pos, node in frontier.items():
 				if node.total_cost < frontier[best].total_cost:
 					best = pos
-			return best
+			return best, frontier[best]
 
 		frontier = { start: Node(0,0) }
 		closed = {}
 
 		while len(frontier) > 0: 
 			
-			current = get_frontier_best()
-			closed[current] = frontier[current]
+			current, current_node = get_frontier_best()
+			closed[current] = current_node
 			del frontier[current]
 
 			if current == goal: 
@@ -43,7 +43,7 @@ def run(run_title, input_file):
 					continue
 
 				heuristic = ((map_size.x-1) - child.x) + ((map_size.y-1) - child.y)
-				child_cost = closed[current].cost + risk_map[child.x][child.y]
+				child_cost = current_node.cost + risk_map[child.x][child.y]
 				child_total_cost = child_cost + heuristic
 
 				if child in frontier: 
