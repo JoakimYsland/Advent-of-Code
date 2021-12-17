@@ -70,7 +70,6 @@ def run(run_title, input_file):
 			else: 
 				return ((map_size.x-1) - pos.x) + ((map_size.y-1) - pos.y)
 
-
 		frontier = { start: Node(0, 0, None) }
 		closed = {}
 
@@ -100,7 +99,7 @@ def run(run_title, input_file):
 
 	# --------------------------------------------------------------------------------
 
-	# Test / Real – 315 / ???
+	# Test / Real – 315 / 2925 (33386)
 
 	risk_map = []
 	start_time_ms = round(time.time() * 1000)
