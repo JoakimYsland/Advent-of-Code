@@ -109,9 +109,9 @@ def run(run_title, input_file):
 	end = Vec2(map_size.x-1, map_size.y-1)
 	closed = a_star_search(start, end)
 
-	goal = closed[end]
+	lowest_total_risk = closed[end].cost
 	# visualize()
-	print(run_title, "goal.cost:", goal.cost)
+	print(run_title, "lowest_total_risk:", lowest_total_risk)
 
 	end_time_ms = round(time.time() * 1000)
 	print("time:", end_time_ms - start_time_ms)
