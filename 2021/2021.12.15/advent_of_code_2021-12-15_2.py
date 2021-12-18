@@ -18,9 +18,6 @@ class Node:
 		self.heuristic = heuristic
 		self.total_cost = cost + heuristic
 
-	def get_total_cost(self):
-		return self.cost + self.heuristic
-
 def run(run_title, input_file):
 
 	def visualize():
@@ -85,7 +82,7 @@ def run(run_title, input_file):
 				child_total_cost = child_cost + heuristic
 
 				if child in frontier: 
-					if frontier[child].get_total_cost() < child_total_cost:
+					if frontier[child].total_cost < child_total_cost:
 						continue
 				
 				child_node = Node(child.x, child.y, current, child_cost, heuristic)
@@ -113,11 +110,11 @@ def run(run_title, input_file):
 	closed = a_star_search(start, end)
 
 	goal = closed[end]
-	visualize()
+	# visualize()
 	print(run_title, "goal.cost:", goal.cost)
 
 	end_time_ms = round(time.time() * 1000)
 	print("time:", end_time_ms - start_time_ms)
 
-run("[Test]", open('input_test.txt', 'r').readlines())
-# run("[Real]", open('input.txt', 'r').readlines())
+# run("[Test]", open('input_test.txt', 'r').readlines())
+run("[Real]", open('input.txt', 'r').readlines())
