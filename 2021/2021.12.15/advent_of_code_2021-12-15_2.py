@@ -5,6 +5,7 @@ import re
 import time
 from copy import deepcopy
 from collections import namedtuple
+from queue import PriorityQueue
 
 Vec2 = namedtuple("Vec2", ['x', 'y'])
 
@@ -15,6 +16,7 @@ class Node:
 		self.parent = parent
 		self.cost = cost
 		self.heuristic = heuristic
+		self.total_cost = cost + heuristic
 
 	def get_total_cost(self):
 		return self.cost + self.heuristic
@@ -61,21 +63,14 @@ def run(run_title, input_file):
 			if (pos.y < map_size.y-1): 	adjacent.append(Vec2(pos.x, pos.y+1))
 			return adjacent
 
-		def get_frontier_best(): 
-			return min(frontier.items(), key=lambda x: x[1].get_total_cost())
-
-		def get_heuristic(pos): 
-			if pos in frontier: 
-				return frontier[pos].heuristic
-			else: 
-				return ((map_size.x-1) - pos.x) + ((map_size.y-1) - pos.y)
-
-
+		frontier_pqueue = PriorityQueue()
+		frontier_pqueue.put((0, start))
 		frontier = { start: Node(0, 0, None) }
 		closed = {}
 
 		while len(frontier) > 0: 
-			current, current_node = get_frontier_best()
+			prio, current = frontier_pqueue.get()
+			current_node = frontier[current]
 			closed[current] = current_node
 			del frontier[current]
 
@@ -86,7 +81,7 @@ def run(run_title, input_file):
 				if child in closed: 
 					continue
 
-				heuristic = get_heuristic(child)
+				heuristic = ((map_size.x-1) - child.x) + ((map_size.y-1) - child.y)
 				child_cost = current_node.cost + risk_map[child.x][child.y]
 				child_total_cost = child_cost + heuristic
 
@@ -94,13 +89,16 @@ def run(run_title, input_file):
 					if frontier[child].get_total_cost() < child_total_cost:
 						continue
 				
-				frontier[child] = Node(child.x, child.y, current, child_cost, heuristic)
+				child_node = Node(child.x, child.y, current, child_cost, heuristic)
+				if not child in frontier: 
+					frontier_pqueue.put((child_total_cost, child))
+				frontier[child] = child_node
 
 		return closed
 
 	# --------------------------------------------------------------------------------
 
-	# Test / Real – 315 / 2925 (32750ms)
+	# Test / Real – 315 / 2925 (2128ms)
 
 	risk_map = []
 	start_time_ms = round(time.time() * 1000)
