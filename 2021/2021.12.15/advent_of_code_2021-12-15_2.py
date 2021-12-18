@@ -5,7 +5,6 @@ import re
 import time
 from copy import deepcopy
 from collections import namedtuple
-from queue import PriorityQueue
 
 Vec2 = namedtuple("Vec2", ['x', 'y'])
 
@@ -13,23 +12,18 @@ class Node:
 	def __init__(self, x, y, parent=None, cost=0, heuristic=0): 
 		self.x = x
 		self.y = y
-		self.pos = Vec2(x, y)
 		self.parent = parent
 		self.cost = cost
 		self.heuristic = heuristic
-		self.total_cost = cost + heuristic
 
-	def __eq__(self, other):
-		if isinstance(other, Node):
-			return self.total_cost == other.total_cost
-		return False
+	def get_total_cost(self):
+		return self.cost + self.heuristic
 
 def run(run_title, input_file):
 
-	def visualize(goal, closed):
+	def visualize():
 		def reconstruct_path(current, closed): 
 			path = []
-			print(closed[current].parent)
 			while current != None: 
 				path.append(current)
 				current = closed[current].parent
@@ -37,7 +31,7 @@ def run(run_title, input_file):
 
 		visualization = [['.' for x in range(map_size.x)] for y in range(map_size.y)]
 
-		for pos in reconstruct_path(goal, closed): 
+		for pos in reconstruct_path(end, closed): 
 			visualization[pos.x][pos.y] = str(risk_map[pos.x][pos.y])
 		
 		for line in visualization: 
@@ -67,27 +61,25 @@ def run(run_title, input_file):
 			if (pos.y < map_size.y-1): 	adjacent.append(Vec2(pos.x, pos.y+1))
 			return adjacent
 
+		def get_frontier_best(): 
+			return min(frontier.items(), key=lambda x: x[1].get_total_cost())
+
 		def get_heuristic(pos): 
 			if pos in frontier: 
 				return frontier[pos].heuristic
 			else: 
 				return ((map_size.x-1) - pos.x) + ((map_size.y-1) - pos.y)
 
+
 		frontier = { start: Node(0, 0, None) }
-		frontier_prioq = PriorityQueue()
-		frontier_prioq.put((0, Node(0, 0, None)))
 		closed = {}
 
-		while not frontier_prioq.empty(): 
-			_, current = frontier_prioq.get()
-			current_pos = Vec2(current.x, current.y)
-			closed[current_pos] = current
+		while len(frontier) > 0: 
+			current, current_node = get_frontier_best()
+			closed[current] = current_node
+			del frontier[current]
 
-			if current_pos in frontier: 
-				del frontier[current_pos]
-			# del frontier[current_pos]
-
-			if current_pos == goal: 
+			if current == goal: 
 				break
 
 			for child in get_adjacent(current): 
@@ -95,22 +87,20 @@ def run(run_title, input_file):
 					continue
 
 				heuristic = get_heuristic(child)
-				child_cost = current.cost + risk_map[child.x][child.y]
+				child_cost = current_node.cost + risk_map[child.x][child.y]
 				child_total_cost = child_cost + heuristic
 
 				if child in frontier: 
-					if frontier[child].total_cost < child_total_cost:
+					if frontier[child].get_total_cost() < child_total_cost:
 						continue
 				
-				child_node = Node(child.x, child.y, current, child_cost, heuristic)
-				frontier[child] = child_node
-				frontier_prioq.put((child_total_cost, child_node))
+				frontier[child] = Node(child.x, child.y, current, child_cost, heuristic)
 
 		return closed
 
 	# --------------------------------------------------------------------------------
 
-	# Test / Real – 315 / 2925 (3838ms)
+	# Test / Real – 315 / 2925 (32750ms)
 
 	risk_map = []
 	start_time_ms = round(time.time() * 1000)
@@ -125,13 +115,12 @@ def run(run_title, input_file):
 	end = Vec2(map_size.x-1, map_size.y-1)
 	closed = a_star_search(start, end)
 
-	# goal = closed[end]
-	# visualize(closed[end].pos, closed)
-	visualize(end, closed)
-	print(run_title, "closed[end]:", closed[end].cost)
+	goal = closed[end]
+	# visualize()
+	print(run_title, "goal.cost:", goal.cost)
 
 	end_time_ms = round(time.time() * 1000)
 	print("time:", end_time_ms - start_time_ms)
 
-run("[Test]", open('input_test.txt', 'r').readlines())
-# run("[Real]", open('input.txt', 'r').readlines())
+# run("[Test]", open('input_test.txt', 'r').readlines())
+run("[Real]", open('input.txt', 'r').readlines())
