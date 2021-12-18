@@ -13,21 +13,23 @@ class Node:
 	def __init__(self, x, y, parent=None, cost=0, heuristic=0): 
 		self.x = x
 		self.y = y
+		self.pos = Vec2(x, y)
 		self.parent = parent
 		self.cost = cost
 		self.heuristic = heuristic
+		self.total_cost = cost + heuristic
 
 	def __eq__(self, other):
-		return self.get_total_cost() == other.get_total_cost()
-
-	def get_total_cost(self):
-		return self.cost + self.heuristic
+		if isinstance(other, Node):
+			return self.total_cost == other.total_cost
+		return False
 
 def run(run_title, input_file):
 
-	def visualize():
+	def visualize(goal, closed):
 		def reconstruct_path(current, closed): 
 			path = []
+			print(closed[current].parent)
 			while current != None: 
 				path.append(current)
 				current = closed[current].parent
@@ -65,9 +67,6 @@ def run(run_title, input_file):
 			if (pos.y < map_size.y-1): 	adjacent.append(Vec2(pos.x, pos.y+1))
 			return adjacent
 
-		# def get_frontier_best(): 
-		# 	return min(frontier.items(), key=lambda x: x[1].get_total_cost())
-
 		def get_heuristic(pos): 
 			if pos in frontier: 
 				return frontier[pos].heuristic
@@ -86,6 +85,7 @@ def run(run_title, input_file):
 
 			if current_pos in frontier: 
 				del frontier[current_pos]
+			# del frontier[current_pos]
 
 			if current_pos == goal: 
 				break
@@ -97,11 +97,9 @@ def run(run_title, input_file):
 				heuristic = get_heuristic(child)
 				child_cost = current.cost + risk_map[child.x][child.y]
 				child_total_cost = child_cost + heuristic
-				# child_node = Node(child.x, child.y, current, child_cost, heuristic)
 
-				# if any((child_total_cost, child_node) in node for node in frontier.queue): 
 				if child in frontier: 
-					if frontier[child].get_total_cost() < child_total_cost:
+					if frontier[child].total_cost < child_total_cost:
 						continue
 				
 				child_node = Node(child.x, child.y, current, child_cost, heuristic)
@@ -127,12 +125,13 @@ def run(run_title, input_file):
 	end = Vec2(map_size.x-1, map_size.y-1)
 	closed = a_star_search(start, end)
 
-	# visualize()	
-	goal = closed[end]
-	print(run_title, "goal.cost:", goal.cost)
+	# goal = closed[end]
+	# visualize(closed[end].pos, closed)
+	visualize(end, closed)
+	print(run_title, "closed[end]:", closed[end].cost)
 
 	end_time_ms = round(time.time() * 1000)
 	print("time:", end_time_ms - start_time_ms)
 
-# run("[Test]", open('input_test.txt', 'r').readlines())
-run("[Real]", open('input.txt', 'r').readlines())
+run("[Test]", open('input_test.txt', 'r').readlines())
+# run("[Real]", open('input.txt', 'r').readlines())
