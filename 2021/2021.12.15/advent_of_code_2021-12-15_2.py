@@ -65,7 +65,7 @@ def run(run_title, input_file):
 		closed = {}
 
 		while len(frontier) > 0: 
-			prio, current = frontier_pqueue.get()
+			_, current = frontier_pqueue.get()
 			current_node = frontier[current]
 			closed[current] = current_node
 			del frontier[current]
