@@ -24,16 +24,15 @@ class Node:
 def run(run_title, input_file):
 
 	def visualize():
-		def reconstruct_path(current, closed): 
-			path = []
-			while current != None: 
-				path.append(current)
-				current = closed[current].parent
-			return path
+		path = []
+		current = end
+		while current != None: 
+			path.append(current)
+			current = closed[current].parent
 
 		visualization = [['.' for x in range(map_size.x)] for y in range(map_size.y)]
 
-		for pos in reconstruct_path(end, closed): 
+		for pos in path: 
 			visualization[pos.x][pos.y] = str(risk_map[pos.x][pos.y])
 		
 		for line in visualization: 
@@ -114,11 +113,11 @@ def run(run_title, input_file):
 	closed = a_star_search(start, end)
 
 	goal = closed[end]
-	# visualize()
+	visualize()
 	print(run_title, "goal.cost:", goal.cost)
 
 	end_time_ms = round(time.time() * 1000)
 	print("time:", end_time_ms - start_time_ms)
 
-# run("[Test]", open('input_test.txt', 'r').readlines())
-run("[Real]", open('input.txt', 'r').readlines())
+run("[Test]", open('input_test.txt', 'r').readlines())
+# run("[Real]", open('input.txt', 'r').readlines())
