@@ -1,10 +1,9 @@
 
 # https://adventofcode.com/2021/day/16
 
-import re
+# import re
 import time
-import binascii
-from copy import deepcopy
+# from copy import deepcopy
 
 def run(run_title, input_file):
 
