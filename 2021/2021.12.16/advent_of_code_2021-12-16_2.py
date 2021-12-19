@@ -4,7 +4,6 @@
 # import re
 import time
 import math
-# from copy import deepcopy
 
 def run(run_title, input_file):
 
@@ -17,7 +16,7 @@ def run(run_title, input_file):
 
 		packet_version = int(packet[0:3],2)
 		packet_type_id = int(packet[3:6],2)
-		
+		offset = 6
 
 		nonlocal sum_packet_version
 		sum_packet_version += packet_version
@@ -29,7 +28,6 @@ def run(run_title, input_file):
 		if packet_type_id == 4: 
 			# Literal value
 			print('literal_packet:', packet)
-			offset = 6
 			literal_value = ''
 			flag = 1
 			while flag != '0':
@@ -38,41 +36,40 @@ def run(run_title, input_file):
 				literal_value += group[1:5]
 				offset += 5
 			print('literal_value:', literal_value, ('(' + str(int(literal_value, 2)) + ')'))
-			padding = offset - len(literal_value)
-			return ('0' * padding) + literal_value
+			return offset, literal_value
 		else: 
 			# Operator
 			length_type = packet[6:7]
+			offset += 1
 			literal_values = []
 			print('length_type:', length_type)
 			if (length_type == '0'): 
 				# Length is a 15-bit number representing the number of bits in the sub-packets
 				sub_packets_bit_length = int(packet[7:22], 2)
-				sub_packet = packet[22:22+sub_packets_bit_length]
 				print('sub_packets_bit_length:', sub_packets_bit_length)
-				offset = 0
-				while offset < sub_packets_bit_length - 1: 
-					literal_value = parse_packet(sub_packet[offset:])
-					offset += len(literal_value)
+				offset += 15
+				sub_packet_end = offset + sub_packets_bit_length - 1
+				while offset < sub_packet_end: 
+					new_offset, literal_value = parse_packet(packet[offset:])
+					offset += new_offset
 					literal_values.append(int(literal_value, 2))
 			else: 
 				# Length is a 11-bit number representing the number of sub-packets
 				num_sub_packets = int(packet[7:18], 2)
-				sub_packet = packet[18:]
 				print('num_sub_packets:', num_sub_packets)
-				offset = 0
+				offset += 11
 				for i in range(0, num_sub_packets):
-					literal_value = parse_packet(sub_packet[offset:])
-					offset += len(literal_value)
+					new_offset, literal_value = parse_packet(packet[offset:])
+					offset += new_offset
 					literal_values.append(int(literal_value, 2))
 
-			if 	 (packet_type_id == 0): return sum(literal_values) # Sum
-			elif (packet_type_id == 1): return math.prod(literal_values) # Product
-			elif (packet_type_id == 2): return min(literal_values) # Minimum
-			elif (packet_type_id == 3): return max(literal_values) # Maximum
-			elif (packet_type_id == 5): return 1 if literal_values[0] > literal_values[1] else 0 # Greater than
-			elif (packet_type_id == 6): return 1 if literal_values[0] < literal_values[1] else 0 # Less than
-			elif (packet_type_id == 7): return 1 if literal_values[0] == literal_values[1] else 0 # Equal to
+			if 	 (packet_type_id == 0): return offset, sum(literal_values) # Sum
+			elif (packet_type_id == 1): return offset, math.prod(literal_values) # Product
+			elif (packet_type_id == 2): return offset, min(literal_values) # Minimum
+			elif (packet_type_id == 3): return offset, max(literal_values) # Maximum
+			elif (packet_type_id == 5): return offset, 1 if literal_values[0] > literal_values[1] else 0 # Greater than
+			elif (packet_type_id == 6): return offset, 1 if literal_values[0] < literal_values[1] else 0 # Less than
+			elif (packet_type_id == 7): return offset, 1 if literal_values[0] == literal_values[1] else 0 # Equal to
 
 	hex_to_binary = {
 		'0': '0000', 
@@ -104,7 +101,7 @@ def run(run_title, input_file):
 
 	for line in input_file: 
 		binary = ''.join(hex_to_binary[c] for c in line.strip())
-		transmission = parse_packet(binary)
+		_, transmission = parse_packet(binary)
 
 	end_time_ms = round(time.time() * 1000)
 	total_time = end_time_ms - start_time_ms
