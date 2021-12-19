@@ -19,13 +19,14 @@ def run(run_title, input_file):
 
 		if int(packet, 2) == 0: 
 			padding = len(packet)
+			print('padding')
 			return padding
 
 		packet_version = int(packet[0:3],2)
 		packet_type_id = int(packet[3:6],2)
 
-		nonlocal sum_version_numbers
-		sum_version_numbers += packet_version
+		nonlocal transmission
+		transmission += packet_version
 
 		print('––––––––––')
 		print('packet_version:', packet_version)
@@ -40,7 +41,8 @@ def run(run_title, input_file):
 				flag = group[0:1]
 				literal_value += group[1:5]
 				offset += 5
-			print('literal_value:', int(literal_value, 2))
+			literal_value = int(literal_value, 2)
+			print('literal_value:', literal_value)
 			return offset
 		else: # Operator
 			length_type = packet[6:7]
@@ -85,7 +87,7 @@ def run(run_title, input_file):
 
 	start_time_ms = round(time.time() * 1000)
 
-	sum_version_numbers = 0
+	transmission = 0
 
 	for line in input_file: 
 		binary = ''.join(hex_to_binary[c] for c in line.strip())
@@ -97,7 +99,7 @@ def run(run_title, input_file):
 	total_time = end_time_ms - start_time_ms
 
 	print('––––––––––')
-	print(run_title, "sum_version_numbers:", sum_version_numbers, ('(' + str(total_time) + "ms)"))
+	print(run_title, "transmission:", transmission, ('(' + str(total_time) + "ms)"))
 
 # run("[Test]", open('input_test.txt', 'r').readlines())
 run("[Real]", open('input.txt', 'r').readlines())
