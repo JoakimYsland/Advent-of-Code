@@ -75,26 +75,26 @@ def run(run_title, input_file):
 
 			my_print('––––––––––')
 			if (packet_type == 0): # Sum
-				literal_value = sum(literal_values)
-				my_print('Returning sum of:', literal_values, "=>", literal_value)
+				operator_value = sum(literal_values)
+				my_print('Returning sum of:', literal_values, "=>", operator_value)
 			elif (packet_type == 1): # Product
-				literal_value = math.prod(literal_values)
-				my_print('Returning product of:', literal_values, "=>", literal_value)
+				operator_value = math.prod(literal_values)
+				my_print('Returning product of:', literal_values, "=>", operator_value)
 			elif (packet_type == 2): # Minimum
-				literal_value = min(literal_values)
-				my_print('Returning min of:', literal_values, "=>", literal_value)
+				operator_value = min(literal_values)
+				my_print('Returning min of:', literal_values, "=>", operator_value)
 			elif (packet_type == 3): # Maximum
-				literal_value = max(literal_values)
-				my_print('Returning max of:', literal_values, "=>", literal_value)
+				operator_value = max(literal_values)
+				my_print('Returning max of:', literal_values, "=>", operator_value)
 			elif (packet_type == 5): # Greater than
-				literal_value = 1 if literal_values[0] > literal_values[1] else 0
-				my_print('Returning > of:', literal_values, "=>", literal_value)
+				operator_value = 1 if literal_values[0] > literal_values[1] else 0
+				my_print('Returning > of:', literal_values, "=>", operator_value)
 			elif (packet_type == 6): # Less than
-				literal_value = 1 if literal_values[0] < literal_values[1] else 0
-				my_print('Returning < of:', literal_values, "=>", literal_value)
+				operator_value = 1 if literal_values[0] < literal_values[1] else 0
+				my_print('Returning < of:', literal_values, "=>", operator_value)
 			elif (packet_type == 7): # Equal to
-				literal_value = 1 if literal_values[0] == literal_values[1] else 0
-				my_print('Returning == of:', literal_values, "=>", literal_value)
+				operator_value = 1 if literal_values[0] == literal_values[1] else 0
+				my_print('Returning == of:', literal_values, "=>", operator_value)
 
 			return offset, operator_value
 
