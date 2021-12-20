@@ -109,7 +109,7 @@ def run(run_title, input_file):
 			if state == 'IDLE': 
 				done = True
 			else: 
-				print(sequence, '–', state)
+				print(state, '=>', sequence)
 				
 		print('––––––––––')
 
