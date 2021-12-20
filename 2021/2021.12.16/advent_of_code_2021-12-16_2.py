@@ -6,7 +6,7 @@ import time
 import math
 
 def my_print(*args, **kwargs):
-	# print(' '.join(map(str,args)), **kwargs)
+	print(' '.join(map(str,args)), **kwargs)
 	return
 
 def run(run_title, input_file):
