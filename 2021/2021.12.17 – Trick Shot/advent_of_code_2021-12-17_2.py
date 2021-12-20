@@ -30,11 +30,12 @@ class Probe:
 		if self.velocity.x < 0: self.velocity.x += 1
 		self.velocity.y -= 1
 
-	def check_collision(self, area): 
-		if self.position.x >= area[0] and self.position.x <= area[1]: 
-			if self.position.y >= area[2] and self.position.y <= area[3]: 
-				return True
-		return False
+	def is_in_target_area(self, area):
+		p = self.position
+		return p.x >= area[0] and p.x <= area[1] and p.y >= area[2] and p.y <= area[3]
+
+	def is_out_of_bounds(self, area): 
+		return self.position.x > area[1] or self.position.y < area[2]
 
 def my_print(*args, **kwargs):
 	print(' '.join(map(str,args)), **kwargs)
@@ -47,48 +48,42 @@ def run(run_title, input_file):
 
 	# --------------------------------------------------------------------------------
 
-	# Test / Real – n/a / 13476220616073 (2ms)
+	# Test / Real – 112 / 1908
 
 	start_time_ms = round(time.time() * 1000)
 
-	probes = []
+	num_hits = 0
 
-	init_velocity_x = 1
+	# r = 100 # 447
+	# r = 200 # 753
+	# r = 250 # 1068
+	r = 300 # 1908
 
-	for i in range(1, 100): 
-		triangle_number = int(i * (i + 1) / 2) # https://www.mathsisfun.com/algebra/triangular-numbers.html
-		if triangle_number > target_area[0]: 
-			if triangle_number < target_area[1]: 
-				init_velocity_x = i
-				break
-
-	print('init_velocity_x:', init_velocity_x)
-
-	for i in range(1, 100):
-		probes.append(Probe(0, 0, init_velocity_x, i))
-
-	while len(probes) > 0: 
-		for i, probe in enumerate(probes.copy()): 
-			probe.update()
-
-			if probe.position.x > target_area[1] or probe.position.y < target_area[2]: 
-				print(probe.position, '- Probe out of bounds')
-				probes.pop(i)
-			else: 
-				if probe.check_collision(target_area): 
-					peak = 0
-					for pos in probe.path: 
-						if pos.y > peak: 
-							peak = pos.y
-					print(probe.position, '- Collision!', 'Peak:', peak)
-					probes.pop(i)
+	for x in range(0, r): 
+		velocity_x = x
+		for y in range(-r, r): 
+			velocity_y = y
+			velocity_str = str(velocity_x) + ',' + str(velocity_y)
+			probe = Probe(0, 0, velocity_x, velocity_y)
+			probe_status = 'VALID'
+			while probe_status == 'VALID': 
+				probe.update()
+				if probe.is_out_of_bounds(target_area): 
+					# print('Probe', velocity_str, '- Probe out of bounds (', probe.position, ')')
+					probe_status = 'OOB'
+				else: 
+					if probe.is_in_target_area(target_area): 
+						# print('Probe', velocity_str, '- Collision! (', probe.position, ')')
+						probe_status = 'HIT'
+			if probe_status == 'HIT': 
+				num_hits += 1
 
 	end_time_ms = round(time.time() * 1000)
 	total_time = end_time_ms - start_time_ms
 
-	# print('––––––––––')
-	# print(run_title, "sum_packet_version:", sum_packet_version, ('(' + str(total_time) + "ms)"))
-	# print(run_title, "op_value_final:", op_value_final, ('(' + str(total_time) + "ms)"))
+	print('––––––––––')
+	print(run_title, "num_hits:", num_hits, ('(' + str(total_time) + "ms)"))
+	print('––––––––––')
 
-# run("[Test]", open('input_test.txt', 'r').readlines())
+run("[Test]", open('input_test.txt', 'r').readlines())
 # run("[Real]", open('input.txt', 'r').readlines())
