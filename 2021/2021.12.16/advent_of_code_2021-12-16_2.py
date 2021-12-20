@@ -45,7 +45,7 @@ def run(run_title, input_file):
 			# Operator
 			length_type = packet[6:7]
 			offset += 1
-			literal_values = []
+			op_values = []
 			my_print('length_type:', length_type)
 			if (length_type == '0'): 
 				# Length is a 15-bit number representing the number of bits in the sub-packets
@@ -58,7 +58,7 @@ def run(run_title, input_file):
 					offset += new_offset
 					if type(literal_value) != int: 
 						literal_value = int(literal_value, 2)
-					literal_values.append(literal_value)
+					op_values.append(literal_value)
 			else: 
 				# Length is a 11-bit number representing the number of sub-packets
 				num_sub_packets = int(packet[7:18], 2)
@@ -69,34 +69,34 @@ def run(run_title, input_file):
 					offset += new_offset
 					if type(literal_value) != int: 
 						literal_value = int(literal_value, 2)
-					literal_values.append(literal_value)
+					op_values.append(literal_value)
 
-			operator_value = 0
+			op_value_final = 0
 
 			my_print('––––––––––')
 			if (packet_type == 0): # Sum
-				operator_value = sum(literal_values)
-				my_print('Returning sum of:', literal_values, "=>", operator_value)
+				op_value_final = sum(op_values)
+				my_print('Returning sum of:', op_values, "=>", op_value_final)
 			elif (packet_type == 1): # Product
-				operator_value = math.prod(literal_values)
-				my_print('Returning product of:', literal_values, "=>", operator_value)
+				op_value_final = math.prod(op_values)
+				my_print('Returning product of:', op_values, "=>", op_value_final)
 			elif (packet_type == 2): # Minimum
-				operator_value = min(literal_values)
-				my_print('Returning min of:', literal_values, "=>", operator_value)
+				op_value_final = min(op_values)
+				my_print('Returning min of:', op_values, "=>", op_value_final)
 			elif (packet_type == 3): # Maximum
-				operator_value = max(literal_values)
-				my_print('Returning max of:', literal_values, "=>", operator_value)
+				op_value_final = max(op_values)
+				my_print('Returning max of:', op_values, "=>", op_value_final)
 			elif (packet_type == 5): # Greater than
-				operator_value = 1 if literal_values[0] > literal_values[1] else 0
-				my_print('Returning > of:', literal_values, "=>", operator_value)
+				op_value_final = 1 if op_values[0] > op_values[1] else 0
+				my_print('Returning > of:', op_values, "=>", op_value_final)
 			elif (packet_type == 6): # Less than
-				operator_value = 1 if literal_values[0] < literal_values[1] else 0
-				my_print('Returning < of:', literal_values, "=>", operator_value)
+				op_value_final = 1 if op_values[0] < op_values[1] else 0
+				my_print('Returning < of:', op_values, "=>", op_value_final)
 			elif (packet_type == 7): # Equal to
-				operator_value = 1 if literal_values[0] == literal_values[1] else 0
-				my_print('Returning == of:', literal_values, "=>", operator_value)
+				op_value_final = 1 if op_values[0] == op_values[1] else 0
+				my_print('Returning == of:', op_values, "=>", op_value_final)
 
-			return offset, operator_value
+			return offset, op_value_final
 
 	hex_to_binary = {
 		'0': '0000', 
@@ -123,19 +123,19 @@ def run(run_title, input_file):
 
 	start_time_ms = round(time.time() * 1000)
 
-	transmission = 0
+	op_value_final = 0
 	sum_packet_version = 0
 
 	for line in input_file: 
 		binary = ''.join(hex_to_binary[c] for c in line.strip())
-		_, transmission = parse_packet(binary)
+		_, op_value_final = parse_packet(binary)
 
 	end_time_ms = round(time.time() * 1000)
 	total_time = end_time_ms - start_time_ms
 
 	print('––––––––––')
 	print(run_title, "sum_packet_version:", sum_packet_version, ('(' + str(total_time) + "ms)"))
-	print(run_title, "transmission:", transmission, ('(' + str(total_time) + "ms)"))
+	print(run_title, "op_value_final:", op_value_final, ('(' + str(total_time) + "ms)"))
 
 # run("[Test]", open('input_test.txt', 'r').readlines())
 run("[Real]", open('input.txt', 'r').readlines())
