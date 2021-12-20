@@ -58,10 +58,13 @@ def run(run_title, input_file):
 	# 		depth = sfnum.depth
 	# 	return reconstruction
 
-	# [[[[[4,3],4],4],[7,[[8,4],9]]],[1,1]]
-	def reduce_line(line):
-		
-		# line = [c for c in line.replace(',', '')]
+	def add_sequences(sequence_1, sequence_2): 
+		new_sequence = sequence_1 + sequence_2
+		for sfnum in new_sequence: 
+			sfnum.depth += 1
+		return new_sequence
+
+	def get_sequence_from_line(line): 
 		sequence = []
 		depth = 0
 		for i, c in enumerate(line): 
@@ -70,6 +73,11 @@ def run(run_title, input_file):
 			elif c == ',': continue
 			else: 
 				sequence.append(SFNum(depth, int(c)))
+		return sequence
+
+	def reduce_line(line):
+		
+		sequence = get_sequence_from_line(line)
 		
 		print(line)
 		print(sequence)
@@ -98,33 +106,12 @@ def run(run_title, input_file):
 					sequence.insert(i+1, SFNum(sfnum.depth, v2))
 					break
 
-			print(sequence, state)
-
 			if state == 'IDLE': 
 				done = True
+			else: 
+				print(sequence, '–', state)
 				
 		print('––––––––––')
-					
-
-		# 	if c.isdigit():
-		# 		line(i) = int(c)
-
-		# reduced = True
-		# while reduced: 
-		# 	depth = 0
-		# 	prev_number_index = None
-		# 	explode
-		# 	for i, c in enumerate(line.copy()): 
-		# 		if c == '[': 
-		# 			depth += 1
-		# 		elif c == ']': 
-		# 			depth -= 1
-		# 		else: 
-		# 			if depth > 4: # Explode
-		# 				if prev_number_index != None: 
-		# 					line[prev_number_index] += c
-		# 			prev_number_index = i
-		# 	reduced = False
 
 	# --------------------------------------------------------------------------------
 
