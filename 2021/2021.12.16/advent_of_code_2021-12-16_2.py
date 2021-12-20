@@ -6,17 +6,12 @@ import time
 import math
 
 def my_print(*args, **kwargs):
-	p = False
-	if p: print(' '.join(map(str,args)), **kwargs)
+	# print(' '.join(map(str,args)), **kwargs)
+	return
 
 def run(run_title, input_file):
 
 	def parse_packet(packet): 
-
-		if int(packet, 2) == 0: 
-			padding = len(packet)
-			print('padding')
-			return padding
 
 		packet_version = int(packet[0:3],2)
 		packet_type = int(packet[3:6],2)
