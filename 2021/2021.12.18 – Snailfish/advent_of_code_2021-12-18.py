@@ -75,16 +75,14 @@ def run(run_title, input_file):
 				sequence.append(SFNum(depth, int(c)))
 		return sequence
 
-	def reduce_line(line):
-		
-		sequence = get_sequence_from_line(line)
+	def reduce_sequence(sequence):
 		
 		print(line)
 		print(sequence)
 		print('––––––––––')
 
-		done = False
-		while not done: 
+		reduced = False
+		while not reduced: 
 			state = 'IDLE'
 			for i, sfnum in enumerate(sequence): 
 				if sfnum.depth > 4: 
@@ -107,9 +105,11 @@ def run(run_title, input_file):
 					break
 
 			if state == 'IDLE': 
-				done = True
+				reduced = True
 			else: 
 				print(state, '=>', sequence)
+		
+		return sequence
 				
 		print('––––––––––')
 
@@ -120,9 +120,24 @@ def run(run_title, input_file):
 	start_time_ms = round(time.time() * 1000)
 
 	num_hits = 0
+	sequence = None
 
 	for line in input_file: 
-		reduce_line(line.strip())
+		next_sequence = get_sequence_from_line(line.strip())
+		next_sequence = reduce_sequence(next_sequence)
+		
+		if sequence != None: 
+			sequence = add_sequences(sequence, next_sequence)
+			sequence = reduce_sequence(sequence)
+		else: 
+			sequence = next_sequence
+
+	print('––––––––––')
+	print(sequence)
+	print('––––––––––')
+
+	# [[[[8,7],[7,7]],[[8,6],[7,7]]],[[[0,7],[6,6]],[8,7]]]
+	# [(4,7), (4,8), (4,7), (4,8), (4,8), (4,8), (4,0), (4,8), (4,8), (4,4), (3,6), (3,8), (3,7)]
 
 	# # r = 100 # 447
 	# # r = 200 # 753
