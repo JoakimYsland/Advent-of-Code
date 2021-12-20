@@ -77,8 +77,7 @@ def run(run_title, input_file):
 
 	def reduce_sequence(sequence):
 		
-		print(line)
-		print(sequence)
+		print('REDUCE =>', sequence)
 		print('––––––––––')
 
 		reduced = False
@@ -120,17 +119,22 @@ def run(run_title, input_file):
 	start_time_ms = round(time.time() * 1000)
 
 	num_hits = 0
-	sequence = None
+	sequence = get_sequence_from_line(input_file[0].strip())
 
-	for line in input_file: 
-		next_sequence = get_sequence_from_line(line.strip())
-		next_sequence = reduce_sequence(next_sequence)
+	for i in range(1, len(input_file)): 
+		next_sequence = get_sequence_from_line(input_file[i].strip())
+		sequence = add_sequences(sequence, next_sequence)
+		sequence = reduce_sequence(sequence)
+
+	# for line in input_file: 
+	# 	next_sequence = get_sequence_from_line(line.strip())
+	# 	next_sequence = reduce_sequence(next_sequence)
 		
-		if sequence != None: 
-			sequence = add_sequences(sequence, next_sequence)
-			sequence = reduce_sequence(sequence)
-		else: 
-			sequence = next_sequence
+	# 	if sequence != None: 
+	# 		sequence = add_sequences(sequence, next_sequence)
+	# 		sequence = reduce_sequence(sequence)
+	# 	else: 
+	# 		sequence = next_sequence
 
 	print('––––––––––')
 	print(sequence)
