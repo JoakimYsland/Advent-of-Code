@@ -47,7 +47,7 @@ def run(run_title, input_file):
 
 	# --------------------------------------------------------------------------------
 
-	# Test / Real – n/a / 13476220616073 (2ms)
+	# Test / Real – 45 / 4656
 
 	start_time_ms = round(time.time() * 1000)
 
@@ -90,5 +90,5 @@ def run(run_title, input_file):
 	# print(run_title, "sum_packet_version:", sum_packet_version, ('(' + str(total_time) + "ms)"))
 	# print(run_title, "op_value_final:", op_value_final, ('(' + str(total_time) + "ms)"))
 
-# run("[Test]", open('input_test.txt', 'r').readlines())
+run("[Test]", open('input_test.txt', 'r').readlines())
 # run("[Real]", open('input.txt', 'r').readlines())
