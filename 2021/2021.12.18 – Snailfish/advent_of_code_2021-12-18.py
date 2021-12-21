@@ -111,6 +111,17 @@ def run(run_title, input_file):
 		return sequence
 				
 		print('––––––––––')
+	
+	def get_magnitude(sequence):
+
+		while len(sequence) > 1: 
+			for i in range(0, len(sequence) - 1):
+				if sequence[i].depth == sequence[i+1].depth: 
+					sequence[i].depth -= 1
+					sequence[i].value = (sequence[i].value * 3) + (sequence[i+1].value * 2)
+					sequence.pop(i+1)
+					break
+		return sequence[0].value
 
 	# --------------------------------------------------------------------------------
 
@@ -121,51 +132,22 @@ def run(run_title, input_file):
 	num_hits = 0
 	sequence = get_sequence_from_line(input_file[0].strip())
 
-	for i in range(1, len(input_file)): 
-		next_sequence = get_sequence_from_line(input_file[i].strip())
-		sequence = add_sequences(sequence, next_sequence)
-		sequence = reduce_sequence(sequence)
+	# for i in range(1, len(input_file)): 
+	# 	next_sequence = get_sequence_from_line(input_file[i].strip())
+	# 	sequence = add_sequences(sequence, next_sequence)
+	# 	sequence = reduce_sequence(sequence)
 
-	# for line in input_file: 
-	# 	next_sequence = get_sequence_from_line(line.strip())
-	# 	next_sequence = reduce_sequence(next_sequence)
-		
-	# 	if sequence != None: 
-	# 		sequence = add_sequences(sequence, next_sequence)
-	# 		sequence = reduce_sequence(sequence)
-	# 	else: 
-	# 		sequence = next_sequence
+	# print('––––––––––')
+	# s = get_sequence_from_line('[[[[4,0],[5,4]],[[7,7],[6,0]]],[[8,[7,7]],[[7,9],[5,0]]]]')
+	# print(s)
+	# # print(sequence)
+	# print('––––––––––')
 
 	print('––––––––––')
-	print(sequence)
+	s = get_sequence_from_line('[[[[8,7],[7,7]],[[8,6],[7,7]]],[[[0,7],[6,6]],[8,7]]]')
+	print(s)
+	print(get_magnitude(s))
 	print('––––––––––')
-
-	# [[[[8,7],[7,7]],[[8,6],[7,7]]],[[[0,7],[6,6]],[8,7]]]
-	# [(4,7), (4,8), (4,7), (4,8), (4,8), (4,8), (4,0), (4,8), (4,8), (4,4), (3,6), (3,8), (3,7)]
-
-	# # r = 100 # 447
-	# # r = 200 # 753
-	# # r = 250 # 1068
-	# r = 300 # 1908
-
-	# for x in range(0, r): 
-	# 	velocity_x = x
-	# 	for y in range(-r, r): 
-	# 		velocity_y = y
-	# 		velocity_str = str(velocity_x) + ',' + str(velocity_y)
-	# 		probe = Probe(0, 0, velocity_x, velocity_y)
-	# 		probe_status = 'VALID'
-	# 		while probe_status == 'VALID': 
-	# 			probe.update()
-	# 			if probe.is_out_of_bounds(target_area): 
-	# 				# print('Probe', velocity_str, '- Probe out of bounds (', probe.position, ')')
-	# 				probe_status = 'OOB'
-	# 			else: 
-	# 				if probe.is_in_target_area(target_area): 
-	# 					# print('Probe', velocity_str, '- Collision! (', probe.position, ')')
-	# 					probe_status = 'HIT'
-	# 		if probe_status == 'HIT': 
-	# 			num_hits += 1
 
 	end_time_ms = round(time.time() * 1000)
 	total_time = end_time_ms - start_time_ms
