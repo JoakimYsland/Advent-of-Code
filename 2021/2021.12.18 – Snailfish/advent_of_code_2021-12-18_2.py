@@ -105,8 +105,9 @@ def run(run_title, input_file):
 		for j in range(0, len(sequences)): 
 			if i == j: 
 				continue
-			sequence = add_sequences(deepcopy(sequences[i]), deepcopy(sequences[j]))
-			sequence = reduce_sequence(sequence)
+			s1 = deepcopy(sequences[i])
+			s2 = deepcopy(sequences[j])
+			sequence = reduce_sequence(add_sequences(s1, s2))
 			highest_magnitude = max(highest_magnitude, get_magnitude(sequence))
 
 	end_time_ms = round(time.time() * 1000)
