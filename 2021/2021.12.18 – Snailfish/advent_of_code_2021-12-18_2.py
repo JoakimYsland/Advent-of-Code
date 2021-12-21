@@ -78,14 +78,12 @@ def run(run_title, input_file):
 	
 	def get_magnitude(sequence):
 
-		# return sequence[0].value
 		while len(sequence) > 1: 
 			for i in range(0, len(sequence) - 1):
 				left  = sequence[i]
 				right = sequence[i+1]
 				if left.depth == right.depth: 
 					left.depth = max(1, left.depth - 1)
-					# left.depth -= 1
 					left.value = (left.value * 3) + (right.value * 2)
 					sequence.pop(i+1)
 					break
