@@ -106,9 +106,7 @@ def run(run_title, input_file):
 	total_time = end_time_ms - start_time_ms
 
 	print('––––––––––')
-	print(get_sequence_from_line('[[[[8,7],[7,7]],[[8,6],[7,7]]],[[[0,7],[6,6]],[8,7]]]'))
 	print(sequence)
-	print(get_magnitude(sequence))
 	print(run_title, "magnitude:", get_magnitude(sequence), ('(' + str(total_time) + "ms)"))
 	print('––––––––––')
 
