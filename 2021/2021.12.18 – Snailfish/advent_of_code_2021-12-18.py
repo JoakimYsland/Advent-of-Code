@@ -14,49 +14,10 @@ class SFNum:
 		return "({0},{1})".format(str(self.depth), str(self.value))
 
 def my_print(*args, **kwargs):
-	# print(' '.join(map(str,args)), **kwargs)
+	print(' '.join(map(str,args)), **kwargs)
 	return
 
 def run(run_title, input_file):
-
-	# def reconstruct_sequence(sequence): 
-	# 	depth = 0
-	# 	# depth_streak = 0
-	# 	prev_depth_change
-	# 	reconstruction = ''
-	# 	for i, sfnum in enumerate(sequence): 
-	# 		depth_change = sfnum.depth - depth
-	# 		if depth_change > 0: 
-	# 			depth_streak = 1
-	# 			reconstruction += '[' * depth_change
-	# 		elif depth_change < 0: 
-	# 			depth_streak = 1
-	# 			reconstruction += ']' * abs(depth_change)
-	# 		# else: 
-	# 		# 	depth_streak += 1
-	# 		# 	reconstruction += ']'
-
-	# 		# if depth_streak % 2 == 0: 
-	# 		# 	reconstruction += '],['
-	# 		# if depth_streak % 2 == 1: 
-	# 		# 	reconstruction += '],['
-
-
-	# 		reconstruction += str(sfnum.value)
-
-	# 		if depth_change == 0: 
-	# 			reconstruction += ']'
-
-	# 		# if depth_streak > 1: 
-	# 			# reconstruction += ')'
-
-	# 		# else: reconstruction += '],['
-	# 		# if not depth_change <= 0: 
-	# 		# reconstruction += ','
-	# 		# if depth_change == 0: reconstruction += ']'
-	# 		prev_depth_change = depth
-	# 		depth = sfnum.depth
-	# 	return reconstruction
 
 	def add_sequences(sequence_1, sequence_2): 
 		new_sequence = sequence_1 + sequence_2
@@ -140,10 +101,9 @@ def run(run_title, input_file):
 		sequence = reduce_sequence(sequence)
 
 	print('––––––––––')
-	s = get_sequence_from_line('[[[[6,6],[7,6]],[[7,7],[7,0]]],[[[7,7],[7,7]],[[7,8],[9,9]]]]')
-	print(s)
+	print(get_sequence_from_line('[[[[4,0],[5,4]],[[7,7],[6,0]]],[[8,[7,7]],[[7,9],[5,0]]]]'))
 	print(sequence)
-	print(get_magnitude(sequence))
+	# print(get_magnitude(sequence))
 	print('––––––––––')
 
 	end_time_ms = round(time.time() * 1000)
