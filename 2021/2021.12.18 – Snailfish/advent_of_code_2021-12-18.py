@@ -82,7 +82,7 @@ def run(run_title, input_file):
 				left  = sequence[i]
 				right = sequence[i+1]
 				if left.depth == right.depth: 
-					left.depth -= 1
+					left.depth = max(1, left.depth - 1)
 					left.value = (left.value * 3) + (right.value * 2)
 					sequence.pop(i+1)
 					break
