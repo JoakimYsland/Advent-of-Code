@@ -94,7 +94,6 @@ def run(run_title, input_file):
 
 	start_time_ms = round(time.time() * 1000)
 
-	num_hits = 0
 	sequence = get_sequence_from_line(input_file[0].strip())
 
 	for i in range(1, len(input_file)): 
