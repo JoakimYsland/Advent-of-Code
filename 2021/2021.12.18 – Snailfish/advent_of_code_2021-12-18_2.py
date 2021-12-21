@@ -105,47 +105,14 @@ def run(run_title, input_file):
 		for j in range(0, len(sequences)): 
 			if i == j: 
 				continue
-			s1 = add_sequences(deepcopy(sequences[i]), deepcopy(sequences[j]))
-			s1 = reduce_sequence(s1)
-			highest_magnitude = max(highest_magnitude, get_magnitude(s1))
-
-
-	# s1 = add_sequences(sequences[8], sequences[0])
-	# s1 = add_sequences(sequences[0], sequences[4])
-	# s1 = reduce_sequence(s1)
-	# print(reduce_sequence(get_sequence_from_line('[[[[7,8],[6,6]],[[6,0],[7,7]]],[[[7,8],[8,8]],[[7,9],[0,6]]]]')))
-	# print(s1)
-	# print(get_magnitude(s1))
-
-	# s1 = add_sequences(sequences[1], sequences[0])
-	# s1 = reduce_sequence(s1)
-	# print(get_magnitude(s1))
-
-
-	# for i in range(0, 5): 
-	# 	for j in range(0, 5): 
-	# 		if i == j: 
-	# 			continue
-	# 		s1 = add_sequences(sequences[i], sequences[j])
-	# 		s1 = reduce_sequence(s1)
-	# 		magnitudes.append(get_magnitude(s1))
-
-	# print(len(magnitudes))
-
-
-
-	# sequence = get_sequence_from_line(input_file[0].strip())
-
-	# for i in range(1, len(input_file)): 
-	# 	next_sequence = get_sequence_from_line(input_file[i].strip())
-	# 	sequence = add_sequences(sequence, next_sequence)
-	# 	sequence = reduce_sequence(sequence)
+			sequence = add_sequences(deepcopy(sequences[i]), deepcopy(sequences[j]))
+			sequence = reduce_sequence(sequence)
+			highest_magnitude = max(highest_magnitude, get_magnitude(sequence))
 
 	end_time_ms = round(time.time() * 1000)
 	total_time = end_time_ms - start_time_ms
 
 	print('––––––––––')
-	# print(sequence)
 	print(run_title, "highest_magnitude:", highest_magnitude, ('(' + str(total_time) + "ms)"))
 	print('––––––––––')
 
