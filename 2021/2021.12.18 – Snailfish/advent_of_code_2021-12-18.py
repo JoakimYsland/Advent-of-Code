@@ -14,7 +14,7 @@ class SFNum:
 		return "({0},{1})".format(str(self.depth), str(self.value))
 
 def my_print(*args, **kwargs):
-	print(' '.join(map(str,args)), **kwargs)
+	# print(' '.join(map(str,args)), **kwargs)
 	return
 
 def run(run_title, input_file):
@@ -55,14 +55,16 @@ def run(run_title, input_file):
 					sfnum.value = 0
 					sequence.pop(i+1)
 					break
-				elif sfnum.value > 9: 
-					state = 'SPLIT'
-					v1 = int(sfnum.value / 2)
-					v2 = int((sfnum.value / 2) + 0.5)
-					sfnum.depth += 1
-					sfnum.value = v1
-					sequence.insert(i+1, SFNum(sfnum.depth, v2))
-					break
+			if state == 'IDLE': 
+				for i, sfnum in enumerate(sequence): 
+					if sfnum.value > 9: 
+						state = 'SPLIT'
+						v1 = int(sfnum.value / 2)
+						v2 = int((sfnum.value / 2) + 0.5)
+						sfnum.depth += 1
+						sfnum.value = v1
+						sequence.insert(i+1, SFNum(sfnum.depth, v2))
+						break
 
 			if state == 'IDLE': 
 				reduced = True
@@ -100,18 +102,15 @@ def run(run_title, input_file):
 		sequence = add_sequences(sequence, next_sequence)
 		sequence = reduce_sequence(sequence)
 
-	print('––––––––––')
-	print(get_sequence_from_line('[[[[4,0],[5,4]],[[7,7],[6,0]]],[[8,[7,7]],[[7,9],[5,0]]]]'))
-	print(sequence)
-	# print(get_magnitude(sequence))
-	print('––––––––––')
-
 	end_time_ms = round(time.time() * 1000)
 	total_time = end_time_ms - start_time_ms
 
-	# print('––––––––––')
-	# print(run_title, "num_hits:", num_hits, ('(' + str(total_time) + "ms)"))
-	# print('––––––––––')
+	print('––––––––––')
+	print(get_sequence_from_line('[[[[8,7],[7,7]],[[8,6],[7,7]]],[[[0,7],[6,6]],[8,7]]]'))
+	print(sequence)
+	print(get_magnitude(sequence))
+	print(run_title, "magnitude:", get_magnitude(sequence), ('(' + str(total_time) + "ms)"))
+	print('––––––––––')
 
 run("[Test]", open('input_test.txt', 'r').readlines())
 # run("[Real]", open('input.txt', 'r').readlines())
