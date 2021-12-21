@@ -112,5 +112,5 @@ def run(run_title, input_file):
 	print(run_title, "magnitude:", get_magnitude(sequence), ('(' + str(total_time) + "ms)"))
 	print('––––––––––')
 
-run("[Test]", open('input_test.txt', 'r').readlines())
-# run("[Real]", open('input.txt', 'r').readlines())
+# run("[Test]", open('input_test.txt', 'r').readlines())
+run("[Real]", open('input.txt', 'r').readlines())
