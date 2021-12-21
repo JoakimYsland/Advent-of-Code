@@ -50,12 +50,11 @@ def run(run_title, input_file):
 					state = 'EXPLODE'
 					if i > 0: 
 						sequence[i-1].value += sequence[i].value
-					if i + 1 < len(sequence): 
-						if i + 2 < len(sequence): 
-							sequence[i+2].value += sequence[i+1].value
-						sequence.pop(i+1)
+					if i + 2 < len(sequence): 
+						sequence[i+2].value += sequence[i+1].value
 					sfnum.depth -=1
 					sfnum.value = 0
+					sequence.pop(i+1)
 					break
 			if state == 'IDLE': 
 				for i, sfnum in enumerate(sequence): 
