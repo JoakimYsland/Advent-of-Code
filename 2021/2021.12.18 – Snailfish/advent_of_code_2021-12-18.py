@@ -14,7 +14,7 @@ class SFNum:
 		return "({0},{1})".format(str(self.depth), str(self.value))
 
 def my_print(*args, **kwargs):
-	print(' '.join(map(str,args)), **kwargs)
+	# print(' '.join(map(str,args)), **kwargs)
 	return
 
 def run(run_title, input_file):
@@ -77,8 +77,8 @@ def run(run_title, input_file):
 
 	def reduce_sequence(sequence):
 		
-		print('REDUCE =>', sequence)
-		print('––––––––––')
+		my_print('REDUCE =>', sequence)
+		my_print('––––––––––')
 
 		reduced = False
 		while not reduced: 
@@ -106,47 +106,44 @@ def run(run_title, input_file):
 			if state == 'IDLE': 
 				reduced = True
 			else: 
-				print(state, '=>', sequence)
+				my_print(state, '=>', sequence)
 		
 		return sequence
 				
-		print('––––––––––')
+		my_print('––––––––––')
 	
 	def get_magnitude(sequence):
 
 		while len(sequence) > 1: 
 			for i in range(0, len(sequence) - 1):
-				if sequence[i].depth == sequence[i+1].depth: 
-					sequence[i].depth -= 1
-					sequence[i].value = (sequence[i].value * 3) + (sequence[i+1].value * 2)
+				left  = sequence[i]
+				right = sequence[i+1]
+				if left.depth == right.depth: 
+					left.depth -= 1
+					left.value = (left.value * 3) + (right.value * 2)
 					sequence.pop(i+1)
 					break
 		return sequence[0].value
 
 	# --------------------------------------------------------------------------------
 
-	# Test / Real – 112 / 1908
+	# Test / Real – 4140 / ???
 
 	start_time_ms = round(time.time() * 1000)
 
 	num_hits = 0
 	sequence = get_sequence_from_line(input_file[0].strip())
 
-	# for i in range(1, len(input_file)): 
-	# 	next_sequence = get_sequence_from_line(input_file[i].strip())
-	# 	sequence = add_sequences(sequence, next_sequence)
-	# 	sequence = reduce_sequence(sequence)
-
-	# print('––––––––––')
-	# s = get_sequence_from_line('[[[[4,0],[5,4]],[[7,7],[6,0]]],[[8,[7,7]],[[7,9],[5,0]]]]')
-	# print(s)
-	# # print(sequence)
-	# print('––––––––––')
+	for i in range(1, len(input_file)): 
+		next_sequence = get_sequence_from_line(input_file[i].strip())
+		sequence = add_sequences(sequence, next_sequence)
+		sequence = reduce_sequence(sequence)
 
 	print('––––––––––')
-	s = get_sequence_from_line('[[[[8,7],[7,7]],[[8,6],[7,7]]],[[[0,7],[6,6]],[8,7]]]')
+	s = get_sequence_from_line('[[[[6,6],[7,6]],[[7,7],[7,0]]],[[[7,7],[7,7]],[[7,8],[9,9]]]]')
 	print(s)
-	print(get_magnitude(s))
+	print(sequence)
+	print(get_magnitude(sequence))
 	print('––––––––––')
 
 	end_time_ms = round(time.time() * 1000)
