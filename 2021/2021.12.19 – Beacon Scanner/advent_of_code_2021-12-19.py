@@ -141,7 +141,8 @@ def run(run_title, input_file):
 		result = intersect_scanners(scanners[s1], scanners[s2])
 		if result != None: 
 			offset, permutation = result
-			print("Offset from Scanner {0} to Scanner {1} is {2} (permutation {3})".format(s1, s2, offset, permutation))
+			text = "Offset from Scanner {0} to Scanner {1} is {2} (permutation {3})"
+			print(text.format(s1, s2, offset, permutation))
 			scanner_graph.setdefault(str(s1), [])
 			scanner_graph[str(s1)].append((str(s2), offset))
 	
