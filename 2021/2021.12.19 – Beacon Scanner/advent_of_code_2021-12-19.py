@@ -24,9 +24,6 @@ class Vec3:
 	def __abs__(self):
 		return Vec3(abs(self.x), abs(self.y), abs(self.z))
 
-	# def __neg__(self):
-	# 	return Vec3(-self.x, -self.y, -self.z)
-
 def my_print(*args, **kwargs):
 	# print(' '.join(map(str,args)), **kwargs)
 	return
