@@ -126,9 +126,7 @@ def run(run_title, input_file):
 			if offset != None: 
 				print("Offset from Scanner {0} to Scanner {1} is {2}".format(i, j, offset))
 				scanner_graph.setdefault(str(i), [])
-				# scanner_graph.setdefault(str(j), [])
 				scanner_graph[str(i)].append((str(j), offset))
-				# scanner_graph[str(j)].append((str(i), -offset))
 
 	map_scanner_graph()
 
