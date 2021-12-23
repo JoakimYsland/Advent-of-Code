@@ -77,13 +77,13 @@ def run(run_title, input_file):
 
 		for offset, count in offsets.items(): 
 			if count >= 12: 
-				print(offset, count)
+				# print(offset, count)
 				return offset
 		return None
 
 	# --------------------------------------------------------------------------------
 
-	# Test / Real – 3993 / 4837
+	# Test / Real – ??? / ???
 
 	start_time_ms = round(time.time() * 1000)
 	
@@ -105,21 +105,9 @@ def run(run_title, input_file):
 			if i == j: 
 				continue
 
-			print('Comparing', i, 'and', j)
 			offset = intersect_scanners(scanners[i], scanners[j])
-
-
-			# for b1 in scanners[i]:
-			# 	permutations = get_axis_permutations(b1)
-			# 	for b2 in scanners[j]: 
-			# 		for b in permutations: 
-			# 			offset = str(b - b2)
-			# 			offsets.setdefault(offset, 0)
-			# 			offsets[offset] += 1
-
-			# for offset, count in offsets.items(): 
-			# 	if count > 2: 
-			# 		print(offset, count)
+			if offset != None: 
+				print("Offset from Scanner {0} to Scanner {1} is {2}".format(i, j, offset))
 
 	end_time_ms = round(time.time() * 1000)
 	total_time = end_time_ms - start_time_ms
