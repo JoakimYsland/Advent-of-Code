@@ -57,45 +57,46 @@ def run(run_title, input_file):
 			print('Comparing', i, 'and', j)
 
 			for b1 in scanners[i]:
-				x,y,z = b1 
+				x, y, z = b1.x, b1.y, b1.z
 				b1_list = [
 					# Foward, Right, Up
 
-					Vec3( y,-z, x), 
-					Vec3(-z,-y, x), 
-					Vec3(-y, z, x), 
-					Vec3( z, y, x), 
+					Vec3( x,-z, y), 
+					Vec3(-z,-x, y), 
+					Vec3(-x, z, y), 
+					Vec3( z, x, y), 
 
-					Vec3(-x,-z, y), 
-					Vec3(-z, x, y), 
-					Vec3( x, z, y), 
-					Vec3( z,-x, y), 
+					Vec3(-y,-z, x), 
+					Vec3(-z, y, x), 
+					Vec3( y, z, x), 
+					Vec3( z,-y, x), 
 
-					Vec3( y, x, z), 
-					Vec3( x,-y, z), 
-					Vec3(-y,-x, z), 
-					Vec3(-x, y, z), 
+					Vec3( x, y, z), 
+					Vec3( y,-x, z), 
+					Vec3(-x,-y, z), 
+					Vec3(-y, x, z), 
 
-					Vec3( y, z,-x), 
-					Vec3( z,-y,-x), 
-					Vec3(-y,-z,-x), 
-					Vec3(-z, y,-x), 
+					Vec3( x, z,-y), 
+					Vec3( z,-x,-y), 
+					Vec3(-x,-z,-y), 
+					Vec3(-z, x,-y), 
 
-					Vec3( z, x,-y), 
-					Vec3( x,-z,-y), 
-					Vec3(-z,-x,-y), 
-					Vec3(-x, z,-y), 
+					Vec3( z, y,-x), 
+					Vec3( y,-z,-x), 
+					Vec3(-z,-y,-x), 
+					Vec3(-y, z,-x), 
 
-					Vec3( y,-x,-z), 
-					Vec3(-x,-y,-z), 
-					Vec3(-y, x,-z), 
-					Vec3( x, y,-z), 
+					Vec3( x,-y,-z), 
+					Vec3(-y,-x,-z), 
+					Vec3(-x, y,-z), 
+					Vec3( y, x,-z), 
 				]
 				for b2 in scanners[j]: 
-					b2_m = Vec3(b2.y, b2.x, b2.z)
+					# b2_m = Vec3(b2.y, b2.x, b2.z)
 					for b in b1_list: 
 						# offset = str(abs(b - b2_m))
-						offset = str(b - b2_m)
+						# offset = str(b - b2_m)
+						offset = str(b - b2)
 						offsets.setdefault(offset, 0)
 						offsets[offset] += 1
 
