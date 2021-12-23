@@ -24,8 +24,8 @@ class Vec3:
 	def __abs__(self):
 		return Vec3(abs(self.x), abs(self.y), abs(self.z))
 
-	def __neg__(self):
-		return Vec3(-self.x, -self.y, -self.z)
+	# def __neg__(self):
+	# 	return Vec3(-self.x, -self.y, -self.z)
 
 def my_print(*args, **kwargs):
 	# print(' '.join(map(str,args)), **kwargs)
@@ -34,35 +34,30 @@ def my_print(*args, **kwargs):
 def run(run_title, input_file):
 
 	def get_axis_permutations(vec3): 
-		x, y, z = vec3.x, vec3.y, vec3.z
+		x,y,z = vec3.x, vec3.y, vec3.z
 		return [
 			# Foward, Right, Up
-			Vec3( x,-z, y), 
+			Vec3( x,-z, y), # 0
 			Vec3(-z,-x, y), 
 			Vec3(-x, z, y), 
 			Vec3( z, x, y), 
-
-			Vec3(-y,-z, x), 
+			Vec3(-y,-z, x), # 4
 			Vec3(-z, y, x), 
 			Vec3( y, z, x), 
 			Vec3( z,-y, x), 
-
-			Vec3( x, y, z), 
+			Vec3( x, y, z), # 8
 			Vec3( y,-x, z), 
 			Vec3(-x,-y, z), 
 			Vec3(-y, x, z), 
-
-			Vec3( x, z,-y), 
+			Vec3( x, z,-y), # 12
 			Vec3( z,-x,-y), 
 			Vec3(-x,-z,-y), 
 			Vec3(-z, x,-y), 
-
-			Vec3( z, y,-x), 
+			Vec3( z, y,-x), # 16
 			Vec3( y,-z,-x), 
 			Vec3(-z,-y,-x), 
 			Vec3(-y, z,-x), 
-
-			Vec3( x,-y,-z), 
+			Vec3( x,-y,-z), # 20
 			Vec3(-y,-x,-z), 
 			Vec3(-x, y,-z), 
 			Vec3( y, x,-z), 
@@ -75,17 +70,17 @@ def run(run_title, input_file):
 			permutations = get_axis_permutations(beacon_b)
 			# for beacon_b in b: 
 			for beacon_a in a: 
-				for beacon_perm in permutations: 
+				for i, beacon_perm in enumerate(permutations): 
 					# offset = str(beacon_perm - beacon_b)
-					offset = str(beacon_a - beacon_perm)
-					offsets.setdefault(offset, 0)
-					offsets[offset] += 1
+					# offset = str(beacon_a - beacon_perm)
+					offset = beacon_a - beacon_perm
+					k = str(offset)
+					offsets.setdefault(k, 0)
+					offsets[k] += 1
+					if offsets[k] >= 12: 
+						print(i)
+						return offset
 
-		for offset, count in offsets.items(): 
-			if count >= 12: 
-				# print(offset, count)
-				x,y,z = (int(c) for c in offset[1:len(offset)-1].split(','))
-				return Vec3(x,y,z)
 		return None
 
 	def map_scanner_graph(): 
@@ -123,7 +118,8 @@ def run(run_title, input_file):
 			scanners[-1].append(Vec3(x,y,z))
 
 	for i in range(0, len(scanners)): 
-		for j in range(i, len(scanners)):
+		# for j in range(i, len(scanners)): 
+		for j in range(0, len(scanners)): 
 			if i == j: 
 				continue
 
@@ -131,9 +127,9 @@ def run(run_title, input_file):
 			if offset != None: 
 				print("Offset from Scanner {0} to Scanner {1} is {2}".format(i, j, offset))
 				scanner_graph.setdefault(str(i), [])
-				scanner_graph.setdefault(str(j), [])
+				# scanner_graph.setdefault(str(j), [])
 				scanner_graph[str(i)].append((str(j), offset))
-				scanner_graph[str(j)].append((str(i), -offset))
+				# scanner_graph[str(j)].append((str(i), -offset))
 
 	map_scanner_graph()
 
