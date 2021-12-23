@@ -21,9 +21,6 @@ class Vec3:
 	def __sub__(self, other):
 		return Vec3(self.x - other.x, self.y - other.y, self.z - other.z)
 
-	def __abs__(self):
-		return Vec3(abs(self.x), abs(self.y), abs(self.z))
-
 def my_print(*args, **kwargs):
 	# print(' '.join(map(str,args)), **kwargs)
 	return
@@ -92,7 +89,6 @@ def run(run_title, input_file):
 		visited = []
 		traverse('0', Vec3(0,0,0))
 
-	
 	def correct_scanner_rotations(): 
 		
 		def traverse(i):
