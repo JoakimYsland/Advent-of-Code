@@ -116,7 +116,6 @@ def run(run_title, input_file):
 	start_time_ms = round(time.time() * 1000)
 	
 	scanners = []
-	beacons = {}
 	offsets = {}
 	scanner_graph = {}
 	intersecting_scanners = []
@@ -143,6 +142,7 @@ def run(run_title, input_file):
 	
 	map_scanner_offsets()
 
+	beacons = {}
 	for i, scanner in enumerate(scanners): 
 		for beacon in scanner: 
 			p = beacon + offsets[str(i)]
