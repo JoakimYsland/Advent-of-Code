@@ -1,13 +1,10 @@
 
-# https://adventofcode.com/2021/day/18
+# https://adventofcode.com/2021/day/19
 
 # import re
 import time
 import math
 from copy import deepcopy
-# from collections import namedtuple
-
-# Vec3 = namedtuple("Vec3", ['x', 'y', 'z'])
 
 class Vec3: 
 	def __init__(self, x, y, z): 
