@@ -111,7 +111,7 @@ def run(run_title, input_file):
 
 	# --------------------------------------------------------------------------------
 
-	# Test / Real – 79 / 378
+	# Test / Real – 3621 / 13148
 
 	start_time_ms = round(time.time() * 1000)
 	
@@ -148,11 +148,18 @@ def run(run_title, input_file):
 			p = beacon + offsets[str(i)]
 			beacons.setdefault(str(p), 1)
 
+	max_mh_distance = 0
+	for i in offsets.values(): 
+		for j in offsets.values(): 
+			mh_distance = abs(j.x - i.x) + abs(j.y - i.y) + abs(j.z - i.z)
+			max_mh_distance = max(max_mh_distance, mh_distance)
+
 	end_time_ms = round(time.time() * 1000)
 	total_time = end_time_ms - start_time_ms
 
 	print('––––––––––')
 	print(run_title, "beacons:", len(beacons), ('(' + str(total_time) + "ms)"))
+	print(run_title, "max_mh_distance:", max_mh_distance, ('(' + str(total_time) + "ms)"))
 	print('––––––––––')
 
 # run("[Test]", open('input_test.txt', 'r').readlines())
