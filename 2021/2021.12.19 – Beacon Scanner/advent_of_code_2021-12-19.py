@@ -94,7 +94,7 @@ def run(run_title, input_file):
 		traverse('0', Vec3(0,0,0))
 
 	
-	def correct_scanner_rotation(): 
+	def correct_scanner_rotations(): 
 		
 		def traverse(i):
 			corrected.append(str(i))
@@ -135,7 +135,7 @@ def run(run_title, input_file):
 			x,y,z = (int(c) for c in line.strip().split(','))
 			scanners[-1].append(Vec3(x,y,z))
 
-	correct_scanner_rotation()
+	correct_scanner_rotations()
 
 	for s1, s2 in scanner_graph2: 
 		result = intersect_scanners(scanners[s1], scanners[s2])
