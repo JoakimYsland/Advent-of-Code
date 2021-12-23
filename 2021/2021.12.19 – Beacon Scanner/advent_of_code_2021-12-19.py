@@ -31,7 +31,6 @@ def my_print(*args, **kwargs):
 def run(run_title, input_file):
 
 	def get_axis_permutation(v, i): 
-		# Foward, Right, Up
 		if i == 0:  return Vec3( v.x,-v.z, v.y) # 0
 		if i == 1:  return Vec3(-v.z,-v.x, v.y) 
 		if i == 2:  return Vec3(-v.x, v.z, v.y) 
