@@ -70,11 +70,14 @@ def run(run_title, input_file):
 
 	def intersect_scanners(a, b): 
 		offsets = {}
-		for beacon_a in a:
-			permutations = get_axis_permutations(beacon_a)
-			for beacon_b in b: 
+		# for beacon_a in a:
+		for beacon_b in b:
+			permutations = get_axis_permutations(beacon_b)
+			# for beacon_b in b: 
+			for beacon_a in a: 
 				for beacon_perm in permutations: 
-					offset = str(beacon_perm - beacon_b)
+					# offset = str(beacon_perm - beacon_b)
+					offset = str(beacon_a - beacon_perm)
 					offsets.setdefault(offset, 0)
 					offsets[offset] += 1
 
