@@ -84,7 +84,6 @@ def run(run_title, input_file):
 		return None
 
 	def map_scanner_graph(): 
-
 		def traverse(scanner_id, total_offset): 
 			visited.append(scanner_id)
 			offsets[scanner_id] = total_offset
