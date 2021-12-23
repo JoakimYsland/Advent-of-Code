@@ -4,6 +4,7 @@
 # import re
 import time
 import math
+import re
 from copy import deepcopy
 
 class Vec3: 
@@ -15,11 +16,17 @@ class Vec3:
 	def __repr__(self): 
 		return "({0},{1},{2})".format(str(self.x), str(self.y), str(self.z))
 
+	def __add__(self, other):
+		return Vec3(self.x + other.x, self.y + other.y, self.z + other.z)
+
 	def __sub__(self, other):
 		return Vec3(self.x - other.x, self.y - other.y, self.z - other.z)
 
 	def __abs__(self):
 		return Vec3(abs(self.x), abs(self.y), abs(self.z))
+
+	def __neg__(self):
+		return Vec3(-self.x, -self.y, -self.z)
 
 def my_print(*args, **kwargs):
 	# print(' '.join(map(str,args)), **kwargs)
@@ -75,8 +82,23 @@ def run(run_title, input_file):
 		for offset, count in offsets.items(): 
 			if count >= 12: 
 				# print(offset, count)
-				return offset
+				x,y,z = (int(c) for c in offset[1:len(offset)-1].split(','))
+				return Vec3(x,y,z)
 		return None
+
+	def map_scanner_graph(): 
+
+		def traverse(scanner_id, total_offset): 
+			visited.append(scanner_id)
+			offsets[scanner_id] = total_offset
+
+			for s in scanner_graph[scanner_id]: 
+				if not s[0] in visited: 
+					traverse(s[0], deepcopy(total_offset) + s[1])
+
+		total_offset = Vec3(0,0,0)
+		visited = []
+		traverse('0', total_offset)
 
 	# --------------------------------------------------------------------------------
 
@@ -85,6 +107,9 @@ def run(run_title, input_file):
 	start_time_ms = round(time.time() * 1000)
 	
 	scanners = []
+	beacons = {}
+	offsets = {}
+	scanner_graph = {}
 
 	for line in input_file: 
 		if len(line) < 2: 
@@ -95,8 +120,6 @@ def run(run_title, input_file):
 			x,y,z = (int(c) for c in line.strip().split(','))
 			scanners[-1].append(Vec3(x,y,z))
 
-	beacons = {}
-
 	for i in range(0, len(scanners)): 
 		for j in range(i, len(scanners)):
 			if i == j: 
@@ -105,13 +128,25 @@ def run(run_title, input_file):
 			offset = intersect_scanners(scanners[i], scanners[j])
 			if offset != None: 
 				print("Offset from Scanner {0} to Scanner {1} is {2}".format(i, j, offset))
+				scanner_graph.setdefault(str(i), [])
+				scanner_graph.setdefault(str(j), [])
+				scanner_graph[str(i)].append((str(j), offset))
+				scanner_graph[str(j)].append((str(i), -offset))
+
+	map_scanner_graph()
+	print(offsets)
+
+	for i, scanner in enumerate(scanners): 
+		for beacon in scanner: 
+			p = beacon + offsets[str(i)]
+			beacons.setdefault(str(p), 1)
 
 	end_time_ms = round(time.time() * 1000)
 	total_time = end_time_ms - start_time_ms
 
-	# print('––––––––––')
-	# print(run_title, "highest_magnitude:", highest_magnitude, ('(' + str(total_time) + "ms)"))
-	# print('––––––––––')
+	print('––––––––––')
+	print(run_title, "beacons:", len(beacons), ('(' + str(total_time) + "ms)"))
+	print('––––––––––')
 
 run("[Test]", open('input_test.txt', 'r').readlines())
 # run("[Real]", open('input.txt', 'r').readlines())
