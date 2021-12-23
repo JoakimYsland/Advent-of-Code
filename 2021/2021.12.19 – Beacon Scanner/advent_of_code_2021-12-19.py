@@ -79,7 +79,7 @@ def run(run_title, input_file):
 
 		return None
 
-	def map_scanner_graph(): 
+	def map_scanner_offsets(): 
 		
 		def traverse(scanner_id, offset): 
 			visited.append(scanner_id)
@@ -146,7 +146,7 @@ def run(run_title, input_file):
 			scanner_graph.setdefault(str(s1), [])
 			scanner_graph[str(s1)].append((str(s2), offset))
 	
-	map_scanner_graph()
+	map_scanner_offsets()
 
 	for i, scanner in enumerate(scanners): 
 		for beacon in scanner: 
