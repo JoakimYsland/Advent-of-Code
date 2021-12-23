@@ -65,21 +65,16 @@ def run(run_title, input_file):
 
 	def intersect_scanners(a, b): 
 		offsets = {}
-		# for beacon_a in a:
 		for beacon_b in b:
 			permutations = get_axis_permutations(beacon_b)
-			# for beacon_b in b: 
 			for beacon_a in a: 
 				for i, beacon_perm in enumerate(permutations): 
-					# offset = str(beacon_perm - beacon_b)
-					# offset = str(beacon_a - beacon_perm)
 					offset = beacon_a - beacon_perm
 					k = str(offset)
 					offsets.setdefault(k, 0)
 					offsets[k] += 1
 					if offsets[k] >= 12: 
-						print(i)
-						return offset
+						return offset, i
 
 		return None
 
@@ -90,15 +85,20 @@ def run(run_title, input_file):
 
 			for s in scanner_graph[scanner_id]: 
 				if not s[0] in visited: 
-					traverse(s[0], deepcopy(total_offset) + s[1])
+					# traverse(s[0], deepcopy(total_offset) + s[1])
+					o = get_axis_permutations(s[1])
+					print(s[1], o[s[2]])
+					offset = total_offset + o[s[2]]
+					traverse(s[0], offset)
+					# traverse(s[0], s[1] - total_offset)
 
-		total_offset = Vec3(0,0,0)
+		# total_offset = Vec3(0,0,0)
 		visited = []
-		traverse('0', total_offset)
+		traverse('0', Vec3(0,0,0))
 
 	# --------------------------------------------------------------------------------
 
-	# Test / Real – ??? / ???
+	# Test / Real – 79 / ???
 
 	start_time_ms = round(time.time() * 1000)
 	
@@ -124,9 +124,10 @@ def run(run_title, input_file):
 
 			offset = intersect_scanners(scanners[i], scanners[j])
 			if offset != None: 
+				offset, permutation = offset
 				print("Offset from Scanner {0} to Scanner {1} is {2}".format(i, j, offset))
 				scanner_graph.setdefault(str(i), [])
-				scanner_graph[str(i)].append((str(j), offset))
+				scanner_graph[str(i)].append((str(j), offset, permutation))
 
 	map_scanner_graph()
 
