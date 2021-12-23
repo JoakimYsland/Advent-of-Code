@@ -30,6 +30,57 @@ def my_print(*args, **kwargs):
 
 def run(run_title, input_file):
 
+	def get_axis_permutations(vec3): 
+		x, y, z = vec3.x, vec3.y, vec3.z
+		return [
+			# Foward, Right, Up
+			Vec3( x,-z, y), 
+			Vec3(-z,-x, y), 
+			Vec3(-x, z, y), 
+			Vec3( z, x, y), 
+
+			Vec3(-y,-z, x), 
+			Vec3(-z, y, x), 
+			Vec3( y, z, x), 
+			Vec3( z,-y, x), 
+
+			Vec3( x, y, z), 
+			Vec3( y,-x, z), 
+			Vec3(-x,-y, z), 
+			Vec3(-y, x, z), 
+
+			Vec3( x, z,-y), 
+			Vec3( z,-x,-y), 
+			Vec3(-x,-z,-y), 
+			Vec3(-z, x,-y), 
+
+			Vec3( z, y,-x), 
+			Vec3( y,-z,-x), 
+			Vec3(-z,-y,-x), 
+			Vec3(-y, z,-x), 
+
+			Vec3( x,-y,-z), 
+			Vec3(-y,-x,-z), 
+			Vec3(-x, y,-z), 
+			Vec3( y, x,-z), 
+		]
+
+	def intersect_scanners(a, b): 
+		offsets = {}
+		for beacon_a in a:
+			permutations = get_axis_permutations(beacon_a)
+			for beacon_b in b: 
+				for beacon_perm in permutations: 
+					offset = str(beacon_perm - beacon_b)
+					offsets.setdefault(offset, 0)
+					offsets[offset] += 1
+
+		for offset, count in offsets.items(): 
+			if count >= 12: 
+				print(offset, count)
+				return offset
+		return None
+
 	# --------------------------------------------------------------------------------
 
 	# Test / Real – 3993 / 4837
@@ -47,7 +98,7 @@ def run(run_title, input_file):
 			x,y,z = (int(c) for c in line.strip().split(','))
 			scanners[-1].append(Vec3(x,y,z))
 
-	offsets = {}
+	beacons = {}
 
 	for i in range(0, len(scanners)): 
 		for j in range(i, len(scanners)):
@@ -55,50 +106,20 @@ def run(run_title, input_file):
 				continue
 
 			print('Comparing', i, 'and', j)
+			offset = intersect_scanners(scanners[i], scanners[j])
 
-			for b1 in scanners[i]:
-				x, y, z = b1.x, b1.y, b1.z
-				b1_list = [
-					# Foward, Right, Up
-					Vec3( x,-z, y), 
-					Vec3(-z,-x, y), 
-					Vec3(-x, z, y), 
-					Vec3( z, x, y), 
 
-					Vec3(-y,-z, x), 
-					Vec3(-z, y, x), 
-					Vec3( y, z, x), 
-					Vec3( z,-y, x), 
+			# for b1 in scanners[i]:
+			# 	permutations = get_axis_permutations(b1)
+			# 	for b2 in scanners[j]: 
+			# 		for b in permutations: 
+			# 			offset = str(b - b2)
+			# 			offsets.setdefault(offset, 0)
+			# 			offsets[offset] += 1
 
-					Vec3( x, y, z), 
-					Vec3( y,-x, z), 
-					Vec3(-x,-y, z), 
-					Vec3(-y, x, z), 
-
-					Vec3( x, z,-y), 
-					Vec3( z,-x,-y), 
-					Vec3(-x,-z,-y), 
-					Vec3(-z, x,-y), 
-
-					Vec3( z, y,-x), 
-					Vec3( y,-z,-x), 
-					Vec3(-z,-y,-x), 
-					Vec3(-y, z,-x), 
-
-					Vec3( x,-y,-z), 
-					Vec3(-y,-x,-z), 
-					Vec3(-x, y,-z), 
-					Vec3( y, x,-z), 
-				]
-				for b2 in scanners[j]: 
-					for b in b1_list: 
-						offset = str(b - b2)
-						offsets.setdefault(offset, 0)
-						offsets[offset] += 1
-
-			for offset, count in offsets.items(): 
-				if count > 2: 
-					print(offset, count)
+			# for offset, count in offsets.items(): 
+			# 	if count > 2: 
+			# 		print(offset, count)
 
 	end_time_ms = round(time.time() * 1000)
 	total_time = end_time_ms - start_time_ms
