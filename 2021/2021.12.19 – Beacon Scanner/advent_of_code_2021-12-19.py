@@ -33,33 +33,33 @@ def my_print(*args, **kwargs):
 
 def run(run_title, input_file):
 
-	def get_axis_permutation(vec3, i): 
-		x,y,z = vec3.x, vec3.y, vec3.z
+	def get_axis_permutation(v, i): 
+		# x,y,z = vec3.x, vec3.y, vec3.z
 		# Foward, Right, Up
-		if i == 0:  return Vec3( x,-z, y) # 0
-		if i == 1:  return Vec3(-z,-x, y) 
-		if i == 2:  return Vec3(-x, z, y) 
-		if i == 3:  return Vec3( z, x, y) 
-		if i == 4:  return Vec3(-y,-z, x) # 4
-		if i == 5:  return Vec3(-z, y, x) 
-		if i == 6:  return Vec3( y, z, x) 
-		if i == 7:  return Vec3( z,-y, x) 
-		if i == 8:  return Vec3( x, y, z) # 8
-		if i == 9:  return Vec3( y,-x, z) 
-		if i == 10: return Vec3(-x,-y, z) 
-		if i == 11: return Vec3(-y, x, z) 
-		if i == 12: return Vec3( x, z,-y) # 12
-		if i == 13: return Vec3( z,-x,-y) 
-		if i == 14: return Vec3(-x,-z,-y) 
-		if i == 15: return Vec3(-z, x,-y) 
-		if i == 16: return Vec3( z, y,-x) # 16
-		if i == 17: return Vec3( y,-z,-x) 
-		if i == 18: return Vec3(-z,-y,-x) 
-		if i == 19: return Vec3(-y, z,-x) 
-		if i == 20: return Vec3( x,-y,-z) # 20
-		if i == 21: return Vec3(-y,-x,-z) 
-		if i == 22: return Vec3(-x, y,-z) 
-		if i == 23: return Vec3( y, x,-z) 
+		if i == 0:  return Vec3( v.x,-v.z, v.y) # 0
+		if i == 1:  return Vec3(-v.z,-v.x, v.y) 
+		if i == 2:  return Vec3(-v.x, v.z, v.y) 
+		if i == 3:  return Vec3( v.z, v.x, v.y) 
+		if i == 4:  return Vec3(-v.y,-v.z, v.x) # 4
+		if i == 5:  return Vec3(-v.z, v.y, v.x) 
+		if i == 6:  return Vec3( v.y, v.z, v.x) 
+		if i == 7:  return Vec3( v.z,-v.y, v.x) 
+		if i == 8:  return Vec3( v.x, v.y, v.z) # 8
+		if i == 9:  return Vec3( v.y,-v.x, v.z) 
+		if i == 10: return Vec3(-v.x,-v.y, v.z) 
+		if i == 11: return Vec3(-v.y, v.x, v.z) 
+		if i == 12: return Vec3( v.x, v.z,-v.y) # 12
+		if i == 13: return Vec3( v.z,-v.x,-v.y) 
+		if i == 14: return Vec3(-v.x,-v.z,-v.y) 
+		if i == 15: return Vec3(-v.z, v.x,-v.y) 
+		if i == 16: return Vec3( v.z, v.y,-v.x) # 16
+		if i == 17: return Vec3( v.y,-v.z,-v.x) 
+		if i == 18: return Vec3(-v.z,-v.y,-v.x) 
+		if i == 19: return Vec3(-v.y, v.z,-v.x) 
+		if i == 20: return Vec3( v.x,-v.y,-v.z) # 20
+		if i == 21: return Vec3(-v.y,-v.x,-v.z) 
+		if i == 22: return Vec3(-v.x, v.y,-v.z) 
+		if i == 23: return Vec3( v.y, v.x,-v.z) 
 		return None
 
 	def get_axis_permutations(vec3): 
@@ -108,17 +108,19 @@ def run(run_title, input_file):
 		return None
 
 	def map_scanner_graph(): 
-		def traverse(scanner_id, total_offset): 
+		def traverse(scanner_id, offset): 
 			visited.append(scanner_id)
-			offsets[scanner_id] = total_offset
+			offsets[scanner_id] = offset
 
-			for s in scanner_graph[scanner_id]: 
-				if not s[0] in visited: 
-					# traverse(s[0], deepcopy(total_offset) + s[1])
-					o = get_axis_permutations(s[1])
-					offset = total_offset + o[s[2]]
-					traverse(s[0], offset)
-					# traverse(s[0], s[1] - total_offset)
+			if scanner_id in scanner_graph: 
+				for s in scanner_graph[scanner_id]: 
+					if not s[0] in visited: 
+						# traverse(s[0], deepcopy(offset) + s[1])
+						# o = get_axis_permutations(s[1])
+						# offset = offset + o[s[2]]
+						# offset = offset + o[s[2]]
+						traverse(s[0], offset + s[1])
+						# traverse(s[0], s[1] - total_offset)
 
 		# total_offset = Vec3(0,0,0)
 		visited = []
@@ -134,6 +136,7 @@ def run(run_title, input_file):
 	beacons = {}
 	offsets = {}
 	scanner_graph = {}
+	scanner_graph2 = []
 
 	for line in input_file: 
 		if len(line) < 2: 
@@ -154,35 +157,42 @@ def run(run_title, input_file):
 			result = intersect_scanners(scanners[i], scanners[j])
 			if result != None: 
 				print("Correcting from {0} onto {1}".format(i, j))
-				scanner = scanners[j]
 				offset, permutation = result
-				for beacon in scanner: 
-					beacon = get_axis_permutation(beacon, permutation)
+				scanner_graph2.append((i, j))
+				for k in range(0, len(scanners[j])): 
+					scanners[j][k] = get_axis_permutation(scanners[j][k], permutation)
 				correct_scanner_rotation(j)
 
 	correct_scanner_rotation(0)
-	print(len(corrected))
-	return
+	# return
+
+	for s1, s2 in scanner_graph2: 
+		result = intersect_scanners(scanners[s1], scanners[s2])
+		if result != None: 
+			offset, permutation = result
+			print("Offset from Scanner {0} to Scanner {1} is {2} (permutation {3})".format(s1, s2, offset, permutation))
+			scanner_graph.setdefault(str(s1), [])
+			scanner_graph[str(s1)].append((str(s2), offset))
 	
-	for i in range(0, len(scanners)): 
-		# for j in range(i, len(scanners)): 
-		for j in range(0, len(scanners)): 
-			if i == j: 
-				continue
+	# for i in range(0, len(scanners)): 
+	# 	# for j in range(i, len(scanners)): 
+	# 	for j in range(0, len(scanners)): 
+	# 		if i == j: 
+	# 			continue
 
-			offset = intersect_scanners(scanners[i], scanners[j])
-			if offset != None: 
-				offset, permutation = offset
-				print("Offset from Scanner {0} to Scanner {1} is {2}".format(i, j, offset))
-				scanner_graph.setdefault(str(i), [])
-				scanner_graph[str(i)].append((str(j), offset, permutation))
+	# 		offset = intersect_scanners(scanners[i], scanners[j])
+	# 		if offset != None: 
+	# 			offset, permutation = offset
+	# 			print("Offset from Scanner {0} to Scanner {1} is {2}".format(i, j, offset))
+	# 			scanner_graph.setdefault(str(i), [])
+	# 			scanner_graph[str(i)].append((str(j), offset, permutation))
 
-	# map_scanner_graph()
+	map_scanner_graph()
 
-	# for i, scanner in enumerate(scanners): 
-	# 	for beacon in scanner: 
-	# 		p = beacon + offsets[str(i)]
-	# 		beacons.setdefault(str(p), 1)
+	for i, scanner in enumerate(scanners): 
+		for beacon in scanner: 
+			p = beacon + offsets[str(i)]
+			beacons.setdefault(str(p), 1)
 
 	end_time_ms = round(time.time() * 1000)
 	total_time = end_time_ms - start_time_ms
@@ -191,5 +201,5 @@ def run(run_title, input_file):
 	print(run_title, "beacons:", len(beacons), ('(' + str(total_time) + "ms)"))
 	print('––––––––––')
 
-# run("[Test]", open('input_test.txt', 'r').readlines())
-run("[Real]", open('input.txt', 'r').readlines())
+run("[Test]", open('input_test.txt', 'r').readlines())
+# run("[Real]", open('input.txt', 'r').readlines())
