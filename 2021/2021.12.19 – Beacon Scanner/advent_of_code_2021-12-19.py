@@ -60,7 +60,6 @@ def run(run_title, input_file):
 				x, y, z = b1.x, b1.y, b1.z
 				b1_list = [
 					# Foward, Right, Up
-
 					Vec3( x,-z, y), 
 					Vec3(-z,-x, y), 
 					Vec3(-x, z, y), 
@@ -92,19 +91,14 @@ def run(run_title, input_file):
 					Vec3( y, x,-z), 
 				]
 				for b2 in scanners[j]: 
-					# b2_m = Vec3(b2.y, b2.x, b2.z)
 					for b in b1_list: 
-						# offset = str(abs(b - b2_m))
-						# offset = str(b - b2_m)
 						offset = str(b - b2)
 						offsets.setdefault(offset, 0)
 						offsets[offset] += 1
 
-			print(len(offsets))
 			for offset, count in offsets.items(): 
 				if count > 2: 
 					print(offset, count)
-				# print(offset, count)
 
 	end_time_ms = round(time.time() * 1000)
 	total_time = end_time_ms - start_time_ms
