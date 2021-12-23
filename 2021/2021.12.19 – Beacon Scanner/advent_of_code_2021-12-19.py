@@ -93,6 +93,27 @@ def run(run_title, input_file):
 		visited = []
 		traverse('0', Vec3(0,0,0))
 
+	
+	def correct_scanner_rotation(): 
+		
+		def traverse(i):
+			corrected.append(str(i))
+			for j in range(0, len(scanners)): 
+				if i == j or str(j) in corrected: 
+					continue
+
+				result = intersect_scanners(scanners[i], scanners[j])
+				if result != None: 
+					print("Correcting from {0} onto {1}".format(i, j))
+					offset, permutation = result
+					scanner_graph2.append((i, j))
+					for k in range(0, len(scanners[j])): 
+						scanners[j][k] = get_axis_permutation(scanners[j][k], permutation)
+					traverse(j)
+
+		corrected = []
+		traverse(0)
+
 	# --------------------------------------------------------------------------------
 
 	# Test / Real – 79 / ???
@@ -114,23 +135,7 @@ def run(run_title, input_file):
 			x,y,z = (int(c) for c in line.strip().split(','))
 			scanners[-1].append(Vec3(x,y,z))
 
-	corrected = []
-	def correct_scanner_rotation(i): 
-		corrected.append(str(i))
-		for j in range(0, len(scanners)): 
-			if i == j or str(j) in corrected: 
-				continue
-
-			result = intersect_scanners(scanners[i], scanners[j])
-			if result != None: 
-				print("Correcting from {0} onto {1}".format(i, j))
-				offset, permutation = result
-				scanner_graph2.append((i, j))
-				for k in range(0, len(scanners[j])): 
-					scanners[j][k] = get_axis_permutation(scanners[j][k], permutation)
-				correct_scanner_rotation(j)
-
-	correct_scanner_rotation(0)
+	correct_scanner_rotation()
 
 	for s1, s2 in scanner_graph2: 
 		result = intersect_scanners(scanners[s1], scanners[s2])
