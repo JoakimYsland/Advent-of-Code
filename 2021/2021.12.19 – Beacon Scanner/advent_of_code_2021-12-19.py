@@ -106,7 +106,7 @@ def run(run_title, input_file):
 				if result != None: 
 					print("Correcting from {0} onto {1}".format(i, j))
 					offset, permutation = result
-					scanner_graph2.append((i, j))
+					intersecting_scanners.append((i, j))
 					for k in range(0, len(scanners[j])): 
 						scanners[j][k] = get_axis_permutation(scanners[j][k], permutation)
 					traverse(j)
@@ -124,7 +124,7 @@ def run(run_title, input_file):
 	beacons = {}
 	offsets = {}
 	scanner_graph = {}
-	scanner_graph2 = []
+	intersecting_scanners = []
 
 	for line in input_file: 
 		if len(line) < 2: 
@@ -137,7 +137,7 @@ def run(run_title, input_file):
 
 	correct_scanner_rotations()
 
-	for s1, s2 in scanner_graph2: 
+	for s1, s2 in intersecting_scanners: 
 		result = intersect_scanners(scanners[s1], scanners[s2])
 		if result != None: 
 			offset, permutation = result
