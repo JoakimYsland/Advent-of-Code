@@ -59,37 +59,7 @@ def run(run_title, input_file):
 			for b1 in scanners[i]:
 				x,y,z = b1 
 				b1_list = [
-					# foward, side, up
-
-					#  y -z  x
-					# -z -y  x
-					# -y  z  x
-					#  z  y  x
-
-					# -x -z  y
-					# -z  x  y
-					#  x  z  y
-					#  z -x  y
-
-					#  y  x  z
-					#  x -y  z
-					# -y -x  z
-					# -x  y  z
-
-					#  y  z -x
-					#  z -y -x
-					# -y -z -x
-					# -z  y -x
-
-					#  z  x -y
-					#  x -z -y
-					# -z -x -y
-					# -x  z -y
-
-					#  y -x -z
-					# -x -y -z
-					#  x -y -z
-					#  x  y -z
+					# Foward, Right, Up
 
 					Vec3( y,-z, x), 
 					Vec3(-z,-y, x), 
