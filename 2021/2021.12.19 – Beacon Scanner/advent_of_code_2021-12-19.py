@@ -34,7 +34,6 @@ def my_print(*args, **kwargs):
 def run(run_title, input_file):
 
 	def get_axis_permutation(v, i): 
-		# x,y,z = vec3.x, vec3.y, vec3.z
 		# Foward, Right, Up
 		if i == 0:  return Vec3( v.x,-v.z, v.y) # 0
 		if i == 1:  return Vec3(-v.z,-v.x, v.y) 
@@ -62,35 +61,11 @@ def run(run_title, input_file):
 		if i == 23: return Vec3( v.y, v.x,-v.z) 
 		return None
 
-	def get_axis_permutations(vec3): 
-		x,y,z = vec3.x, vec3.y, vec3.z
-		return [
-			# Foward, Right, Up
-			Vec3( x,-z, y), # 0
-			Vec3(-z,-x, y), 
-			Vec3(-x, z, y), 
-			Vec3( z, x, y), 
-			Vec3(-y,-z, x), # 4
-			Vec3(-z, y, x), 
-			Vec3( y, z, x), 
-			Vec3( z,-y, x), 
-			Vec3( x, y, z), # 8
-			Vec3( y,-x, z), 
-			Vec3(-x,-y, z), 
-			Vec3(-y, x, z), 
-			Vec3( x, z,-y), # 12
-			Vec3( z,-x,-y), 
-			Vec3(-x,-z,-y), 
-			Vec3(-z, x,-y), 
-			Vec3( z, y,-x), # 16
-			Vec3( y,-z,-x), 
-			Vec3(-z,-y,-x), 
-			Vec3(-y, z,-x), 
-			Vec3( x,-y,-z), # 20
-			Vec3(-y,-x,-z), 
-			Vec3(-x, y,-z), 
-			Vec3( y, x,-z), 
-		]
+	def get_axis_permutations(v): 
+		permutations = []
+		for i in range(0, 24):
+			permutations.append(get_axis_permutation(v, i))
+		return permutations
 
 	def intersect_scanners(a, b): 
 		offsets = {}
@@ -115,14 +90,8 @@ def run(run_title, input_file):
 			if scanner_id in scanner_graph: 
 				for s in scanner_graph[scanner_id]: 
 					if not s[0] in visited: 
-						# traverse(s[0], deepcopy(offset) + s[1])
-						# o = get_axis_permutations(s[1])
-						# offset = offset + o[s[2]]
-						# offset = offset + o[s[2]]
 						traverse(s[0], offset + s[1])
-						# traverse(s[0], s[1] - total_offset)
 
-		# total_offset = Vec3(0,0,0)
 		visited = []
 		traverse('0', Vec3(0,0,0))
 
@@ -164,7 +133,6 @@ def run(run_title, input_file):
 				correct_scanner_rotation(j)
 
 	correct_scanner_rotation(0)
-	# return
 
 	for s1, s2 in scanner_graph2: 
 		result = intersect_scanners(scanners[s1], scanners[s2])
@@ -174,19 +142,6 @@ def run(run_title, input_file):
 			scanner_graph.setdefault(str(s1), [])
 			scanner_graph[str(s1)].append((str(s2), offset))
 	
-	# for i in range(0, len(scanners)): 
-	# 	# for j in range(i, len(scanners)): 
-	# 	for j in range(0, len(scanners)): 
-	# 		if i == j: 
-	# 			continue
-
-	# 		offset = intersect_scanners(scanners[i], scanners[j])
-	# 		if offset != None: 
-	# 			offset, permutation = offset
-	# 			print("Offset from Scanner {0} to Scanner {1} is {2}".format(i, j, offset))
-	# 			scanner_graph.setdefault(str(i), [])
-	# 			scanner_graph[str(i)].append((str(j), offset, permutation))
-
 	map_scanner_graph()
 
 	for i, scanner in enumerate(scanners): 
