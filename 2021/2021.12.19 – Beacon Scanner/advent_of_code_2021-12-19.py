@@ -1,7 +1,6 @@
 
 # https://adventofcode.com/2021/day/19
 
-# import re
 import time
 import math
 import re
@@ -134,7 +133,6 @@ def run(run_title, input_file):
 				scanner_graph[str(j)].append((str(i), -offset))
 
 	map_scanner_graph()
-	print(offsets)
 
 	for i, scanner in enumerate(scanners): 
 		for beacon in scanner: 
