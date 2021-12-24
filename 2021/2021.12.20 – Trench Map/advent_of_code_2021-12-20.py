@@ -24,7 +24,7 @@ def run(run_title, input_file):
 			joined_row = ''.join(row).replace('0', '.').replace('1', '#')
 			print(joined_row)
 
-	def enhance(): 
+	def enhance_image(): 
 		image_copy = deepcopy(image)
 		for y in range(1, len(image) - 1): 
 			for x in range(1, len(image[0]) - 1): 
@@ -62,7 +62,7 @@ def run(run_title, input_file):
 
 	for i in range(0, 2): 
 		pad_image()
-		enhance()
+		enhance_image()
 
 	# print_image()
 
