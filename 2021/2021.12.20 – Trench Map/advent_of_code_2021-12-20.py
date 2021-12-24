@@ -21,10 +21,8 @@ def run(run_title, input_file):
 
 	def print_image(): 
 		for row in deepcopy(image): 
-			row_joined = ''.join(row)
-			row_joined = row_joined.replace('0', '.')
-			row_joined = row_joined.replace('1', '#')
-			print(row_joined)
+			joined_row = ''.join(row).replace('0', '.').replace('1', '#')
+			print(joined_row)
 
 	def enhance(): 
 		image_copy = deepcopy(image)
@@ -54,14 +52,10 @@ def run(run_title, input_file):
 
 	for i, line in enumerate(input_file): 
 		if i == 0: 
-			enhancement_algorithm = line.strip()
-			enhancement_algorithm = enhancement_algorithm.replace('.', '0')
-			enhancement_algorithm = enhancement_algorithm.replace('#', '1')
-			enhancement_algorithm = [c for c in enhancement_algorithm]
+			row = line.strip().replace('.', '0').replace('#', '1')
+			enhancement_algorithm = [c for c in row]
 		elif i > 1: 
-			row = line.strip()
-			row = row.replace('.', '0')
-			row = row.replace('#', '1')
+			row = line.strip().replace('.', '0').replace('#', '1')
 			image.append([c for c in row])
 	
 	pad_image()
@@ -70,7 +64,7 @@ def run(run_title, input_file):
 		pad_image()
 		enhance()
 
-	# print_image()
+	print_image()
 
 	lit_pixels = get_lit_pixels()
 
@@ -80,4 +74,4 @@ def run(run_title, input_file):
 	print(run_title, "lit_pixels:", lit_pixels, ('(' + str(total_time) + "ms)"))
 
 run("[Test]", open('input_test.txt', 'r').readlines())
-run("[Real]", open('input.txt', 'r').readlines())
+# run("[Real]", open('input.txt', 'r').readlines())
