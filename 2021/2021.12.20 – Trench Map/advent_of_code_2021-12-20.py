@@ -19,6 +19,13 @@ def run(run_title, input_file):
 			row.insert(0, '0')
 			row.append('0')
 
+	def crop_image():
+		image.pop(-1)
+		image.pop(0)
+		for row in image: 
+			row.pop(-1)
+			row.pop(0)
+
 	def print_image(): 
 		for row in deepcopy(image): 
 			joined_row = ''.join(row).replace('0', '.').replace('1', '#')
@@ -43,7 +50,7 @@ def run(run_title, input_file):
 
 	# --------------------------------------------------------------------------------
 
-	# Test / Real – 35 / !5482
+	# Test / Real – 35 / 5486
 
 	start_time_ms = round(time.time() * 1000)
 
@@ -58,13 +65,15 @@ def run(run_title, input_file):
 			row = line.strip().replace('.', '0').replace('#', '1')
 			image.append([c for c in row])
 	
-	pad_image()
+	for i in range(0, 20): 
+		pad_image()
 
 	for i in range(0, 2): 
 		pad_image()
 		enhance_image()
 
-	# print_image()
+	for i in range(0, 5): 
+		crop_image()
 
 	lit_pixels = get_lit_pixels()
 
@@ -73,5 +82,5 @@ def run(run_title, input_file):
 
 	print(run_title, "lit_pixels:", lit_pixels, ('(' + str(total_time) + "ms)"))
 
-run("[Test]", open('input_test.txt', 'r').readlines())
+# run("[Test]", open('input_test.txt', 'r').readlines())
 run("[Real]", open('input.txt', 'r').readlines())
