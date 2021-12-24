@@ -64,7 +64,7 @@ def run(run_title, input_file):
 		pad_image()
 		enhance()
 
-	print_image()
+	# print_image()
 
 	lit_pixels = get_lit_pixels()
 
@@ -74,4 +74,4 @@ def run(run_title, input_file):
 	print(run_title, "lit_pixels:", lit_pixels, ('(' + str(total_time) + "ms)"))
 
 run("[Test]", open('input_test.txt', 'r').readlines())
-# run("[Real]", open('input.txt', 'r').readlines())
+run("[Real]", open('input.txt', 'r').readlines())
