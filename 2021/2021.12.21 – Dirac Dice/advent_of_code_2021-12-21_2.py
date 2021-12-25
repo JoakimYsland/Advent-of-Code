@@ -65,7 +65,6 @@ def run(run_title, input_file):
 			if games[game_state] < 1: 
 				del games[game_state]
 
-		# player = 1 if player == 2 else 2
 		p1_turn = not p1_turn
 
 	end_time_ms = round(time.time() * 1000)
