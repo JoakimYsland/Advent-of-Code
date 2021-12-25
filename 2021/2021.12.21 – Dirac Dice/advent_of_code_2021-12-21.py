@@ -1,5 +1,5 @@
 
-# https://adventofcode.com/2021/day/20
+# https://adventofcode.com/2021/day/21
 
 import time
 import math
