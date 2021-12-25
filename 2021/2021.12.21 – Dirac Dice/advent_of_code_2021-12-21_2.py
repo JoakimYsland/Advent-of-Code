@@ -1,5 +1,5 @@
 
-# https://adventofcode.com/2021/day/20
+# https://adventofcode.com/2021/day/21
 
 import time
 import math
@@ -28,8 +28,8 @@ def run(run_title, input_file):
 	# Test / Real – 444356092776315 / 133029050096658
 
 	start_time_ms = round(time.time() * 1000)
-	scoreboard = [0, 0]
 	
+	scoreboard = [0, 0]
 	# games = { (4, 0, 8, 0): 1 }
 	games = { (2, 0, 7, 0): 1 }
 	p1_turn = True
