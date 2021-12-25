@@ -62,7 +62,7 @@ def run(run_title, input_file):
 			
 			games[game_state] -= count
 
-			if games[game_state] < 1: 
+			if games[game_state] == 0: 
 				del games[game_state]
 
 		p1_turn = not p1_turn
