@@ -36,8 +36,8 @@ def run(run_title, input_file):
 
 	while len(games) > 0: 
 		
-		g = games.copy()
-		for game_state, count in g.items(): 
+		games_turn_start = games.copy()
+		for game_state, count in games_turn_start.items(): 
 
 			if p1_turn: p1, s1, p2, s2 = game_state
 			else: 		p2, s2, p1, s1 = game_state
