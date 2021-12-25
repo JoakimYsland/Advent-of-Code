@@ -28,26 +28,19 @@ def run(run_title, input_file):
 	# Test / Real – 444356092776315 / 133029050096658
 
 	start_time_ms = round(time.time() * 1000)
-	
-	# players = deque([
-	# 	('Player 1', 4, 0), 
-	# 	('Player 2', 8, 0), 
-	# 	# ('Player 1', 2, 0), 
-	# 	# ('Player 2', 7, 0), 
-	# 	])
 	scoreboard = { 'Player 1': 0, 'Player 2': 0 }
 	
 	# games = { (4, 0, 8, 0): 1 }
 	games = { (2, 0, 7, 0): 1 }
-	player = 1
+	p1_turn = True
 
 	while len(games) > 0: 
 		
 		g = games.copy()
 		for game_state, count in g.items(): 
 
-			if player == 1: p1, s1, p2, s2 = game_state
-			else: 			p2, s2, p1, s1 = game_state
+			if p1_turn: p1, s1, p2, s2 = game_state
+			else: 		p2, s2, p1, s1 = game_state
 
 			for q_sum_rolls, q_count in quantum_distribution.items(): 
 
@@ -59,11 +52,11 @@ def run(run_title, input_file):
 				new_count = count * q_count
 
 				if new_score >= 21: 
-					if player == 1: scoreboard['Player 1'] += new_count
-					else: 			scoreboard['Player 2'] += new_count
+					if p1_turn: scoreboard['Player 1'] += new_count
+					else: 		scoreboard['Player 2'] += new_count
 				else: 
-					if player == 1: new_game_state = (new_pos, new_score, p2, s2)
-					else: 			new_game_state = (p2, s2, new_pos, new_score)
+					if p1_turn: new_game_state = (new_pos, new_score, p2, s2)
+					else: 		new_game_state = (p2, s2, new_pos, new_score)
 					games.setdefault(new_game_state, 0)
 					games[new_game_state] += new_count
 			
@@ -72,7 +65,8 @@ def run(run_title, input_file):
 			if games[game_state] < 1: 
 				del games[game_state]
 
-		player = 1 if player == 2 else 2
+		# player = 1 if player == 2 else 2
+		p1_turn = not p1_turn
 
 	end_time_ms = round(time.time() * 1000)
 	total_time = end_time_ms - start_time_ms
