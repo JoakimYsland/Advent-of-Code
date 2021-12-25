@@ -28,7 +28,7 @@ def run(run_title, input_file):
 	# Test / Real – 444356092776315 / 133029050096658
 
 	start_time_ms = round(time.time() * 1000)
-	scoreboard = { 'Player 1': 0, 'Player 2': 0 }
+	scoreboard = [0, 0]
 	
 	# games = { (4, 0, 8, 0): 1 }
 	games = { (2, 0, 7, 0): 1 }
@@ -52,8 +52,8 @@ def run(run_title, input_file):
 				new_count = count * q_count
 
 				if new_score >= 21: 
-					if p1_turn: scoreboard['Player 1'] += new_count
-					else: 		scoreboard['Player 2'] += new_count
+					if p1_turn: scoreboard[0] += new_count
+					else: 		scoreboard[1] += new_count
 				else: 
 					if p1_turn: new_game_state = (new_pos, new_score, p2, s2)
 					else: 		new_game_state = (p2, s2, new_pos, new_score)
