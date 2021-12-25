@@ -16,6 +16,8 @@ def run(run_title, input_file):
 	# --------------------------------------------------------------------------------
 
 	# Test / Real – 444356092776315 / ???
+	# 				4572434982669
+	# 				2540267948187
 
 	start_time_ms = round(time.time() * 1000)
 	
@@ -59,17 +61,14 @@ def run(run_title, input_file):
 					new_score = s1 + new_pos
 					new_count = count * q_count
 
-					if player == 1: new_game_state = (new_pos, new_score, p2, s2)
-					else: 			new_game_state = (p2, s2, new_pos, new_score)
-
-					games.setdefault(new_game_state, 0)
-					my_print('new_game_state: ', new_game_state, new_count)
-					
 					if new_score >= 21: 
 						if player == 1: scoreboard['Player 1'] += new_count
 						else: 			scoreboard['Player 2'] += new_count
-						games[new_game_state] = 0
 					else: 
+						if player == 1: new_game_state = (new_pos, new_score, p2, s2)
+						else: 			new_game_state = (p2, s2, new_pos, new_score)
+						my_print('new_game_state: ', new_game_state, new_count)
+						games.setdefault(new_game_state, 0)
 						games[new_game_state] += new_count
 						playing = True
 
