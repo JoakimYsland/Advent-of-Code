@@ -62,42 +62,78 @@ def run(run_title, input_file):
 		c_min = [split[1], split[3], split[5]]
 		c_max = [split[2], split[4], split[6]]
 		new_cuboid = [split[0], c_min, c_max]
-
-		# i_min, i_max = get_intersection(new_cuboid, init_procedure_area)
-		# i_volume = get_cuboid_volume(['intersection', i_min, i_max])
-		# if i_volume > 0: 
-		# 	new_cuboid = [split[0], i_min, i_max]
-			# cuboids.append(new_cuboid)
 		cuboids.append(new_cuboid)
 
 	# Replace OFFs with intersection OFFs
-	cuboids.reverse()
 	for i in range(0, len(cuboids)): 
 		if cuboids[i][0] == 'off': 
 			cuboids[i][0] = 'delete'
-			j = i + 1
-			while j < len(cuboids): 
+			for j in range(i+1, len(cuboids)):
 				if cuboids[j][0] == 'on': 
 					i_min, i_max = get_intersection(cuboids[i], cuboids[j])
 					new_cuboid = ['intersection', i_min, i_max]
 					i_volume = get_cuboid_volume(new_cuboid)
 					if i_volume > 0: 
-						cuboids.insert(j, new_cuboid)
-						j += 1
-				j += 1
-	for c in cuboids: 
-		if c[0] == 'intersection': 
-			c[0] = 'off'
-	cuboids.reverse()
+						cuboids.append(new_cuboid)
+	for c in [c for c in cuboids if c[0] == 'intersection']: 
+		c[0] = 'off'
 
+	# Add intersection OFFs between ONs
+	for i in range(0, len(cuboids)): 
+		if cuboids[i][0] != 'on': 
+			continue
+		for j in range(0, len(cuboids)): 
+			if cuboids[j][0] != 'on': 
+				continue
+			if i == j: 
+				continue
+				
+			i_min, i_max = get_intersection(cuboids[i], cuboids[j])
+			new_cuboid = ['intersection', i_min, i_max]
+			i_volume = get_cuboid_volume(new_cuboid)
+			if i_volume > 0: 
+				cuboids.append(new_cuboid)
+	
+	for c in [c for c in cuboids if c[0] == 'intersection']: 
+		c[0] = 'off'
+
+	# Add intersection ONs between OFFs
+	for i in range(0, len(cuboids)): 
+		if cuboids[i][0] != 'off': 
+			continue
+		for j in range(0, len(cuboids)): 
+			if cuboids[j][0] != 'off': 
+				continue
+			if i == j: 
+				continue
+				
+			i_min, i_max = get_intersection(cuboids[i], cuboids[j])
+			new_cuboid = ['intersection', i_min, i_max]
+			i_volume = get_cuboid_volume(new_cuboid)
+			if i_volume > 0: 
+				cuboids.append(new_cuboid)
+	
+	for c in [c for c in cuboids if c[0] == 'intersection']: 
+		c[0] = 'on'
+	
 	print('-----')
 	for c in cuboids: 
 		print(c[0])
+	print('-----')
 
+	cubes_on = 0
+	# cubes_off = 0
 
-	# Add intersection OFFs between ONs
-	# Add intersection ONs between OFFs
+	for cuboid in cuboids: 
+		instruction, c_min, c_max = cuboid
+		if instruction == 'on': 
+			cubes_on += get_cuboid_volume(cuboid)
+		elif instruction == 'off': 
+			cubes_on -= get_cuboid_volume(cuboid)
 
+	# print('-----')
+	# for c in cuboids: 
+	# 	print(c[0])
 
 	# boolean(cuboids[0], cuboids[1])
 
@@ -117,7 +153,7 @@ def run(run_title, input_file):
 	end_time_ms = round(time.time() * 1000)
 	total_time = end_time_ms - start_time_ms
 
-	# print(run_title, "cubes_on:", cubes_on, ('(' + str(total_time) + "ms)"))
+	print(run_title, "cubes_on:", cubes_on, ('(' + str(total_time) + "ms)"))
 
 run("[Test]", open('input_test.txt', 'r').readlines())
 # run("[Real]", open('input.txt', 'r').readlines())
