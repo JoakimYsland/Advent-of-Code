@@ -12,15 +12,6 @@ def my_print(*args, **kwargs):
 
 def run(run_title, input_file):
 
-	def get_cube_list(cuboid): 
-		cube_list = []
-		c_min, c_max = cuboid[1], cuboid[2]
-		for x in range(c_min[0], c_max[0] + 1): 
-			for y in range(c_min[1], c_max[1] + 1): 
-				for z in range(c_min[2], c_max[2] + 1): 
-					cube_list.append((x,y,z))
-		return cube_list
-
 	def get_cuboid_volume(cuboid): 
 		c_min, c_max = cuboid[1], cuboid[2]
 		for i in range(0, 3):
@@ -39,16 +30,16 @@ def run(run_title, input_file):
 		i_max = [None, None, None]
 
 		for i in range(0, 3):
-			if a_max[i] > b_min[i] and a_min[i] < b_min[i]: 
+			if a_max[i] >= b_min[i] and a_min[i] <= b_min[i]: 
 				i_max[i] = a_max[i]
 				i_min[i] = b_min[i]
-			elif a_max[i] > b_max[i] and a_min[i] > b_min[i]: 
+			elif a_max[i] >= b_max[i] and a_min[i] >= b_min[i]: 
 				i_max[i] = b_max[i]
 				i_min[i] = a_min[i]
-			elif a_max[i] < b_max[i] and a_min[i] > b_min[i]: 
+			elif a_max[i] <= b_max[i] and a_min[i] >= b_min[i]: 
 				i_max[i] = a_max[i]
 				i_min[i] = a_min[i]
-			elif a_max[i] > b_max[i] and a_min[i] < b_min[i]: 
+			elif a_max[i] >= b_max[i] and a_min[i] <= b_min[i]: 
 				i_max[i] = b_max[i]
 				i_min[i] = b_min[i]
 
@@ -79,23 +70,54 @@ def run(run_title, input_file):
 			# cuboids.append(new_cuboid)
 		cuboids.append(new_cuboid)
 
-	for cuboid in cuboids: 
-		instruction, _, _ = cuboid
-		cube_list = get_cube_list(cuboid)
-		
-		if instruction == 'on': 
-			for cube in cube_list: 
-				reactor[cube] = 1
-		if instruction == 'off': 
-			for cube in cube_list: 
-				reactor[cube] = 0
+	# Replace OFFs with intersection OFFs
+	cuboids.reverse()
+	for i in range(0, len(cuboids)): 
+		if cuboids[i][0] == 'off': 
+			cuboids[i][0] = 'delete'
+			j = i + 1
+			while j < len(cuboids): 
+				if cuboids[j][0] == 'on': 
+					i_min, i_max = get_intersection(cuboids[i], cuboids[j])
+					new_cuboid = ['intersection', i_min, i_max]
+					i_volume = get_cuboid_volume(new_cuboid)
+					if i_volume > 0: 
+						cuboids.insert(j, new_cuboid)
+						j += 1
+				j += 1
+	for c in cuboids: 
+		if c[0] == 'intersection': 
+			c[0] = 'off'
+	cuboids.reverse()
 
-	cubes_on = len([c for c in reactor.values() if c == 1])
+	print('-----')
+	for c in cuboids: 
+		print(c[0])
+
+
+	# Add intersection OFFs between ONs
+	# Add intersection ONs between OFFs
+
+
+	# boolean(cuboids[0], cuboids[1])
+
+	# for cuboid in cuboids: 
+	# 	instruction, _, _ = cuboid
+	# 	cube_list = get_cube_list(cuboid)
+		
+	# 	if instruction == 'on': 
+	# 		for cube in cube_list: 
+	# 			reactor[cube] = 1
+	# 	if instruction == 'off': 
+	# 		for cube in cube_list: 
+	# 			reactor[cube] = 0
+
+	# cubes_on = len([c for c in reactor.values() if c == 1])
 
 	end_time_ms = round(time.time() * 1000)
 	total_time = end_time_ms - start_time_ms
 
-	print(run_title, "cubes_on:", cubes_on, ('(' + str(total_time) + "ms)"))
+	# print(run_title, "cubes_on:", cubes_on, ('(' + str(total_time) + "ms)"))
 
-# run("[Test]", open('input_test.txt', 'r').readlines())
-run("[Real]", open('input.txt', 'r').readlines())
+run("[Test]", open('input_test.txt', 'r').readlines())
+# run("[Real]", open('input.txt', 'r').readlines())
