@@ -5,22 +5,6 @@ import time
 import math
 import re
 from copy import deepcopy
-# from collections import deque
-
-# class Vec3: 
-# 	def __init__(self, x, y, z): 
-# 		self.x = x
-# 		self.y = y
-# 		self.z = z
-
-# 	def __repr__(self): 
-# 		return "({0},{1},{2})".format(str(self.x), str(self.y), str(self.z))
-
-# 	# def __add__(self, other):
-# 	# 	return Vec3(self.x + other.x, self.y + other.y, self.z + other.z)
-
-# 	def __sub__(self, other):
-# 		return Vec3(self.x - other.x, self.y - other.y, self.z - other.z)
 
 def my_print(*args, **kwargs):
 	# print(' '.join(map(str,args)), **kwargs)
@@ -91,11 +75,17 @@ def run(run_title, input_file):
 		i_min, i_max = get_intersection(new_cuboid, init_procedure_area)
 		i_volume = get_cuboid_volume(['intersection', i_min, i_max])
 		if i_volume > 0: 
+			new_cuboid = [split[0], i_min, i_max]
 			cuboids.append(new_cuboid)
+
+	# for cube in get_cube_list(cuboids[0]): 
+	# 	print(cube)
 
 	for cuboid in cuboids: 
 		instruction, c_min, c_max = cuboid
 		cube_list = get_cube_list(cuboid)
+		# print(get_cuboid_volume(cuboid))
+		
 		if instruction == 'on': 
 			for cube in cube_list: 
 				reactor[cube] = 1
