@@ -56,7 +56,7 @@ def run(run_title, input_file):
 
 	# --------------------------------------------------------------------------------
 
-	# Test / Real – 590784 / ???
+	# Test / Real – 590784 / 648023
 
 	start_time_ms = round(time.time() * 1000)
 	
@@ -78,18 +78,14 @@ def run(run_title, input_file):
 			new_cuboid = [split[0], i_min, i_max]
 			cuboids.append(new_cuboid)
 
-	# for cube in get_cube_list(cuboids[0]): 
-	# 	print(cube)
-
 	for cuboid in cuboids: 
-		instruction, c_min, c_max = cuboid
+		instruction, _, _ = cuboid
 		cube_list = get_cube_list(cuboid)
-		# print(get_cuboid_volume(cuboid))
 		
 		if instruction == 'on': 
 			for cube in cube_list: 
 				reactor[cube] = 1
-		elif instruction == 'off': 
+		if instruction == 'off': 
 			for cube in cube_list: 
 				if cube in reactor: 
 					reactor[cube] = 0
@@ -101,5 +97,5 @@ def run(run_title, input_file):
 
 	print(run_title, "cubes_on:", cubes_on, ('(' + str(total_time) + "ms)"))
 
-run("[Test]", open('input_test.txt', 'r').readlines())
-# run("[Real]", open('input.txt', 'r').readlines())
+# run("[Test]", open('input_test.txt', 'r').readlines())
+run("[Real]", open('input.txt', 'r').readlines())
