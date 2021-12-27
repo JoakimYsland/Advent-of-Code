@@ -124,7 +124,7 @@ def run(run_title, input_file):
 	add_intersection_cuboids('on', 'on_intersection')
 
 	# # Add intersection ONs between OFFs
-	# add_intersection_cuboids('on_intersection', 'off_intersection')
+	add_intersection_cuboids('on_intersection', 'off_intersection')
 	
 	# for c in [c for c in cuboids if c[0] == 'replaced_off']: 
 	for c in cuboids: 
