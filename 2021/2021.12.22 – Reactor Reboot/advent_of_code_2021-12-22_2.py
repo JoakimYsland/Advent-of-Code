@@ -42,24 +42,6 @@ def run(run_title, input_file):
 
 		return i_min, i_max
 
-	# def add_intersection_cuboids(filter, new_cuboid_name): 
-	# 	init_length = len(cuboids)
-	# 	for i in range(0, init_length): 
-	# 		if not cuboids[i][0] in filter: 
-	# 			continue
-	# 		for j in range(i, init_length): 
-	# 			if not cuboids[j][0] in filter: 
-	# 				continue
-	# 			if i == j: 
-	# 				continue
-					
-	# 			i_min, i_max = get_intersection(cuboids[i], cuboids[j])
-	# 			new_cuboid = [new_cuboid_name, i_min, i_max]
-	# 			i_volume = get_cuboid_volume(new_cuboid)
-	# 			if i_volume > 0: 
-	# 				cuboids.append(new_cuboid)
-	# 				my_print(new_cuboid)
-
 	# --------------------------------------------------------------------------------
 
 	# Test / Real – 2758514936282235 / ???
@@ -68,6 +50,7 @@ def run(run_title, input_file):
 	start_time_ms = round(time.time() * 1000)
 	
 	cuboids = []
+	cuboids_dict = {}
 	# init_procedure_area = ['init_procedure_area', [-50, -50, -50], [50, 50, 50]]
 
 	for line in input_file: 
@@ -81,32 +64,8 @@ def run(run_title, input_file):
 		new_cuboid = [split[0], c_min, c_max]
 		cuboids.append(new_cuboid)
 
-	# for c in cuboids: my_print(c)
-	# my_print('-----')
-
-	# # Add intersection OFFs between ONs
-	# add_intersection_cuboids(['on'], 'on_intersection')
-
-	# # # Add intersection ONs between OFFs
-	# add_intersection_cuboids(['off', 'on_intersection'], 'off_intersection')
-
-	# # Replace OFFs with intersection OFFs
-	# cuboids.reverse()
-	# init_length = len(cuboids)
-	# for i in range(0, init_length): 
-	# 	if cuboids[i][0] == 'off': 
-	# 		cuboids[i][0] = 'original_off'
-	# 		for j in range(i+1, init_length):
-	# 			if cuboids[j][0] == 'on': 
-	# 				i_min, i_max = get_intersection(cuboids[i], cuboids[j])
-	# 				new_cuboid = ['replaced_off', i_min, i_max]
-	# 				i_volume = get_cuboid_volume(new_cuboid)
-	# 				if i_volume > 0: 
-	# 					cuboids.append(new_cuboid)
-	# 					my_print(new_cuboid)
-	# cuboids.reverse()
-
 	i = 0
+	dupes = 0
 	while i < len(cuboids): 
 		for j in range(i-1, -1, -1): 
 			i_min, i_max = get_intersection(cuboids[i], cuboids[j])
@@ -114,6 +73,8 @@ def run(run_title, input_file):
 			new_cuboid = [new_cuboid_name, i_min, i_max]
 			i_volume = get_cuboid_volume(new_cuboid)
 			if i_volume > 0: 
+				if new_cuboid in cuboids: 
+					dupes += 1
 				cuboids.insert(j+1, new_cuboid)
 				i += 1
 
@@ -121,8 +82,6 @@ def run(run_title, input_file):
 			cuboids.pop(i)
 		else: 
 			i += 1
-	
-	print(len(cuboids))
 
 	cubes_on = 0
 	for cuboid in cuboids: 
