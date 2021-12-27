@@ -45,7 +45,7 @@ def run(run_title, input_file):
 	# --------------------------------------------------------------------------------
 
 	# Test / Real – 2758514936282235 / ???
-	# 				4616670828883298
+	# 				2913162407580289
 
 	start_time_ms = round(time.time() * 1000)
 	
@@ -64,32 +64,35 @@ def run(run_title, input_file):
 		new_cuboid = [split[0], c_min, c_max]
 		cuboids.append(new_cuboid)
 
-	i = 0
-	dupes = 0
-	while i < len(cuboids): 
-		for j in range(i-1, -1, -1): 
-			i_min, i_max = get_intersection(cuboids[i], cuboids[j])
-			new_cuboid_name = 'on' if cuboids[j][0] == 'off' else 'off'
+	while len(cuboids) > 0: 
+		next_cuboid = cuboids.pop(0)
+		for cuboid in deepcopy(cuboids_dict).values(): 
+			i_min, i_max = get_intersection(next_cuboid, cuboid[0])
+			new_cuboid_name = 'on' if cuboid[0][0] == 'off' else 'off'
 			new_cuboid = [new_cuboid_name, i_min, i_max]
-			i_volume = get_cuboid_volume(new_cuboid)
-			if i_volume > 0: 
-				if new_cuboid in cuboids: 
-					dupes += 1
-				cuboids.insert(j+1, new_cuboid)
-				i += 1
+			new_cuboid_key = str(new_cuboid)
+			if new_cuboid_key in cuboids_dict.keys(): 
+				cuboids_dict[new_cuboid_key][1] += cuboid[1]
+			else: 
+				i_volume = get_cuboid_volume(new_cuboid)
+				if i_volume > 0: 
+					cuboids_dict[new_cuboid_key] = [new_cuboid, cuboid[1]]
+		if next_cuboid[0] != 'off': 
+			next_cuboid_key = str(next_cuboid)
+			cuboids_dict.setdefault(next_cuboid_key, [next_cuboid, 0])
+			cuboids_dict[next_cuboid_key][1] += 1
 
-		if cuboids[i][0] == 'off': 
-			cuboids.pop(i)
-		else: 
-			i += 1
+	# for k,v in cuboids_dict.items(): 
+	# 	print(v)
+	# print(len(cuboids_dict))
 
 	cubes_on = 0
-	for cuboid in cuboids: 
-		instruction, c_min, c_max = cuboid
+	for cuboid in cuboids_dict.values(): 
+		instruction, c_min, c_max = cuboid[0]
 		if instruction == 'on': 
-			cubes_on += get_cuboid_volume(cuboid)
+			cubes_on += get_cuboid_volume(cuboid[0]) * cuboid[1]
 		elif instruction == 'off': 
-			cubes_on -= get_cuboid_volume(cuboid)
+			cubes_on -= get_cuboid_volume(cuboid[0]) * cuboid[1]
 
 	end_time_ms = round(time.time() * 1000)
 	total_time = end_time_ms - start_time_ms
