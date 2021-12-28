@@ -28,9 +28,7 @@ def run(run_title, input_file):
 
 		for i in range(0, 3):
 			if a_max[i] < b_min[i] or a_min[i] > b_max[i]: 
-				i_max[i] = None
-				i_min[i] = None
-				return i_min, i_max
+				return None, None
 			else: 
 				i_max[i] = min(a_max[i], b_max[i])
 				i_min[i] = max(a_min[i], b_min[i])
@@ -61,15 +59,13 @@ def run(run_title, input_file):
 
 		for cuboid in deepcopy(cuboids_dict).values(): 
 			i_min, i_max = get_intersection(next_cuboid, cuboid[0])
+			if i_min == None or i_max == None: 
+				continue
 			mod = 1 if cuboid[0][0] == 'off' else -1
 			new_cuboid = ['intersection', i_min, i_max]
 			new_cuboid_key = str(new_cuboid)
-			if new_cuboid_key in cuboids_dict: 
-				cuboids_dict[new_cuboid_key][1] += cuboid[1] * mod
-			else: 
-				i_volume = get_cuboid_volume(new_cuboid)
-				if i_volume > 0: 
-					cuboids_dict[new_cuboid_key] = [new_cuboid, cuboid[1] * mod]
+			cuboids_dict.setdefault(new_cuboid_key, [new_cuboid, 0])
+			cuboids_dict[new_cuboid_key][1] += cuboid[1] * mod
 
 		cuboids_dict = { k:v for k, v in cuboids_dict.items() if v[1] != 0 }
 					
