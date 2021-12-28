@@ -27,16 +27,11 @@ def run(run_title, input_file):
 		i_max = [None, None, None]
 
 		for i in range(0, 3):
-			if a_max[i] >= b_min[i] and a_min[i] <= b_min[i]: 
-				i_max[i] = min(a_max[i], b_max[i])
-				i_min[i] = max(a_min[i], b_min[i])
-			elif a_max[i] >= b_max[i] and a_min[i] >= b_min[i]: 
-				i_max[i] = min(a_max[i], b_max[i])
-				i_min[i] = max(a_min[i], b_min[i])
-			elif a_max[i] <= b_max[i] and a_min[i] >= b_min[i]: 
-				i_max[i] = min(a_max[i], b_max[i])
-				i_min[i] = max(a_min[i], b_min[i])
-			elif a_max[i] >= b_max[i] and a_min[i] <= b_min[i]: 
+			if a_max[i] < b_min[i] or a_min[i] > b_max[i]: 
+				i_max[i] = None
+				i_min[i] = None
+				return i_min, i_max
+			else: 
 				i_max[i] = min(a_max[i], b_max[i])
 				i_min[i] = max(a_min[i], b_min[i])
 
@@ -44,8 +39,7 @@ def run(run_title, input_file):
 
 	# --------------------------------------------------------------------------------
 
-	# Test / Real – 2758514936282235 / !1669091624597477
-	# 				2913162407580289    1669091624597477
+	# Test / Real – 2758514936282235 / 1285677377848549
 
 	start_time_ms = round(time.time() * 1000)
 	
@@ -59,12 +53,8 @@ def run(run_title, input_file):
 		c_max = [split[2], split[4], split[6]]
 		new_cuboid = [split[0], c_min, c_max]
 		cuboids.append(new_cuboid)
-			
-	print(len(cuboids))
 
 	cuboids_dict = {}
-	volume_cache = {}
-	intersection_cache = {}
 	while len(cuboids) > 0: 
 		print(len(cuboids))
 		next_cuboid = cuboids.pop(0)
@@ -72,9 +62,9 @@ def run(run_title, input_file):
 		for cuboid in deepcopy(cuboids_dict).values(): 
 			i_min, i_max = get_intersection(next_cuboid, cuboid[0])
 			mod = 1 if cuboid[0][0] == 'off' else -1
-			new_cuboid = ['on', i_min, i_max]
+			new_cuboid = ['intersection', i_min, i_max]
 			new_cuboid_key = str(new_cuboid)
-			if new_cuboid_key in cuboids_dict.keys(): 
+			if new_cuboid_key in cuboids_dict: 
 				cuboids_dict[new_cuboid_key][1] += cuboid[1] * mod
 			else: 
 				i_volume = get_cuboid_volume(new_cuboid)
@@ -88,7 +78,7 @@ def run(run_title, input_file):
 			cuboids_dict.setdefault(next_cuboid_key, [next_cuboid, 0])
 			cuboids_dict[next_cuboid_key][1] += 1
 
-	print(len(cuboids_dict))
+	print('len(cuboids_dict):', len(cuboids_dict))
 
 	cubes_on = 0
 	for cuboid in cuboids_dict.values(): 
@@ -98,7 +88,6 @@ def run(run_title, input_file):
 	total_time = end_time_ms - start_time_ms
 
 	print(run_title, "cubes_on:", cubes_on, ('(' + str(total_time) + "ms)"))
-	print('                 2758514936282235')
 
-run("[Test]", open('input_test.txt', 'r').readlines())
-# run("[Real]", open('input.txt', 'r').readlines())
+# run("[Test]", open('input_test.txt', 'r').readlines())
+run("[Real]", open('input.txt', 'r').readlines())
