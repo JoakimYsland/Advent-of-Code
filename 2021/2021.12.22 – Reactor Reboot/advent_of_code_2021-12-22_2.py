@@ -44,8 +44,8 @@ def run(run_title, input_file):
 
 	# --------------------------------------------------------------------------------
 
-	# Test / Real – 2758514936282235 / ???
-	# 				2913162407580289
+	# Test / Real – 2758514936282235 / !1669091624597477
+	# 				2913162407580289    1669091624597477
 
 	start_time_ms = round(time.time() * 1000)
 	
@@ -59,71 +59,46 @@ def run(run_title, input_file):
 		c_max = [split[2], split[4], split[6]]
 		new_cuboid = [split[0], c_min, c_max]
 		cuboids.append(new_cuboid)
-	
-	# # Pretty straightforward idea. Process the instructions in reverse order, and for any on instruction, add the volume of that cube minus any previously-seen cubes that intersect it.
-	# cuboids.reverse()
-	# processed_cuboids = []
-	# cubes_on = 0
-	# for cuboid in cuboids: 
-	# 	if cuboid[0] == 'on': 
-	# 		asd = False
-	# 		for processed_cuboid in processed_cuboids: 
-	# 			i_min, i_max = get_intersection(cuboid, processed_cuboid)
-	# 			new_cuboid = ['intersection', i_min, i_max]
-	# 			c_volume = get_cuboid_volume(cuboid)
-	# 			i_volume = get_cuboid_volume(new_cuboid)
-	# 			p_volume = get_cuboid_volume(processed_cuboid)
-	# 			# if c_volume > 0 and not asd: 
-	# 			# if c_volume: 
-	# 			if i_volume > 0: 
-	# 				# cubes_on += c_volume - p_volume
-	# 				cubes_on += i_volume
-	# 				# asd = True
-	# 			# if i_volume > 0: 
-	# 				# cubes_on += c_volume - i_volume
-	# 				# cubes_on -= i_volume
-	# 				# cubes_on -= p_volume
-	# 		processed_cuboids.append(cuboid)
 			
 	print(len(cuboids))
 
 	cuboids_dict = {}
+	volume_cache = {}
+	intersection_cache = {}
 	while len(cuboids) > 0: 
+		print(len(cuboids))
 		next_cuboid = cuboids.pop(0)
 
 		for cuboid in deepcopy(cuboids_dict).values(): 
 			i_min, i_max = get_intersection(next_cuboid, cuboid[0])
-			new_cuboid_name = 'on' if cuboid[0][0] == 'off' else 'off'
-			new_cuboid = [new_cuboid_name, i_min, i_max]
+			mod = 1 if cuboid[0][0] == 'off' else -1
+			new_cuboid = ['on', i_min, i_max]
 			new_cuboid_key = str(new_cuboid)
 			if new_cuboid_key in cuboids_dict.keys(): 
-				cuboids_dict[new_cuboid_key][1] += cuboid[1]
+				cuboids_dict[new_cuboid_key][1] += cuboid[1] * mod
 			else: 
 				i_volume = get_cuboid_volume(new_cuboid)
 				if i_volume > 0: 
-					cuboids_dict[new_cuboid_key] = [new_cuboid, cuboid[1]]
+					cuboids_dict[new_cuboid_key] = [new_cuboid, cuboid[1] * mod]
+
+		cuboids_dict = { k:v for k, v in cuboids_dict.items() if v[1] != 0 }
 					
 		if next_cuboid[0] != 'off': 
 			next_cuboid_key = str(next_cuboid)
 			cuboids_dict.setdefault(next_cuboid_key, [next_cuboid, 0])
 			cuboids_dict[next_cuboid_key][1] += 1
 
-	print(len(cuboids_dict)) # 1389
-	# for k,v in cuboids_dict.items(): 
-	# 	print(v)
+	print(len(cuboids_dict))
 
 	cubes_on = 0
 	for cuboid in cuboids_dict.values(): 
-		instruction, c_min, c_max = cuboid[0]
-		if instruction == 'on': 
-			cubes_on += get_cuboid_volume(cuboid[0]) * cuboid[1]
-		elif instruction == 'off': 
-			cubes_on -= get_cuboid_volume(cuboid[0]) * cuboid[1]
+		cubes_on += get_cuboid_volume(cuboid[0]) * cuboid[1]
 
 	end_time_ms = round(time.time() * 1000)
 	total_time = end_time_ms - start_time_ms
 
 	print(run_title, "cubes_on:", cubes_on, ('(' + str(total_time) + "ms)"))
+	print('                 2758514936282235')
 
 run("[Test]", open('input_test.txt', 'r').readlines())
 # run("[Real]", open('input.txt', 'r').readlines())
