@@ -61,7 +61,7 @@ def run(run_title, input_file):
 			i_min, i_max = get_intersection(next_cuboid, cuboid[0])
 			if i_min == None or i_max == None: 
 				continue
-			mod = 1 if cuboid[0][0] == 'off' else -1
+			mod = 1 if cuboid[0][0] == 'off' else -1 # Invert based on cuboid[0]
 			new_cuboid = ['intersection', i_min, i_max]
 			new_cuboid_key = str(new_cuboid)
 			cuboids_dict.setdefault(new_cuboid_key, [new_cuboid, 0])
