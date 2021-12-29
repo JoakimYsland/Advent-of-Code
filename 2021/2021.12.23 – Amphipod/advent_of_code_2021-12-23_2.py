@@ -84,7 +84,7 @@ def run(run_title, input_file):
 
 	# --------------------------------------------------------------------------------
 
-	# Test / Real – 12521 / 10321
+	# Test / Real – 44169 / ???
 
 	start_time_ms = round(time.time() * 1000)
 	
@@ -92,9 +92,7 @@ def run(run_title, input_file):
 	movement_cost = { 'A': 1, 'B': 10, 'C': 100, 'D': 1000 }
 	total_cost = 0
 
-	# Example (12521)
-	# BCBD => ABCD
-	# ADCA => ABCD
+	# Example (44169)
 	burrow.append(['B', 'D', 'D', 'A']) # Room 1 (0 - top, 1 - bottom)
 	burrow.append(['C', 'C', 'B', 'D']) # Room 1 (0 - top, 1 - bottom)
 	burrow.append(['B', 'B', 'A', 'C']) # Room 1 (0 - top, 1 - bottom)
