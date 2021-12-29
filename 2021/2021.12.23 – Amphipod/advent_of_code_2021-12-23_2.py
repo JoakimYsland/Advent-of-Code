@@ -143,6 +143,7 @@ def run(run_title, input_file):
 	leave(3,9)
 	leave(3,0)
 	leave(3,1)
+	transfer(1,3)
 	leave(2,3)
 	transfer(2,3)
 	leave(2,7)
@@ -150,10 +151,14 @@ def run(run_title, input_file):
 	enter(3,2)
 	enter(7,2)
 	enter(9,2)
-	transfer(1,3)
 
-	# leave(3,7)
-	# transfer(3,2)
+	# AA        D
+	#         D  => A B C D
+	#   D B C A  => A B C D
+	#   D B C C  => A B C D
+	#   B B C A  => A B C D
+
+
 
 	# leave(3,10)
 	# leave(3,9)
@@ -192,10 +197,13 @@ def run(run_title, input_file):
 	# leave(3,1)
 	# transfer(1,3)
 
-	print(str(burrow).replace('\'\'', '-').replace('\'', '').replace(',', ''))
+	# print(str(burrow).replace('\'\'', '-').replace('\'', '').replace(',', ''))
 	# print(str(burrow).replace('\'\'', '-').replace('\'', '').replace(',', '').replace('[', '').replace(']', ''))
 	# print(str(burrow[0]).replace('\'\'', '-').replace('\'', '').replace(',', '').replace('[', '').replace(']', ''))
 	# print("   {0}   {1}   {2}   {3}".format(burrow[1][0], burrow[1][1], burrow[1][2], burrow[1][3]))
+	print(str(burrow[0]).replace('\'\'', '-').replace('\'', '').replace(',', ''))
+	for r in [list(x) for x in zip(*burrow[1:5])]: 
+		print("    " + str(r).replace('\'\'', '\'-\'').replace('\'', '').replace(',', '  '))
 
 	end_time_ms = round(time.time() * 1000)
 	total_time = end_time_ms - start_time_ms
