@@ -52,8 +52,6 @@ def run(run_title, input_file):
 
 		from_room_entrance_index = from_room_index * 2
 		to_room_entrance_index = to_room_index * 2
-
-		# room_entrance_index = room_index * 2
 		cost_hallway_move = abs(from_room_entrance_index - to_room_entrance_index)
 		cost_final = (cost_exit_room + cost_hallway_move + cost_enter_room) * movement_cost[amphipod]
 		total_cost += cost_final
