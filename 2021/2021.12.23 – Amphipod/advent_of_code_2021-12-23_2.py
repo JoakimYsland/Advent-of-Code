@@ -12,57 +12,43 @@ def my_print(*args, **kwargs):
 
 def run(run_title, input_file):
 
-	def leave(room_index, hallway_index): 
+	def leave(from_room_index, hallway_index): 
 		nonlocal total_cost
-		
-		for i, a in enumerate(burrow[room_index]): 
-			if a != '': 
-				amphipod = a
-				cost_exit_room = i + 1
-				burrow[room_index][i] = ''
-				break
+		num_vacant = len([s for s in burrow[from_room_index] if s == ''])
+		amphipod = burrow[from_room_index][num_vacant]
+		burrow[from_room_index][num_vacant] = ''
+		cost_exit_room = num_vacant + 1
 
-		room_entrance_index = room_index * 2
+		room_entrance_index = from_room_index * 2
 		cost_hallway_move = abs(hallway_index - room_entrance_index)
 		cost_final = (cost_exit_room + cost_hallway_move) * movement_cost[amphipod]
 		burrow[0][hallway_index] = amphipod
 		total_cost += cost_final
 	
-	def enter(hallway_index, room_index): 
+	def enter(hallway_index, to_room_index): 
 		nonlocal total_cost
-		room_first = burrow[room_index][0]
-		room_second = burrow[room_index][1]
 		amphipod = burrow[0][hallway_index]
-		cost_enter_room = None
 
-		empty_slot = len([s for s in burrow[room_index] if s == ''])
-		cost_enter_room = empty_slot
-		burrow[room_index][empty_slot - 1] = amphipod
+		num_vacant = len([s for s in burrow[to_room_index] if s == ''])
+		cost_enter_room = num_vacant
+		burrow[to_room_index][num_vacant - 1] = amphipod
 
-		room_entrance_index = room_index * 2
+		room_entrance_index = to_room_index * 2
 		cost_hallway_move = abs(hallway_index - room_entrance_index)
 		cost_final = (cost_hallway_move + cost_enter_room) * movement_cost[amphipod]
 		burrow[0][hallway_index] = ''
-		print('enter', amphipod, 'from', hallway_index)
 		total_cost += cost_final
 
 	def transfer(from_room_index, to_room_index): 
 		nonlocal total_cost
-		room_first = burrow[from_room_index][0]
-		room_second = burrow[from_room_index][1]
-		amphipod = None
-		cost_exit_room = None
+		num_vacant = len([s for s in burrow[from_room_index] if s == ''])
+		amphipod = burrow[from_room_index][num_vacant]
+		burrow[from_room_index][num_vacant] = ''
+		cost_exit_room = num_vacant + 1
 
-		for i, a in enumerate(burrow[from_room_index]): 
-			if a != '': 
-				amphipod = a
-				cost_exit_room = i + 1
-				burrow[from_room_index][i] = ''
-				break
-
-		empty_slot = len([s for s in burrow[to_room_index] if s == ''])
-		cost_enter_room = empty_slot
-		burrow[to_room_index][empty_slot - 1] = amphipod
+		num_vacant = len([s for s in burrow[to_room_index] if s == ''])
+		cost_enter_room = num_vacant
+		burrow[to_room_index][num_vacant - 1] = amphipod
 
 		from_room_entrance_index = from_room_index * 2
 		to_room_entrance_index = to_room_index * 2
