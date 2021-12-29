@@ -87,6 +87,11 @@ def run(run_title, input_file):
 
 		my_print(result)
 
+	def visualize_burrow(): 
+		print(str(burrow[0]).replace('\'\'', '-').replace('\'', '').replace(',', ''))
+		for r in [list(x) for x in zip(*burrow[1:5])]: 
+			print("    " + str(r).replace('\'\'', '\'-\'').replace('\'', '').replace(',', '  '))
+
 	# --------------------------------------------------------------------------------
 
 	# Test / Real – 44169 / ???
@@ -138,11 +143,11 @@ def run(run_title, input_file):
 	burrow.append(['D', 'B', 'A', 'A']) # Room 1 (0 - top, 1 - bottom)
 	burrow.append(['D', 'A', 'C', 'A']) # Room 1 (0 - top, 1 - bottom)
 
-	print(str(burrow).replace('\'\'', '-').replace('\'', '').replace(',', ''))
 	leave(3,10)
 	leave(3,9)
 	leave(3,0)
 	leave(3,1)
+
 	transfer(1,3)
 	leave(2,3)
 	transfer(2,3)
@@ -152,58 +157,7 @@ def run(run_title, input_file):
 	enter(7,2)
 	enter(9,2)
 
-	# AA        D
-	#         D  => A B C D
-	#   D B C A  => A B C D
-	#   D B C C  => A B C D
-	#   B B C A  => A B C D
-
-
-
-	# leave(3,10)
-	# leave(3,9)
-	# leave(3,0)
-	# leave(3,1)
-	# transfer(1,3)
-	# leave(2,3)
-	# transfer(2,3)
-	# leave(2,7)
-	# transfer(2,3)
-	# enter(3,2)
-	# enter(7,2)
-	# enter(9,2)
-	# leave(4,9)
-	# leave(4,3)
-	# transfer(4,3)
-	# leave(4,5)
-	# enter(9,4)
-	# enter(10,4)
-
-	# leave(4,10)
-	# leave(4,0)
-	# leave(4,9)
-	# leave(4,1)
-	# transfer(3,4)
-
-	# leave(2,1)
-	# leave(2,10)
-	# leave(2,3)
-	# leave(2,9)
-	# enter(3,2)
-	# enter(1,2)
-	# leave(3,7)
-	# transfer(3,2)
-	# leave(3,0)
-	# leave(3,1)
-	# transfer(1,3)
-
-	# print(str(burrow).replace('\'\'', '-').replace('\'', '').replace(',', ''))
-	# print(str(burrow).replace('\'\'', '-').replace('\'', '').replace(',', '').replace('[', '').replace(']', ''))
-	# print(str(burrow[0]).replace('\'\'', '-').replace('\'', '').replace(',', '').replace('[', '').replace(']', ''))
-	# print("   {0}   {1}   {2}   {3}".format(burrow[1][0], burrow[1][1], burrow[1][2], burrow[1][3]))
-	print(str(burrow[0]).replace('\'\'', '-').replace('\'', '').replace(',', ''))
-	for r in [list(x) for x in zip(*burrow[1:5])]: 
-		print("    " + str(r).replace('\'\'', '\'-\'').replace('\'', '').replace(',', '  '))
+	visualize_burrow()
 
 	end_time_ms = round(time.time() * 1000)
 	total_time = end_time_ms - start_time_ms
