@@ -30,7 +30,6 @@ def run(run_title, input_file):
 		cost_hallway_move = abs(hallway_index - room_entrance_index)
 		cost_final = (cost_exit_room + cost_hallway_move) * movement_cost[amphipod]
 		burrow[0][hallway_index] = amphipod
-		print('leave', amphipod, 'to', hallway_index)
 		total_cost += cost_final
 	
 	def enter(hallway_index, room_index): 
@@ -50,7 +49,6 @@ def run(run_title, input_file):
 		cost_hallway_move = abs(hallway_index - room_entrance_index)
 		cost_final = (cost_hallway_move + cost_enter_room) * movement_cost[amphipod]
 		burrow[0][hallway_index] = ''
-		print('enter', amphipod, 'from', hallway_index)
 		total_cost += cost_final
 
 	def transfer(from_room_index, hallway_index, to_room_index): 
@@ -96,20 +94,36 @@ def run(run_title, input_file):
 	burrow.append(['D', 'A']) # Room 1 (0 - top, 1 - bottom)
 	burrow.append(['D', 'A']) # Room 1 (0 - top, 1 - bottom)
 
-	print(burrow)
-	leave(4,7) 		# D
-	leave(4,9) 		# A
-	enter(7,4) 		# D *
-	transfer(3,7,4) # D **
-	leave(3,1) 		# A
-	leave(2,3) 		# B
-	transfer(2,5,3) # C *
-	enter(3,2) 		# B *
-	transfer(1,5,3) # C **
-	transfer(1,3,2) # B **
-	enter(1,1) 		# A *
-	enter(9,1) 		# A **
+	# print(burrow)
+	# leave(4,7) 		# D
+	# leave(4,9) 		# A
+	# enter(7,4) 		# D *
+	# transfer(3,7,4) # D **
+	# leave(3,1) 		# A
+	# leave(2,3) 		# B
+	# transfer(2,5,3) # C *
+	# enter(3,2) 		# B *
+	# transfer(1,5,3) # C **
+	# transfer(1,3,2) # B **
+	# enter(1,1) 		# A *
+	# enter(9,1) 		# A **
+	# print(burrow)
 
+	# Marianne (14737)
+	print(burrow)
+	leave(1,0)
+	leave(1,1)
+	leave(3,10)
+	leave(4,9)
+	transfer(4,3,1)
+	transfer(3,3,1)
+	enter(9,4)
+	enter(10,4)
+	leave(2,3)
+	transfer(2,5,3)
+	enter(1,2)
+	enter(0,3)
+	enter(3, 2)
 	print(burrow)
 
 	end_time_ms = round(time.time() * 1000)
