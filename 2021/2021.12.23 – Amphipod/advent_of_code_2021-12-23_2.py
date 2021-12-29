@@ -12,11 +12,9 @@ def my_print(*args, **kwargs):
 
 def run(run_title, input_file):
 
-
-
 	def leave(room_index, hallway_index): 
 		nonlocal total_cost
-
+		
 		for i, a in enumerate(burrow[room_index]): 
 			if a != '': 
 				amphipod = a
@@ -37,13 +35,9 @@ def run(run_title, input_file):
 		amphipod = burrow[0][hallway_index]
 		cost_enter_room = None
 
-		burrow[room_index].reverse()
-		for i, a in enumerate(burrow[room_index]): 
-			if a == '': 
-				cost_enter_room = 4 - i
-				burrow[room_index][i] = amphipod
-				break
-		burrow[room_index].reverse()
+		empty_slot = len([s for s in burrow[room_index] if s == ''])
+		cost_enter_room = empty_slot
+		burrow[room_index][empty_slot - 1] = amphipod
 
 		room_entrance_index = room_index * 2
 		cost_hallway_move = abs(hallway_index - room_entrance_index)
@@ -66,13 +60,9 @@ def run(run_title, input_file):
 				burrow[from_room_index][i] = ''
 				break
 
-		burrow[to_room_index].reverse()
-		for i, a in enumerate(burrow[to_room_index]): 
-			if a == '': 
-				cost_enter_room = 4 - i
-				burrow[to_room_index][i] = amphipod
-				break
-		burrow[to_room_index].reverse()
+		empty_slot = len([s for s in burrow[to_room_index] if s == ''])
+		cost_enter_room = empty_slot
+		burrow[to_room_index][empty_slot - 1] = amphipod
 
 		from_room_entrance_index = from_room_index * 2
 		to_room_entrance_index = to_room_index * 2
