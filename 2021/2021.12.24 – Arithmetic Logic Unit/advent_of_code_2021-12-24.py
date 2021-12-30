@@ -12,8 +12,10 @@ def my_print(*args, **kwargs):
 
 def run(run_title, input_file):
 
-	def inp(): 
-		print('inp')
+	def inp(split): 
+		a = split[1]
+		loc = get_write_location(a)
+		ALU[loc] = inps.pop(0)
 
 	def add(): 
 		print('add')
@@ -59,27 +61,27 @@ def run(run_title, input_file):
 		'mod': mod, 
 		'eql': eql, 
 	}
-	inps = [15]
+	inps = [7]
 
 	for line in input_file: 
 		split = line.strip().split()
 		instruction = split[0]
 
 		if instruction == 'inp': 
-			a = split[1]
-			loc = get_write_location(a)
-			ALU[loc] = inps.pop(0)
+			# a = split[1]
+			# loc = get_write_location(a)
+			# ALU[loc] = inps.pop(0)
+			instructions[instruction](split)
 
 		elif instruction == 'add': 
 			a, b = split[1], get_b(split[2])
 			loc_a = get_write_location(a)
-			loc_b = get_write_location(b)
-			ALU[loc_a] = ALU[loc_b] + ALU[loc_a]
+			ALU[loc_a] = b + ALU[loc_a]
 
 		elif instruction == 'mul': 
 			a, b = split[1], get_b(split[2])
 			loc = get_write_location(a)
-			ALU[loc] *= int(b)
+			ALU[loc] *= b
 
 		elif instruction == 'div': 
 			a, b = split[1], get_b(split[2])
@@ -94,8 +96,7 @@ def run(run_title, input_file):
 		elif instruction == 'eql': 
 			a, b = split[1], get_b(split[2])
 			loc_a = get_write_location(a)
-			loc_b = get_write_location(b)
-			is_equal = ALU[loc_a] == ALU[loc_b]
+			is_equal = ALU[loc_a] == b
 			ALU[loc_a] = 1 if is_equal else 0
 
 	# burrow_init = [['', '', '', '', '', '', '', '', '', '', '']] # Hallway (0 - left, 10 - right)
