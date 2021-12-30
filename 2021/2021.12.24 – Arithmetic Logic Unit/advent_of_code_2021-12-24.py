@@ -12,6 +12,19 @@ def my_print(*args, **kwargs):
 
 def run(run_title, input_file):
 
+	def get_write_location(location): 
+		if location == 'x': return 0
+		if location == 'y': return 1
+		if location == 'z': return 2
+		if location == 'w': return 3
+	
+	def get_b(b) : 
+		if b.isdigit(): 
+			return int(b)
+		else: 
+			loc_b = get_write_location(b)
+			return ALU[loc_b]
+
 	def inp(split): 
 		a = split[1]
 		loc = get_write_location(a)
@@ -42,19 +55,6 @@ def run(run_title, input_file):
 		loc_a = get_write_location(a)
 		is_equal = ALU[loc_a] == b
 		ALU[loc_a] = 1 if is_equal else 0
-	
-	def get_write_location(location): 
-		if location == 'x': return 0
-		if location == 'y': return 1
-		if location == 'z': return 2
-		if location == 'w': return 3
-	
-	def get_b(b) : 
-		if b.isdigit(): 
-			return int(b)
-		else: 
-			loc_b = get_write_location(b)
-			return ALU[loc_b]
 
 	# --------------------------------------------------------------------------------
 
