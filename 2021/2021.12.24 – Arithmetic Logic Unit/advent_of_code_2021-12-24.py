@@ -27,8 +27,8 @@ def run(run_title, input_file):
 
 	def inp(split): 
 		a = split[1]
-		loc = get_write_location(a)
-		ALU[loc] = inps.pop(0)
+		loc_a = get_write_location(a)
+		ALU[loc_a] = inps.pop(0)
 
 	def add(split): 
 		a, b = split[1], get_b(split[2])
