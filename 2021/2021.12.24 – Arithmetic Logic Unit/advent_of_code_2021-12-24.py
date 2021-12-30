@@ -37,8 +37,8 @@ def run(run_title, input_file):
 
 	def mul(split): 
 		a, b = split[1], get_b(split[2])
-		loc = get_write_location(a)
-		ALU[loc] *= b
+		loc_a = get_write_location(a)
+		ALU[loc_a] *= b
 
 	def div(split): 
 		a, b = split[1], get_b(split[2])
