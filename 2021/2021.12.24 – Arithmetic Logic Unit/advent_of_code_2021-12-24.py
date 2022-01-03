@@ -120,22 +120,22 @@ def run(run_title, input_file):
 	# 'inp w' number and existing Z-values 0-2000000 that will produce 
 	# an output Z-value of '0' in the 14th cycle. 
 
-	f = open('c_nums_15.txt', 'r').readlines()
-	c_nums = [int(n) for n in f[0].strip().split(', ')]
+	# f = open('c_nums_15.txt', 'r').readlines()
+	# c_nums = [int(n) for n in f[0].strip().split(', ')]
 
-	for n in range(1, 10): 
-		print(n)
-		for j in range(0, 2000000): 
-			run_instructions(n, j)
-			valid_model_number = True if ALU[2] in c_nums else False
-			if valid_model_number: 
-				# print(run_title, "ALU:", ALU, n, j, '----- VALID -----')
-				if not j in temp: 
-					temp.append(j)
+	# for n in range(1, 10): 
+	# 	print(n)
+	# 	for j in range(0, 2000000): 
+	# 		run_instructions(n, j)
+	# 		valid_model_number = True if ALU[2] in c_nums else False
+	# 		if valid_model_number: 
+	# 			# print(run_title, "ALU:", ALU, n, j, '----- VALID -----')
+	# 			if not j in temp: 
+	# 				temp.append(j)
 
-	f = open('c_nums_1.txt', 'a')
-	f.write(str(temp).replace('[', '').replace(']', ''))
-	f.close()
+	# f = open('c_nums_1.txt', 'a')
+	# f.write(str(temp).replace('[', '').replace(']', ''))
+	# f.close()
 
 	# ==================================================
 	# CONTINUATION 2022.01.03
@@ -150,9 +150,15 @@ def run(run_title, input_file):
 	# There is only 1 valid number, '9', which produces an output Z-value of
 	# '12' so the first digit in the valid model number is '9'
 
+	# Largest
 	# 92967699949891
+	# 12 > 321 > 8356 > 321 > 8367 > 217555 > 8367 > 321 > 8361 > 321 > 8355 > 321 > 12
 
-	run_instructions(92967699949891)
+	# Smallest
+	# 91411143612181
+	# 12 > 320 > 8325 > 320 > 8335 > 216718 > 8335 > 320 > 8332 > 320 > 8322 > 320 > 12
+
+	run_instructions(91411143612181)
 	print(ALU)
 	return
 
