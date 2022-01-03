@@ -6,10 +6,6 @@ import math
 import re
 from copy import deepcopy
 
-def my_print(*args, **kwargs):
-	print(' '.join(map(str,args)), **kwargs)
-	return
-
 def run(run_title, input_file):
 
 	def get_write_location(location): 
@@ -73,175 +69,103 @@ def run(run_title, input_file):
 		'eql': eql, 
 	}
 	inps = []
-	# inps = [7] # [1, 1, 1, 0]
-	# inps = [1,3,5,7,9,2,4,6,8,9,9,9,9,9]
-	# number = 99999999999999
-	# number = 11111111111111
-	# number = 13579246899999
+
 	numbers = [
-		# 11111111111111, 
-		# 22222222222222, 
-		# 33333333333333, 
-		# 44444444444444, 
-		# 55555555555555, 
-		# 66666666666666, 
-		# 77777777777777, 
-		# 88888888888888, 
-		# 99999999999999, 
-		# 13579246899999, 
-		# 76687718179891, 
-		# 73826491827356, 
-		# 91287892173649, 
-		# 82376487676572, 
-		# 67347847676857, 
-		# 86921367984678, 
-		# 91423789614327, 
-		# 86959782713487, 
-		# 59817236487265, 
-		# 81723647826358, 
-		# 19354917864586, 
-		# 48716934914941, 
-		# 94196154914865, 
-		# 98461759678496, 
-		# 78542139867946, 
-		# 81379817234917, 
-		# 36917846917451, 
-		# 92746579149696, 
-		# 84948617369186, 
-		# 41285468971494, 
-
-		# 19999999999999, 
-		# 91999999999999, 
-		# 99199999999999, 
-		# 99919999999999, 
-		# 99991999999999, 
-		# 99999199999999, 
-		# 99999919999999, 
-		# 99999991999999, 
-		# 99999999199999, 
-		# 99999999919999, 
-		# 99999999991999, 
-		# 99999999999199, 
-		# 99999999999919, 
-		# 99999999999991, 
-
-		# # 99999999999119, 
-		# # 99999999999123, 
-		# 11223344556677, 
-		# 11221122112211, 
-		# 99119911991199, 
-		# 11991199119911, 
-		# 12345678912345, 
-		# 12121212121212, 
-		# 13131313131313, 
-		# 14141414141414, 
-		# 15151515151515, 
-		# 16161616161616, 
-		# 17171717171717, 
-		# 18181818181818, 
-		# 19191919191919, 
-		
-		# 12345678912345, 
-		# 12345678912349, 
-		# 12345678912399, 
-		# 12345678912999, 
-		# 12345678919999, 
-		# 12345678999999, 
-		# 12345679999999, 
-		# 12345699999999, 
-		# 12345999999999, 
-		# 12349999999999, 
-		# 12399999999999, 
-		# 12999999999999, 
-		# 19999999999999, 
-		# 99999999999999, 
-
-		# 11111111111189, 
-		# 22222222222289, 
-		# 33333333333389, 
-		# 44444444444489, 
-		# 55555555555589, 
-		# 66666666666689, 
-		# 77777777777789, 
-		# 88888888888889, 
-		99999999999989, 
-		# 89898989898989, 
-		# 98989898989889, 
-		# 26262626262689, 
-		
-		# 11, 
-		# 1, 2, 3, 4, 5, 6, 7, 8, 9, 
-		# 11, 22, 33, 44, 55, 66, 77, 88, 99, 
-		# 12, 13, 14, 15, 16, 17, 18, 19, 
-		# 21, 31, 41, 51, 61, 71, 81, 91, 
-		# 12, 24, 36, 48, 21, 42, 63, 84, 
-		# 1221, 2112, 1289
+		# XX964696999889
+		# 964696999889
+		92997999999999
 	]
 
-	# x Has to be 0 because: 
-	# mul y x
-	# add z y
-	# XXXXXXXXXXXX-89-
-	# X 0 is the key
+	def my_print(*args, **kwargs):
+		# print(' '.join(map(str,args)), **kwargs)
+		return
 
-	# inp w      [0, 0, 0, 1]
-	# ...
-	# mul z y    [1, 26, 104, 1]
-	# mul y 0    [1, 0, 104, 1]
-	# add y w    [1, 1, 104, 1]
-	# add y 3    [1, 4, 104, 1]
-	# mul y x    [1, 4, 104, 1]
-	# add z y    [1, 4, 108, 1]
+	temp = []
+	connecting_numbers = []
 
-	def run_instructions(number): 
+	c_nums = [0]
+
+	def run_instructions(number, z=0): 
 		nonlocal inps
 		nonlocal ALU
 		inps = [int(d) for d in str(number)]
-		ALU = [0,0,0,0]
+		ALU = [0,0,z,0]
 
 		for i, line in enumerate(input_file): 
 			if line.startswith('#'): 
 				continue
 			if len(line) <= 1: 
-				my_print('---')
+				# my_print('---')
 				continue
 			split = line.strip().split()
 			instruction = split[0]
 			instructions[instruction](split)
-			# my_print(i, '=>', line.strip(), ALU)
-			# my_print(line.strip(), ALU)
-			my_print(line.strip().ljust(10, ' '), ALU)
 
-		# valid_model_number = True if ALU[2] == 0 else False
-		
-		
-		# print(run_title, "valid_model_number:", valid_model_number, ('(' + str(total_time) + "ms)"))
+	# ==================================================
+	# NEW TEST 2022.01.02 – 2
+	# ==================================================
 
-	for i, n in enumerate(numbers): 
-		run_instructions(n)
+	# Manually check each cycle, starting with the last. 
 
-		end_time_ms = round(time.time() * 1000)
-		total_time = end_time_ms - start_time_ms
-		total_time_str = '(' + str(total_time) + 'ms)'
+	# For the last cycle (14) c_nums_15.txt contains '0', 
+	# meaning that we want cycle 14 to output a Z value of '0'
+	# Then we try all combinations of 'inp w' numbers 1-9 and 
+	# existing Z-values 0-2000000 (coming into the cycle as 
+	# output from the previous one) and record which combinations 
+	# produce the desired output Z-value. 
 
-		print(run_title, "ALU:", ALU, total_time_str, n)
+	# Then we move on to cycle 13 but instead of wanting an 
+	# output Z-value of '0', we want an output Z-value that 
+	# was found when checking cycle 14, meaning any combination of 
+	# 'inp w' number and existing Z-values 0-2000000 that will produce 
+	# an output Z-value of '0' in the 14th cycle. 
 
-	# while number > 10000000000000: 
-	# 	# my_print(number)
-	# 	inps = [int(d) for d in str(number)]
-	# 	for i, line in enumerate(input_file): 
-	# 		# my_print(i, '=>', line.strip())
-	# 		split = line.strip().split()
-	# 		instruction = split[0]
-	# 		instructions[instruction](split)
-		
-	# 	valid_model_number = True if ALU[2] == 0 else False
-	# 	if valid_model_number == True: 
-	# 		break
+	f = open('c_nums_15.txt', 'r').readlines()
+	c_nums = [int(n) for n in f[0].strip().split(', ')]
 
-	# 	number -= 1
-	# 	while '0' in str(number) or number in blacklist: 
-	# 		number -= 1
+	for n in range(1, 10): 
+		print(n)
+		for j in range(0, 2000000): 
+			run_instructions(n, j)
+			valid_model_number = True if ALU[2] in c_nums else False
+			if valid_model_number: 
+				# print(run_title, "ALU:", ALU, n, j, '----- VALID -----')
+				if not j in temp: 
+					temp.append(j)
+
+	f = open('c_nums_1.txt', 'a')
+	f.write(str(temp).replace('[', '').replace(']', ''))
+	f.close()
+
+	# ==================================================
+	# CONTINUATION 2022.01.03
+	# ==================================================
+
+	# Manually check each cycle, starting with the first. 
+
+	# For cycle 1, we have an input Z-value of '0', as recorded in 
+	# 'c_nums_1.txt'. We run all numbers in this file (only '0' for cycle 1)
+	# in combination with all desired Z-values in 'c_nums_2.txt' and see 
+	# which number 1-9 produces a desired output Z-value. 
+	# There is only 1 valid number, '9', which produces an output Z-value of
+	# '12' so the first digit in the valid model number is '9'
+
+	# 92967699949891
+
+	run_instructions(92967699949891)
+	print(ALU)
+	return
+
+	f_in  = open('c_nums_14.txt', 'r').readlines() # 1
+	f_out = open('c_nums_15.txt', 'r').readlines() # 2
+	c_nums_in  = [int(n) for n in f_in[0].strip().split(', ')]
+	c_nums_out = [int(n) for n in f_out[0].strip().split(', ')]
+
+	for n in range(9, 0, -1): 
+		for c_num_in in c_nums_in: 
+			run_instructions(n, c_num_in)
+			if ALU[2] in c_nums_out: 
+				print(n, ALU[2])
 
 	# end_time_ms = round(time.time() * 1000)
 	# total_time = end_time_ms - start_time_ms
