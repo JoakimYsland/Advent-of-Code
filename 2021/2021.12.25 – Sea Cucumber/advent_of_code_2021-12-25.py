@@ -48,7 +48,7 @@ def run(run_title, input_file):
 	# Test / Real – 58 / 329
 
 	start_time_ms = round(time.time() * 1000)
-	steps_to_stop = 0
+	steps = 0
 	cucumbers = []
 	
 	for line in input_file: 
@@ -59,14 +59,16 @@ def run(run_title, input_file):
 	moved = True
 	while moved: 
 		moved = update_cucumbers()
-		steps_to_stop += 1
+		steps += 1
+		if steps % 10 == 0: 
+			print('step', steps)
 
-	visualize_cucumbers()
+	# visualize_cucumbers()
 
 	end_time_ms = round(time.time() * 1000)
 	total_time = end_time_ms - start_time_ms
 
-	print(run_title, "steps_to_stop:", steps_to_stop, ('(' + str(total_time) + "ms)"))
+	print(run_title, "steps:", steps, ('(' + str(total_time) + "ms)"))
 
 # run("[Test]", open('input_test.txt', 'r').readlines())
 run("[Real]", open('input.txt', 'r').readlines())
