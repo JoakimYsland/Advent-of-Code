@@ -1,5 +1,5 @@
 
-# https://adventofcode.com/2021/day/24
+# https://adventofcode.com/2021/day/25
 
 import time
 import math
@@ -45,7 +45,7 @@ def run(run_title, input_file):
 
 	# --------------------------------------------------------------------------------
 
-	# Test / Real – 58 / ???
+	# Test / Real – 58 / 329
 
 	start_time_ms = round(time.time() * 1000)
 	steps_to_stop = 0
@@ -68,5 +68,5 @@ def run(run_title, input_file):
 
 	print(run_title, "steps_to_stop:", steps_to_stop, ('(' + str(total_time) + "ms)"))
 
-run("[Test]", open('input_test.txt', 'r').readlines())
-# run("[Real]", open('input.txt', 'r').readlines())
+# run("[Test]", open('input_test.txt', 'r').readlines())
+run("[Real]", open('input.txt', 'r').readlines())
