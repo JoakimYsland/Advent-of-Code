@@ -6,13 +6,14 @@ import math
 import time
 import re
 import ast
+import functools
 
 def prt(*args, **kwargs):
-	print(' '.join(map(str,args)), **kwargs)
+	# print(' '.join(map(str,args)), **kwargs)
 	return
 
-input_file = open('test_input.txt', 'r').readlines()
-# input_file = open('input.txt', 'r').readlines()
+# input_file = open('test_input.txt', 'r').readlines()
+input_file = open('input.txt', 'r').readlines()
 
 packet_data = []
 
@@ -22,7 +23,13 @@ for i, line in enumerate(input_file):
 	if len(line) > 0:
 		packet_data.append(ast.literal_eval(line))
 
-def asd(left, right): 
+div_packet_1 = [[2]]
+div_packet_2 = [[6]]
+
+packet_data.append(div_packet_1)
+packet_data.append(div_packet_2)
+
+def compare_packets(left, right): 
 	i = 0
 	while i < len(left) and i < len(right): 
 
@@ -31,13 +38,13 @@ def asd(left, right):
 		# If both values are ints, the lower int should come first
 		if type(left[i]) == int and type(right[i]) == int: 
 			if left[i] < right[i]: 
-				return True
+				return 1 #True
 			elif left[i] > right[i]: 
-				return False
+				return -1 #False
 
 		# If both values are lists, compare each pair of ints
 		elif type(left[i]) == list and type(right[i]) == list: 
-			result = asd(left[i], right[i])
+			result = compare_packets(left[i], right[i])
 			if result != None: 
 				return result
 
@@ -45,11 +52,11 @@ def asd(left, right):
 		else: 
 			prt(" – Mixed types; convert to list")
 			if type(left[i]) == int: 
-				result = asd([left[i]], right[i])
+				result = compare_packets([left[i]], right[i])
 				if result != None: 
 					return result
 			elif type(right[i]) == int: 
-				result = asd(left[i], [right[i]])
+				result = compare_packets(left[i], [right[i]])
 				if result != None: 
 					return result
 
@@ -59,30 +66,28 @@ def asd(left, right):
 	# the inputs are in the right order
 	if len(left) < len(right): 
 		prt(" – Left side ran out of items")
-		return True
+		return 1 #True
 	elif len(left) > len(right): 
 		prt(" – Right side ran out of items")
-		return False
+		return -1 #False
 	else: 
 		return None
 
 start_time_ms = round(time.time() * 1000)
+			
+packet_data.sort(key=functools.cmp_to_key(compare_packets), reverse=True)
 
-right_order_pair_indices = []
+index_div_packet_1 = None
+index_div_packet_2 = None
 
-for p in range(0, len(packet_data), 2): 
-	left = packet_data[p]
-	right = packet_data[p+1]
-	pair_index = int((p / 2) + 0.5) + 1
+for i, p in enumerate(packet_data): 
+	if p == div_packet_1: 
+		index_div_packet_1 = i + 1
+	if p == div_packet_2: 
+		index_div_packet_2 = i + 1
 
-	right_order = asd(left, right)
-	prt("Pair", pair_index, "in the right order:", right_order, "\n")
-	
-	if right_order: 
-		right_order_pair_indices.append(pair_index)
-
-sum_right_order_pair_indices = sum(right_order_pair_indices)
-print("sum_right_order_pair_indices:", sum_right_order_pair_indices)
+decoder_key = index_div_packet_1 * index_div_packet_2
+print("decoder_key:", decoder_key)
 
 end_time_ms = round(time.time() * 1000)
 
