@@ -22,7 +22,7 @@ for i, line in enumerate(input_file):
 	if len(line) > 0:
 		packet_data.append(ast.literal_eval(line))
 
-def asd(left, right): 
+def compare_packets(left, right): 
 	i = 0
 	while i < len(left) and i < len(right): 
 
@@ -37,7 +37,7 @@ def asd(left, right):
 
 		# If both values are lists, compare each pair of ints
 		elif type(left[i]) == list and type(right[i]) == list: 
-			result = asd(left[i], right[i])
+			result = compare_packets(left[i], right[i])
 			if result != None: 
 				return result
 
@@ -45,11 +45,11 @@ def asd(left, right):
 		else: 
 			prt(" – Mixed types; convert to list")
 			if type(left[i]) == int: 
-				result = asd([left[i]], right[i])
+				result = compare_packets([left[i]], right[i])
 				if result != None: 
 					return result
 			elif type(right[i]) == int: 
-				result = asd(left[i], [right[i]])
+				result = compare_packets(left[i], [right[i]])
 				if result != None: 
 					return result
 
@@ -75,7 +75,7 @@ for p in range(0, len(packet_data), 2):
 	right = packet_data[p+1]
 	pair_index = int((p / 2) + 0.5) + 1
 
-	right_order = asd(left, right)
+	right_order = compare_packets(left, right)
 	prt("Pair", pair_index, "in the right order:", right_order, "\n")
 	
 	if right_order: 
