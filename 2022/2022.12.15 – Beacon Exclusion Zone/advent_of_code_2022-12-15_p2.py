@@ -11,18 +11,8 @@ def prt(*args, **kwargs):
 	print(' '.join(map(str,args)), **kwargs)
 	return
 
-class Vec2:
-	def __init__(self, x, y): 
-		self.x = x
-		self.y = y
-	def __str__(self):
-		s = "{0},{1}"
-		return s.format(self.x, self.y)
-	def __add__(self, v): 
-		return Vec2(self.x + v.x, self.y + v.y)
-
-# input_file = open('test_input.txt', 'r').readlines()
-input_file = open('input.txt', 'r').readlines()
+# input_file, boundary = open('test_input.txt', 'r').readlines(), 20
+input_file, boundary = open('input.txt', 'r').readlines(), 4000000
 
 sensors = []
 
@@ -35,100 +25,60 @@ for i, line in enumerate(input_file):
 
 start_time_ms = round(time.time() * 1000)
 
-# Calculate bounds
-bounds_min = None
-bounds_max = None
+for y in range(0, boundary, 1): 
 
-for s in sensors: 
-	x1, y1, x2, y2 = s
-	m_distance = abs(x1 - x2) + abs(y1 - y2) # Manhattan Distance
-	x1 -= m_distance # Pad for coverage to nearest Beacon
-	y1 -= m_distance # Pad for coverage to nearest Beacon
-	x2 += m_distance # Pad for coverage to nearest Beacon
-	y2 += m_distance # Pad for coverage to nearest Beacon
-	if bounds_min == None: 
-		bounds_min = Vec2(x1, y1)
-		bounds_max = copy.copy(bounds_min)
-	bounds_min.x = min(bounds_min.x, min(x1, x2))
-	bounds_min.y = min(bounds_min.y, min(y1, y2))
-	bounds_max.x = max(bounds_max.x, max(x1, x2))
-	bounds_max.y = max(bounds_max.y, max(y1, y2))
+	coverage = []
 
-print("Bounds:", bounds_min, bounds_max)
+	# Collect coverages
+	for s in sensors: 
+		x1, y1, x2, y2 = s
+		m_distance = abs(x1 - x2) + abs(y1 - y2) # Manhattan Distance to beacon
+		if abs(y - y1) > m_distance: 
+			continue # Out of range to affect current row
+		else: 
+			# Calculate number of cells where the 
+			# current row intersects the sensor coverage
+			overlap = m_distance - abs(y - y1) 
+			from_x = x1 - overlap
+			to_x = x1 + overlap + 1
+			coverage.append(max(from_x, 0)) # Crop to possible Distress Beacon range
+			coverage.append(min(to_x, boundary)) # Crop to possible Distress Beacon range
 
-# Offset for bounds correction
-for s in sensors: 
-	s[0] -= bounds_min.x # Sensor X
-	s[2] -= bounds_min.x # Beacon X
+	# Merge coverages so that they do not overlap
+	found_overlap = True
+	while found_overlap: 
+		found_overlap = False
+		for a in range(0, len(coverage), 2): 
+			from_a, to_a = coverage[a], coverage[a+1]
+			for b in range(0, len(coverage), 2): 
+				if a == b: 
+					continue # Don't check against self
+				from_b, to_b = coverage[b], coverage[b+1]
+				if from_a <= to_b and from_b <= to_a: # Overlap check
+					found_overlap = True
+					coverage[a] = min(from_a, from_b) # Expand coverage A
+					coverage[a+1] = max(to_a, to_b) # Expand coverage A
+					del coverage[b:b+2] # Delete coverage B
+					break
+			if found_overlap == True: 
+				break
 
-grid = ['.'] * (bounds_max.x - bounds_min.x + 1)
-# target_row = 10
-target_row = 2000000
-
-for s in sensors: 
-	x1, y1, x2, y2 = s
-	m_distance = abs(x1 - x2) + abs(y1 - y2) # Manhattan Distance
-	if abs(target_row - y1) > m_distance: 
-		continue # Out of range to affect target row
-	else: 
-		if y1 == target_row: 
-			grid[x1] = 'S'
-		if y2 == target_row: 
-			grid[x2] = 'B'
-		overlap = m_distance - abs(target_row - y1)
-		# print(x1, y1, x2, y2, overlap)
-		# print(x1 - overlap, "to", x1 + overlap)
-		for i in range(x1 - overlap, x1 + overlap + 1, 1): 			
-			if i >= 0 and i < len(grid): 
-				if grid[i] == '.': 
-					grid[i] = '#'
-
-# print(''.join(grid))
-print(len([e for e in grid if e == '#']))
-
-
-# # Offset for bounds correction
-# for s in sensors: 
-# 	s[0] -= bounds_min.x # Sensor X
-# 	s[1] -= bounds_min.y # Sensor Y
-# 	s[2] -= bounds_min.x # Beacon X
-# 	s[3] -= bounds_min.y # Sensor Y
-
-# # Initialize grid
-# e, c = ".", "█"
-# width, height = bounds_max.x - bounds_min.x + 1, bounds_max.y - bounds_min.y + 1
-# grid = [[e] * width for i in range(height)]
-
-# # Place initial sensors and beacons
-# for s in sensors: 
-# 	x1, y1, x2, y2 = s
-# 	grid[y1][x1] = "S"
-# 	grid[y2][x2] = "B"
-
-# # Map sensor coverage
-# for s in sensors: 
-# 	x1, y1, x2, y2 = s
-# 	m_distance = abs(x1 - x2) + abs(y1 - y2) # Manhattan Distance
-
-# 	# Test example sensor
-# 	# if x1 == 16 and y1 == 17: 
-# 	for i in range(0, m_distance + 1, 1): 
-# 		from_x = x1 - m_distance + i
-# 		to_x = x1 + m_distance + 1 - i
-# 		for j in range(from_x, to_x, 1): 
-# 			if y1-i > 0 and j < len(grid[0]):
-# 				if grid[y1-i][j] == e: 
-# 					grid[y1-i][j] = c
-# 			if y1+i < len(grid) and j < len(grid[0]):
-# 				if grid[y1+i][j] == e: 
-# 					grid[y1+i][j] = c
-
-# # for r in grid: 
-# # 	print(''.join(r))
-
-# row = 2000000 - bounds_min.y
-# num_not_present = len([x for x in grid[row] if x == c])
-# print("num_not_present:", num_not_present)
+	# Sum coverage
+	total_coverage = 0
+	for i in range(0, len(coverage), 2): 
+		f, t = coverage[i], coverage[i+1]
+		total_coverage += t-f
+	
+	# Find Distress Beacon
+	if total_coverage < boundary: 
+		for i in range(0, len(coverage), 2): 
+			f, t = coverage[i], coverage[i+1]
+			if t != 0: # We assume that the first valid coverage is the left-most
+				tuning_frequency = (t * 4000000) + y
+				print("Distress Beacon at:", t, y)
+				print("tuning_frequency:", tuning_frequency)
+				break
+		break # Break main loop
 
 end_time_ms = round(time.time() * 1000)
 
