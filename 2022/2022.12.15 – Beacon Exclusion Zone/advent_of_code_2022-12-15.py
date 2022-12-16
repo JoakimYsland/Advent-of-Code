@@ -76,59 +76,12 @@ for s in sensors:
 		if y2 == target_row: 
 			grid[x2] = 'B'
 		overlap = m_distance - abs(target_row - y1)
-		# print(x1, y1, x2, y2, overlap)
-		# print(x1 - overlap, "to", x1 + overlap)
 		for i in range(x1 - overlap, x1 + overlap + 1, 1): 			
 			if i >= 0 and i < len(grid): 
 				if grid[i] == '.': 
 					grid[i] = '#'
 
-# print(''.join(grid))
 print(len([e for e in grid if e == '#']))
-
-
-# # Offset for bounds correction
-# for s in sensors: 
-# 	s[0] -= bounds_min.x # Sensor X
-# 	s[1] -= bounds_min.y # Sensor Y
-# 	s[2] -= bounds_min.x # Beacon X
-# 	s[3] -= bounds_min.y # Sensor Y
-
-# # Initialize grid
-# e, c = ".", "█"
-# width, height = bounds_max.x - bounds_min.x + 1, bounds_max.y - bounds_min.y + 1
-# grid = [[e] * width for i in range(height)]
-
-# # Place initial sensors and beacons
-# for s in sensors: 
-# 	x1, y1, x2, y2 = s
-# 	grid[y1][x1] = "S"
-# 	grid[y2][x2] = "B"
-
-# # Map sensor coverage
-# for s in sensors: 
-# 	x1, y1, x2, y2 = s
-# 	m_distance = abs(x1 - x2) + abs(y1 - y2) # Manhattan Distance
-
-# 	# Test example sensor
-# 	# if x1 == 16 and y1 == 17: 
-# 	for i in range(0, m_distance + 1, 1): 
-# 		from_x = x1 - m_distance + i
-# 		to_x = x1 + m_distance + 1 - i
-# 		for j in range(from_x, to_x, 1): 
-# 			if y1-i > 0 and j < len(grid[0]):
-# 				if grid[y1-i][j] == e: 
-# 					grid[y1-i][j] = c
-# 			if y1+i < len(grid) and j < len(grid[0]):
-# 				if grid[y1+i][j] == e: 
-# 					grid[y1+i][j] = c
-
-# # for r in grid: 
-# # 	print(''.join(r))
-
-# row = 2000000 - bounds_min.y
-# num_not_present = len([x for x in grid[row] if x == c])
-# print("num_not_present:", num_not_present)
 
 end_time_ms = round(time.time() * 1000)
 
