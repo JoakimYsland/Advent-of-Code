@@ -95,7 +95,6 @@ class Path:
 def Traverse(path): 
 	graph = Graph(len(valves))
 	D = dijkstra(graph, path.history[-1])
-	travelled = False
 	new_paths = []
 	global most_pressure
 
@@ -108,11 +107,7 @@ def Traverse(path):
 		travel_time = D[name]
 		if travel_time + 1 > path.time: 
 			continue # Not enough time to open
-		new_path = deepcopy(path)
-		new_path.current_valve = valve
-		new_path.history.append(valve)
-		travelled = True
-		
+		new_path = deepcopy(path)		
 		new_path.time -= travel_time
 		new_path.open_valve(valve)
 		new_paths.append(new_path)
