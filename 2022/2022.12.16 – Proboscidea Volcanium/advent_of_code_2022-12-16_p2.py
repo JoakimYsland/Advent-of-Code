@@ -11,8 +11,8 @@ def prt(*args, **kwargs):
 	print(' '.join(map(str,args)), **kwargs)
 	return
 
-# input_file = open('test_input.txt', 'r').readlines()
-input_file = open('input.txt', 'r').readlines()
+input_file = open('test_input.txt', 'r').readlines()
+# input_file = open('input.txt', 'r').readlines()
 
 class Valve:
 	tunnels = None
@@ -119,29 +119,19 @@ def Traverse(path):
 	
 	if len(new_paths) == 0: 
 		most_pressure = max(most_pressure, path.score)
-		paths.append(path)
 
 	for p in new_paths: 
 		Traverse(p)
 
 start_time_ms = round(time.time() * 1000)
 
-valves_with_flow_rate = {}
-for k, v in valves.items(): 
-	if v.flow_rate > 0: 
-		valves_with_flow_rate[k] = v
-
+valves_with_flow_rate = { k:v for (k,v) in valves.items() if v.flow_rate > 0 }
 print("valves_with_flow_rate:", len(valves_with_flow_rate))
-path = Path(valves_with_flow_rate)
-path.history.append(start_valve)
-paths = []
 
-Traverse(path)
+start_path = Path(valves_with_flow_rate)
+start_path.history.append(start_valve)
 
-# Time: 58069 ms
-# most_pressure = 0
-# for path in paths: 
-# 	most_pressure = max(most_pressure, path.score)
+Traverse(start_path)
 
 print("most_pressure:", most_pressure)
 
