@@ -18,9 +18,9 @@ for i, line in enumerate(input_file):
 	line = line.rstrip()
 
 start_time_ms = round(time.time() * 1000)
+print("start_time_ms:", start_time_ms)
 
 
 
 end_time_ms = round(time.time() * 1000)
-
 print("Time:", end_time_ms - start_time_ms, "ms")
