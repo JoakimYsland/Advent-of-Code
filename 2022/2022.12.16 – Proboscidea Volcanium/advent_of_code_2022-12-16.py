@@ -22,7 +22,7 @@ class Valve:
 
 valves = {}
 start_valve = None
-most_pressure = 0
+best_path = None
 
 for i, line in enumerate(input_file):
 
@@ -78,13 +78,15 @@ class Path:
 		self.time = 30
 		self.score = 0
 		self.target_valves = target_valves
-		self.history = []
+		self.current = None
+		self.history = {}
 
 	def open_valve(self, valve): 
 		self.time -= 1
-		self.score += self.time * valve.flow_rate
+		score = self.time * valve.flow_rate
+		self.score += score
 		self.target_valves.pop(valve.name)
-		self.history.append(valve)
+		self.history[valve.name] = score
 
 	def get_potential(self): 
 		potential = self.score
@@ -94,13 +96,13 @@ class Path:
 
 def Traverse(path): 
 	graph = Graph(len(valves))
-	D = dijkstra(graph, path.history[-1])
+	D = dijkstra(graph, path.current)
 	new_paths = []
-	global most_pressure
+	global best_path
 
 	# Check if the path can possibly get a better pressure
 	path_potential = path.get_potential()
-	if path_potential < most_pressure: 
+	if best_path != None and path_potential < best_path.score: 
 		return
 
 	for name, valve, in path.target_valves.items(): 
@@ -109,11 +111,16 @@ def Traverse(path):
 			continue # Not enough time to open
 		new_path = deepcopy(path)		
 		new_path.time -= travel_time
+		new_path.current = valve
 		new_path.open_valve(valve)
 		new_paths.append(new_path)
 	
 	if len(new_paths) == 0: 
-		most_pressure = max(most_pressure, path.score)
+		if best_path == None: 
+			best_path = path
+		else: 
+			if path.score > best_path.score: 
+				best_path = path
 
 	for p in new_paths: 
 		Traverse(p)
@@ -124,11 +131,12 @@ valves_with_flow_rate = { k:v for (k,v) in valves.items() if v.flow_rate > 0 }
 print("valves_with_flow_rate:", len(valves_with_flow_rate))
 
 start_path = Path(valves_with_flow_rate)
-start_path.history.append(start_valve)
+start_path.current = start_valve
 
 Traverse(start_path)
 
-print("most_pressure:", most_pressure)
+print("best_path:", best_path.score)
+print(best_path.history)
 
 end_time_ms = round(time.time() * 1000)
 
