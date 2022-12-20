@@ -17,10 +17,12 @@ for i, line in enumerate(input_file):
 
 	line = line.rstrip()
 
+import datetime
+start_time = datetime.datetime.now().strftime("%d-%m-%Y %H:%M:%S")
 start_time_ms = round(time.time() * 1000)
-print("start_time_ms:", start_time_ms)
+print("Start time:", start_time)
 
-
+# Code here
 
 end_time_ms = round(time.time() * 1000)
 print("Time:", end_time_ms - start_time_ms, "ms")
