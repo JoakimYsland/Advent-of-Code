@@ -23,6 +23,7 @@ class Valve:
 valves = {}
 start_valve = None
 best_path = None
+worst_path = None
 paths = 1
 
 for i, line in enumerate(input_file):
@@ -104,6 +105,7 @@ def Traverse(path):
 	D2 = dijkstra(graph2, path.current2)
 	new_paths = []
 	global best_path
+	global worst_path
 	global paths
 
 	# Check if the path can possibly get a better pressure
@@ -115,7 +117,7 @@ def Traverse(path):
 		for y in range(0, len(path.target_valves), 1): 
 
 			if x == y: 
-				continue
+				continue # Don't travel to the same valve
 
 			temp = list(path.target_valves.values())
 			name1, valve1 = temp[x].name, temp[x]
@@ -142,9 +144,13 @@ def Traverse(path):
 	if len(new_paths) == 0: 
 		if best_path == None: 
 			best_path = path
+		if worst_path == None: 
+			worst_path = path
 		else: 
 			if path.score > best_path.score: 
 				best_path = path
+			if path.score < worst_path.score: 
+				worst_path = path
 
 	for p in new_paths: 
 		Traverse(p)
@@ -166,11 +172,17 @@ Traverse(start_path)
 # best_path: 1651
 # {'DD': 560, 'BB': 325, 'JJ': 441, 'HH': 286, 'EE': 27, 'CC': 12}
 # Time: 54 ms
-# 1707
+# 1707 = 645
+print("——————————")
 print("best_path:", best_path.score)
 print("History:", best_path.history, " => ", len(best_path.history))
 print("Remaining time:", best_path.time1, "/", best_path.time2)
+print("")
+print("worst_path:", worst_path.score)
+print("History:", worst_path.history, " => ", len(worst_path.history))
+print("")
 print("paths:", paths)
+print("——————————")
 
 end_time_ms = round(time.time() * 1000)
 print("Time:", end_time_ms - start_time_ms, "ms")
