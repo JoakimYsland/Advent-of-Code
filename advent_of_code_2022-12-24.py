@@ -27,4 +27,5 @@ print("Start time:", get_time_now())
 # Code here
 
 end_time_ms = round(time.time() * 1000)
-print("Time:", end_time_ms - start_time_ms, "ms")
+print("End time:", get_time_now())
+print("Total time:", end_time_ms - start_time_ms, "ms")
