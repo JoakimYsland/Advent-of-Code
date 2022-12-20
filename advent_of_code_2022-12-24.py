@@ -10,6 +10,10 @@ def prt(*args, **kwargs):
 	print(' '.join(map(str,args)), **kwargs)
 	return
 
+def get_time_now(): 
+	# return datetime.datetime.now().strftime("%d-%m-%Y %H:%M:%S")
+	return datetime.datetime.now().strftime("%H:%M:%S")
+
 # input_file = open('test_input.txt', 'r').readlines()
 input_file = open('input.txt', 'r').readlines()
 
@@ -17,10 +21,8 @@ for i, line in enumerate(input_file):
 
 	line = line.rstrip()
 
-import datetime
-start_time = datetime.datetime.now().strftime("%d-%m-%Y %H:%M:%S")
 start_time_ms = round(time.time() * 1000)
-print("Start time:", start_time)
+print("Start time:", get_time_now())
 
 # Code here
 
