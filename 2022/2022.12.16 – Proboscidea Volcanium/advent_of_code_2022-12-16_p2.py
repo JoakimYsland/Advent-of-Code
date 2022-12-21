@@ -162,21 +162,20 @@ def Traverse(path):
 			new_path = deepcopy(path)
 			opened_valve = False
 
-			travel_time1 = D1[name1]
-			if path.time1 >= travel_time1 + 1: 
-				new_path.time1 -= travel_time1 + 1
+			cost1 = D1[name1] + 1 # Travel time + open valve
+			if path.time1 >= cost1: 
+				new_path.time1 -= cost1
 				new_path.current1 = valve1
 				new_path.open_valve(new_path.time1, valve1)
 				opened_valve = True
 
-			travel_time2 = D2[name2]
-			if path.time2 >= travel_time2 + 1: 
-				new_path.time2 -= travel_time2 + 1
+			cost2 = D2[name2] + 1 # Travel time + open valve
+			if path.time2 >= cost2: 
+				new_path.time2 -= cost2
 				new_path.current2 = valve2
 				new_path.open_valve(new_path.time2, valve2)
 				opened_valve = True
 
-			# We spent time. Therefore, we did something
 			if opened_valve == True: 
 				new_path.update_potential(D1, D2)
 				if new_path.potential > best_path.score: 
