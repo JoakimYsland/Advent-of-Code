@@ -125,19 +125,15 @@ def Traverse(path):
 		valve_cycles = len(path.history)
 		print("Valve Cycle", valve_cycles, get_time_now())
 
-	pruned = False
+	# Prune valves no one have time to open
 	for v in list(path.target_valves.keys()): 
 		if path.time1 < D1[v] + 1 and path.time2 < D2[v] + 1: 
-			# No one have time to open the valve
 			path.target_valves.pop(v)
-			pruned = True
-	if pruned: 
-		path.update_potential(D1, D2)
+	
+	path.update_potential(D1, D2)
 
 	# The score has to be higher than this
-	# if path_potential < 1862: # Part 1 answer
-	# if path.potential < 2500: # 2314 => Too low
-	if path.potential < 4000: 
+	if path.potential <= 2314: # 2314 => Too low
 		return
 
 	# Check if the path can possibly get a better pressure
@@ -177,10 +173,8 @@ def Traverse(path):
 				opened_valve = True
 
 			if opened_valve == True: 
-				new_path.update_potential(D1, D2)
-				if new_path.potential > best_path.score: 
-					new_paths.append(new_path)
-					num_paths += 1
+				new_paths.append(new_path)
+				num_paths += 1
 
 	if len(new_paths) == 0: 
 		if path.score > best_path.score: 
@@ -204,12 +198,6 @@ print("start_path.potential:", start_path.potential)
 
 Traverse(start_path)
 
-# valves_with_flow_rate: 6
-# best_path: 1651
-# {'DD': 560, 'BB': 325, 'JJ': 441, 'HH': 286, 'EE': 27, 'CC': 12}
-# Time: 54 ms
-# 1707 = 645 => 123
-# 2314 => Too low
 print("——————————")
 print("best_path:", best_path.score)
 print("History:", best_path.history, " => ", len(best_path.history))
