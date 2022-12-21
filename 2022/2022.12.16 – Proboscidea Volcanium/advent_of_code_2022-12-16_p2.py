@@ -79,28 +79,32 @@ def dijkstra(graph, start_vertex):
 class Path: 
 
 	def __init__(self, target_valves): 
-		self.time1 = 26
-		self.time2 = 26
+		start_time = 26
+		self.time1 = start_time
+		self.time2 = start_time
 		self.score = 0
 		self.target_valves = target_valves
 		self.current1 = None
 		self.current2 = None
 		self.history = {}
+		
 		self.potential = 0
-		self.update_potential()
+		for valve in self.target_valves.values(): 
+			self.potential += valve.flow_rate * (start_time - 1) # 1 minute to open
 
 	def open_valve(self, time, valve): 
 		score = time * valve.flow_rate
 		self.score += score
 		self.target_valves.pop(valve.name)
 		self.history[valve.name] = score
-		self.update_potential()
 
-	def update_potential(self): 
+	def update_potential(self, D1, D2): 
 		potential = self.score
-		max_time = max(self.time1, self.time2) - 1 # 1 minute to open
 		for valve in self.target_valves.values(): 
-			potential += valve.flow_rate * max_time
+			max_time = max(self.time1 - D1[valve.name], self.time2 - D2[valve.name])
+			max_time -= 1 # 1 minute to open
+			if max_time > 0:
+				potential += valve.flow_rate * max_time
 		self.potential = potential
 
 best_path = None
@@ -128,11 +132,12 @@ def Traverse(path):
 			path.target_valves.pop(v)
 			pruned = True
 	if pruned: 
-		path.update_potential()
+		path.update_potential(D1, D2)
 
 	# The score has to be higher than this
 	# if path_potential < 1862: # Part 1 answer
-	if path.potential < 3200: #29
+	# if path.potential < 2500: # 2314 => Too low
+	if path.potential < 4000: 
 		return
 
 	# Check if the path can possibly get a better pressure
@@ -173,7 +178,7 @@ def Traverse(path):
 
 			# We spent time. Therefore, we did something
 			if opened_valve == True: 
-				new_path.update_potential()
+				new_path.update_potential(D1, D2)
 				if new_path.potential > best_path.score: 
 					new_paths.append(new_path)
 					num_paths += 1
@@ -204,16 +209,15 @@ Traverse(start_path)
 # best_path: 1651
 # {'DD': 560, 'BB': 325, 'JJ': 441, 'HH': 286, 'EE': 27, 'CC': 12}
 # Time: 54 ms
-# 1707 = 645
+# 1707 = 645 => 123
+# 2314 => Too low
 print("——————————")
 print("best_path:", best_path.score)
 print("History:", best_path.history, " => ", len(best_path.history))
 print("Remaining time:", best_path.time1, "/", best_path.time2)
-print("")
-print("worst_path:", worst_path.score)
-print("History:", worst_path.history, " => ", len(worst_path.history))
 print("——————————")
 print("num_paths:", num_paths)
 
 end_time_ms = round(time.time() * 1000)
-print("Time:", end_time_ms - start_time_ms, "ms")
+print("End time:", get_time_now())
+print("Total time:", end_time_ms - start_time_ms, "ms")
