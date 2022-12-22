@@ -21,7 +21,7 @@ input_file = open('input.txt', 'r').readlines()
 
 width, height = 7, 3
 cave = []
-jet_pattern = None
+jet_pattern = []
 rocks = [
 	["..####."], 
 
@@ -45,7 +45,8 @@ rocks = [
 for i, line in enumerate(input_file):
 
 	line = line.rstrip()
-	jet_pattern = line
+	for char in line: 
+		jet_pattern.append(-1 if char == "<" else 1)
 
 start_time_ms = round(time.time() * 1000)
 print("Start time:", get_time_now())
@@ -146,7 +147,7 @@ while run:
 
 	if jet: 
 
-		jet_right = jet_pattern[jet_index] == '>'
+		jet_right = jet_pattern[jet_index] == 1
 
 		if not get_jet_collision(jet_right): 
 
