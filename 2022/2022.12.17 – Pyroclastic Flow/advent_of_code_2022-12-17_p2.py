@@ -108,6 +108,7 @@ def get_jet_collision(jet_right):
 	return False
 
 jet_index = 0
+culled_height = 0
 rock_at_rest = False
 run = True
 
@@ -116,8 +117,19 @@ spawn_rock(0)
 
 while run: 
 
-	if rock_at_rest: 
-		if spawned_rocks < 2022: 
+	if rock_at_rest:
+
+		# if spawned_rocks < 1000000000000: 
+		if spawned_rocks < 100000: 
+
+			# OPTIMISATION: If the tower has a full line, 
+			# we can safely remove that line and everything below
+			for y, row in enumerate(cave): 
+				if row == "#######": 
+					culled_height += len(cave) - y
+					cave = cave[0:y]
+					break 
+
 			pad_cave()
 			spawn_rock(spawned_rocks % len(rocks))
 			rock_at_rest = False
@@ -201,7 +213,7 @@ while run:
 pad_cave()
 # print_cave(cave)
 
-print("tower_height:", len(cave) - 3)
+print("tower_height:", len(cave) + culled_height - 3) # Subtract padding
 print("spawned_rocks:", spawned_rocks)
 
 end_time_ms = round(time.time() * 1000)
