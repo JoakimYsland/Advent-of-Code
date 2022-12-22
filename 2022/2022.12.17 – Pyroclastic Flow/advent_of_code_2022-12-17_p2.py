@@ -161,7 +161,6 @@ while run:
 
 	else: 
 
-		rock_at_rest = False
 		rock_bottom = len(rock_indices) # Index of row below active rock
 
 		if rock_bottom > len(cave) - 1: 
