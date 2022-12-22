@@ -111,6 +111,9 @@ jet_index = 0
 culled_height = 0
 rock_at_rest = False
 run = True
+# total_rocks = 1000000000000
+total_rocks = 1000000
+progress = "{0}% ({1})"
 
 pad_cave()
 spawn_rock(0)
@@ -119,8 +122,7 @@ while run:
 
 	if rock_at_rest:
 
-		# if spawned_rocks < 1000000000000: 
-		if spawned_rocks < 100000: 
+		if spawned_rocks < total_rocks: 
 
 			# OPTIMISATION: If the tower has a full line, 
 			# we can safely remove that line and everything below
@@ -134,8 +136,9 @@ while run:
 			spawn_rock(spawned_rocks % len(rocks))
 			rock_at_rest = False
 
-			if spawned_rocks % 10000 == 0: 
-				print(spawned_rocks)
+			if spawned_rocks % (total_rocks / 100) == 0: 
+				p = (spawned_rocks / total_rocks) * 100
+				print(progress.format(int(p), len(cave)))
 
 		else: 
 			run = False
