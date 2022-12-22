@@ -133,6 +133,10 @@ while run:
 			pad_cave()
 			spawn_rock(spawned_rocks % len(rocks))
 			rock_at_rest = False
+
+			if spawned_rocks % 10000 == 0: 
+				print(spawned_rocks)
+
 		else: 
 			run = False
 			break
