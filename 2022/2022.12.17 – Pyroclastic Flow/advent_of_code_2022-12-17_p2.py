@@ -107,17 +107,6 @@ def get_jet_collision(jet_right):
 			return True
 	return False
 
-def cull_cave():
-	global cave
-	global culled_height
-	# OPTIMISATION: If the tower has a full line, 
-	# we can safely remove that line and everything below
-	for y, row in enumerate(cave): 
-		if row == "#######": 
-			culled_height += len(cave) - y
-			cave = cave[0:y]
-			return 
-
 jet_index = 0
 culled_height = 0
 rock_at_rest = False
@@ -134,17 +123,8 @@ progress = "{0}% ({1})"
 pad_cave()
 spawn_rock(0)
 
-jet_cycles = 0
+jet_cycles = 0 # A jet cycle is going through the jet pattern list once
 
-# 1739 rocks in initial cycle
-# 1730 rocks per whole cycle (10090 jets)
-# 1381 rocks in the final cycle
-
-# 2342 rows in the initial cycle
-# 2644 new rows per cycle
-# 29 rows in the final cycle
-
-# test = 0
 cycle0_rocks = 0
 cycle0_height = 0
 
@@ -152,18 +132,7 @@ cycle1_rocks = 0
 cycle1_height = 0
 num_mid_cycles = 0
 
-cycle_last_rocks = 0
-calculated_height = 0
-
-test = 0
-
 while run: 
-
-	# if jet_index == 0 and spawned_rocks > 1: 
-	# 	if jet_cycles == 4: # 13253
-	# 		pad_cave()
-	# 		print(len(cave)-3)
-	# 	jet_cycles += 1
 
 	if jet_index == 0 and spawned_rocks > 1: 
 
@@ -180,17 +149,16 @@ while run:
 			cycle1_height_delta = cycle1_height - cycle0_height
 
 			num_mid_cycles = int((total_rocks - cycle0_rocks) / cycle1_rocks_delta)
-			cycle_last_rocks = total_rocks - cycle0_rocks - (num_mid_cycles * cycle1_rocks_delta)
 			
 			print("—————")
-			print("cycle0_rocks:", cycle0_rocks)
-			print("cycle0_height:", cycle0_height)
-			print("cycle1_rocks:", cycle1_rocks)
-			print("cycle1_height:", cycle1_height)
-			print("cycle1_rocks_delta:", cycle1_rocks_delta)
-			print("cycle1_height_delta:", cycle1_height_delta)
-			print("num_mid_cycles:", num_mid_cycles, ((total_rocks - cycle0_rocks) / cycle1_rocks_delta))
-			print("cycle_last_rocks:", cycle_last_rocks)
+			print("jet_cycles == 1")
+			print("cycle0_rocks:", cycle0_rocks) 				# How many rocks in cycle 0
+			print("cycle0_height:", cycle0_height)				# How tall the tower is after cycle 0
+			print("cycle1_rocks:", cycle1_rocks)				# How many rocks in total after cycle 1
+			print("cycle1_height:", cycle1_height)				# How tall the tower is after cycle 1
+			print("cycle1_rocks_delta:", cycle1_rocks_delta)	# How many rocks were spawned in cycle 1
+			print("cycle1_height_delta:", cycle1_height_delta) 	# How much the tower grew in cycle 1
+			print("num_mid_cycles:", num_mid_cycles)			# How many mid cycles, aka cycle 1, the program will have to run
 			print("—————")
 
 			# Jump forward in time
@@ -200,22 +168,11 @@ while run:
 
 	if rock_at_rest:
 
-		# if test == spawned_rocks: 
-		# 	print(rock_indices)
-		# 	print(spawned_rocks)
-		# 	print_cave(cave[0:10])
-
 		if spawned_rocks < total_rocks: 
-
-			# cull_cave()
 
 			pad_cave()
 			spawn_rock(spawned_rocks % len(rocks))
 			rock_at_rest = False
-
-			# if spawned_rocks % (total_rocks / 100) == 0: 
-			# 	p = (spawned_rocks / total_rocks) * 100
-			# 	print(progress.format(int(p), len(cave)))
 
 		else: 
 			run = False
@@ -293,14 +250,10 @@ while run:
 			rock_indices.insert(0, [])
 
 pad_cave()
-# print_cave(cave)
 
-# print(num_mid_cycles)
-# print((cycle1_height - cycle0_height))
 cycles_mid_height = num_mid_cycles * (cycle1_height - cycle0_height)
 cycles_last_height = (len(cave) - 3) - cycle1_height
 calculated_height = cycle0_height + cycles_mid_height + cycles_last_height
-# 15282
 
 print("tower_height:", len(cave) + culled_height - 3) # Subtract padding
 print("calculated_height:", calculated_height)
