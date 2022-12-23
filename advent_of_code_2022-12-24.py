@@ -19,14 +19,12 @@ def get_time_now():
 input_file = open('test_input.txt', 'r').readlines()
 # input_file = open('input.txt', 'r').readlines()
 
-for i, line in enumerate(input_file):
-
-	line = line.rstrip()
-
 start_time_ms = round(time.time() * 1000)
 print("Start time:", get_time_now())
 
-# Code here
+for i, line in enumerate(input_file):
+
+	line = line.rstrip()
 
 end_time_ms = round(time.time() * 1000)
 print("End time:", get_time_now())
