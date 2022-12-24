@@ -73,77 +73,82 @@ for i, line in enumerate(input_file):
 	new_blueprint = Blueprint(i, [ore_robot, clay_robot, obsidian_robot, geode_robot])
 	blueprints.append(new_blueprint)
 
-def simulate_blueprint(bp, fleet, inventory, remaining_time, avoid_robot=None): 
+def simulate_blueprint(bp, fleet, inventory, remaining_time, target_robot_id): 
 
-	global most_geodes
+	def end_branch(): 
+		global most_geodes
+		most_geodes = max(most_geodes, inventory[3])
+		# print(remaining_time, fleet, inventory)
+
 	global num_branches
 
-	# print(fleet, inventory, remaining_time, avoid_robot)
+	target_robot = bp.robots[target_robot_id]
+
+	# Return if the current fleet will 
+	# never be able to build the target robot
+	for i, cost in enumerate(target_robot): 
+		if cost > 0 and fleet[i] == 0: 
+			end_branch()
+			return
 
 	while remaining_time > 0: 
 
-		# Resource collection is based on the 
-		# round's initial fleet, before building
 		init_fleet = fleet.copy()
+		built_robot = False
+	
+		if can_build(target_robot, inventory): 
 
-		branch_fleet = fleet.copy()
-		branch_inventory = inventory.copy()
+			# There is no point in producing more of a resource 
+			# than what can be spent in 1 round to build a new robot
+			# https://www.reddit.com/r/adventofcode/comments/zpy5rm/2022_day_19_what_are_your_insights_and/
 
-		branches = []
+			if fleet[i] >= bp.max_cost[i]: 
+				end_branch()
+				return
 
-		for i in robot_build_priority: 
+			# Compare max amount of resources against how much 
+			# we could possibly use within the remaining time
+			# https://www.reddit.com/r/adventofcode/comments/zpy5rm/2022_day_19_what_are_your_insights_and/
 
-			robot = bp.robots[i]
-			
-			if i == avoid_robot: 
-				continue
+			if (fleet[i] * remaining_time) + inventory[i] >= remaining_time * bp.max_cost[i]: 
+				end_branch()
+				return
 
-			if can_build(robot, inventory): 
-
-				# There is no point in producing more of a resource 
-				# than what can be spent in 1 round to build a new robot
-				# https://www.reddit.com/r/adventofcode/comments/zpy5rm/2022_day_19_what_are_your_insights_and/
-				if fleet[i] >= bp.max_cost[i]: 
-					continue
-
-				# Compare max amount of resources against how much 
-				# we could possibly use within the remaining time
-				# https://www.reddit.com/r/adventofcode/comments/zpy5rm/2022_day_19_what_are_your_insights_and/
-				if (fleet[i] * remaining_time) + inventory[i] >= remaining_time * bp.max_cost[i]: 
-					continue
-
-				# Build the robot
-				build(i, robot, fleet, inventory)
-				avoid_robot == None
-
-				# Create a branch that does not build this robot, 
-				# and avoid building it until it builds something else
-				branches.append(i)
-
-				# We can only build 1 robot each round
-				break
+			# Build the robot
+			build(target_robot_id, target_robot, fleet, inventory)
+			built_robot = True
 
 		# Collect resources
 		for i in range(0, 4, 1): 
 			inventory[i] += init_fleet[i]
-			branch_inventory[i] += branch_fleet[i]
 
+		# Reduce time
 		remaining_time -= 1
 
-		for b in branches: 
-			simulate_blueprint(bp, branch_fleet, branch_inventory, remaining_time, b)
-			num_branches += 1
+		# If we've built a robot, end the branch and 
+		# create 4 new ones, targeting each of the robots
+		if built_robot: 
+			# if remaining_time > 0: 
+			simulate_blueprint(bp, fleet.copy(), inventory.copy(), remaining_time, 0)
+			simulate_blueprint(bp, fleet.copy(), inventory.copy(), remaining_time, 1)
+			simulate_blueprint(bp, fleet.copy(), inventory.copy(), remaining_time, 2)
+			simulate_blueprint(bp, fleet.copy(), inventory.copy(), remaining_time, 3)
+			num_branches += 3 # Technically, we are continuing this branch and adding 3 more
+			end_branch()
+			return
 
-	if inventory[3] > most_geodes: 
-		most_geodes = inventory[3]
-		print(fleet, inventory)
+	# Ran out of time
+	end_branch()
 
-fleet = [1,0,0,0] # Robots: Ore, Clay, Obsidian, Geode
-inventory = [0,0,0,0] # Ore, Clay, Obsidian, Geode
 remaining_time = 24
-num_branches = 0
+num_branches = 4
 print_blueprint(blueprints[0])
-simulate_blueprint(blueprints[0], fleet, inventory, remaining_time)
+simulate_blueprint(blueprints[0], [1,0,0,0], [0,0,0,0], remaining_time, 0)
+simulate_blueprint(blueprints[0], [1,0,0,0], [0,0,0,0], remaining_time, 1)
+simulate_blueprint(blueprints[0], [1,0,0,0], [0,0,0,0], remaining_time, 2)
+simulate_blueprint(blueprints[0], [1,0,0,0], [0,0,0,0], remaining_time, 3)
+
+# 12310627 / 21503 ms
 
 print("most_geodes:", most_geodes) # 9
 print("num_branches:", num_branches) # 72419
