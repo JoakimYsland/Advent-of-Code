@@ -125,10 +125,13 @@ def simulate_blueprint(bp, fleet, inventory, remaining_time, target_robot_id):
 		# Reduce time
 		remaining_time -= 1
 
+		if remaining_time == 0: 
+			end_branch()
+			return
+
 		# If we've built a robot, end the branch and 
 		# create 4 new ones, targeting each of the robots
 		if built_robot: 
-			# if remaining_time > 0: 
 			simulate_blueprint(bp, fleet.copy(), inventory.copy(), remaining_time, 0)
 			simulate_blueprint(bp, fleet.copy(), inventory.copy(), remaining_time, 1)
 			simulate_blueprint(bp, fleet.copy(), inventory.copy(), remaining_time, 2)
@@ -149,6 +152,7 @@ simulate_blueprint(blueprints[0], [1,0,0,0], [0,0,0,0], remaining_time, 2)
 simulate_blueprint(blueprints[0], [1,0,0,0], [0,0,0,0], remaining_time, 3)
 
 # 12310627 / 21503 ms
+# 6898192 / 15898 ms
 
 print("most_geodes:", most_geodes) # 9
 print("num_branches:", num_branches) # 72419
