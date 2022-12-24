@@ -73,7 +73,7 @@ for i, line in enumerate(input_file):
 	new_blueprint = Blueprint(i, [ore_robot, clay_robot, obsidian_robot, geode_robot])
 	blueprints.append(new_blueprint)
 
-def simulate_blueprint(bp, fleet, inventory, remaining_time, target_robot_id): 
+def simulate_blueprint(bp, fleet, inventory, remaining_time, robot_id): 
 
 	def end_branch(): 
 		global most_geodes
@@ -82,11 +82,11 @@ def simulate_blueprint(bp, fleet, inventory, remaining_time, target_robot_id):
 
 	global num_branches
 
-	target_robot = bp.robots[target_robot_id]
+	robot_cost = bp.robots[robot_id]
 
 	# Return if the current fleet will 
 	# never be able to build the target robot
-	for i, cost in enumerate(target_robot): 
+	for i, cost in enumerate(robot_cost): 
 		if cost > 0 and fleet[i] == 0: 
 			end_branch()
 			return
@@ -96,13 +96,13 @@ def simulate_blueprint(bp, fleet, inventory, remaining_time, target_robot_id):
 		init_fleet = fleet.copy()
 		built_robot = False
 	
-		if can_build(target_robot, inventory): 
+		if can_build(robot_cost, inventory): 
 
 			# There is no point in producing more of a resource 
 			# than what can be spent in 1 round to build a new robot
 			# https://www.reddit.com/r/adventofcode/comments/zpy5rm/2022_day_19_what_are_your_insights_and/
 
-			if fleet[i] >= bp.max_cost[i]: 
+			if fleet[robot_id] >= bp.max_cost[robot_id]: 
 				end_branch()
 				return
 
@@ -110,12 +110,12 @@ def simulate_blueprint(bp, fleet, inventory, remaining_time, target_robot_id):
 			# we could possibly use within the remaining time
 			# https://www.reddit.com/r/adventofcode/comments/zpy5rm/2022_day_19_what_are_your_insights_and/
 
-			if (fleet[i] * remaining_time) + inventory[i] >= remaining_time * bp.max_cost[i]: 
+			if (fleet[robot_id] * remaining_time) + inventory[robot_id] >= remaining_time * bp.max_cost[robot_id]: 
 				end_branch()
 				return
 
 			# Build the robot
-			build(target_robot_id, target_robot, fleet, inventory)
+			build(robot_id, robot_cost, fleet, inventory)
 			built_robot = True
 
 		# Collect resources
@@ -152,7 +152,8 @@ simulate_blueprint(blueprints[0], [1,0,0,0], [0,0,0,0], remaining_time, 2)
 simulate_blueprint(blueprints[0], [1,0,0,0], [0,0,0,0], remaining_time, 3)
 
 # 12310627 / 21503 ms
-# 6898192 / 15898 ms
+#  6898192 / 15898 ms
+#   331252 /   745 ms
 
 print("most_geodes:", most_geodes) # 9
 print("num_branches:", num_branches) # 72419
