@@ -13,7 +13,6 @@ def prt(*args, **kwargs):
 	return
 
 def get_time_now(): 
-	# return datetime.datetime.now().strftime("%d-%m-%Y %H:%M:%S")
 	return datetime.datetime.now().strftime("%H:%M:%S")
 
 input_file = open('test_input.txt', 'r').readlines()
