@@ -25,7 +25,6 @@ class Number:
 		return s.format(self.value, self.mixed)
 
 # input_file = open('test_input.txt', 'r').readlines()
-# input_file = open('test_input2.txt', 'r').readlines()
 input_file = open('input.txt', 'r').readlines()
 
 device_file = []

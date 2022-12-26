@@ -17,15 +17,15 @@ def get_time_now():
 	return datetime.datetime.now().strftime("%H:%M:%S")
 
 class Number: 
-	def __init__(self, value, mixed): 
+	def __init__(self, index, value, mixed): 
+		self.initial_index = index
 		self.value = value
 		self.mixed = mixed
 	def __str__(self): 
-		s = "{0}, {1}"
-		return s.format(self.value, self.mixed)
+		s = "[{0}] {1}, {2}"
+		return s.format(self.initial_index, self.value, self.mixed)
 
 # input_file = open('test_input.txt', 'r').readlines()
-# input_file = open('test_input2.txt', 'r').readlines()
 input_file = open('input.txt', 'r').readlines()
 
 device_file = []
@@ -36,7 +36,7 @@ print("Start time:", get_time_now())
 for i, line in enumerate(input_file):
 
 	line = line.rstrip()
-	device_file.append(Number(int(line), False))
+	device_file.append(Number(i, int(line), False))
 
 def print_sequence(): 
 	numbers = []
@@ -50,6 +50,7 @@ def get_nth(i):
 
 def mix():
 	num_mixes = 0
+	target_index = 0
 	while num_mixes < len(device_file): 
 		for i, number in enumerate(device_file): 
 
@@ -57,6 +58,10 @@ def mix():
 			if number.mixed == True: 
 				continue
 
+			if number.initial_index != target_index: 
+				continue
+			
+			target_index += 1
 			num_mixes += 1
 
 			# No need to do mixing if the number is 0
@@ -80,8 +85,17 @@ def mix():
 			# Only mix 1 number at a time
 			break
 
-# print_sequence()
-mix()
+	# Reset mixing status
+	for n in device_file: 
+		n.mixed = False
+
+# Apply decryption key
+for n in device_file: 
+	n.value *= 811589153 # Decryption key
+
+for i in range(0, 10, 1): 
+	mix()
+	# print_sequence()
 
 # Get index of '0' value
 zero_index = None
