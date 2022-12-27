@@ -26,7 +26,7 @@ class Vec2:
 		return Vec2(self.x + v.x, self.y + v.y)
 
 # ————— Test input —————
-input_file = open('test_input.txt', 'r').readlines()
+input_file = open('test_input2.txt', 'r').readlines()
 face_mapping = {
 	"B3": [Vec2(8,4), Vec2(11,7)], 
 	"C3": [Vec2(8,0), Vec2(11,3)], 
@@ -149,7 +149,7 @@ def get_face(x, y):
 def transpose(x, y, mapping): 
 
 	from1, to1, from2, to2 = mapping
-	print("transpose: ", x, y, "-", from1, "/", to1, "/", from2, "/", to2)
+	prt("transpose: ", x, y, "-", from1, "/", to1, "/", from2, "/", to2)
 
 	# On seam 1
 	# if x >= from1.x and x <= to1.x and y >= from1.y and y <= to1.y: 
@@ -157,7 +157,7 @@ def transpose(x, y, mapping):
 		x <= max(from1.x, to1.x) and 
 		y >= min(from1.y, to1.y) and 
 		y <= max(from1.y, to1.y)):
-		print("On seam 1")
+		prt("On seam 1")
 		# Get offset on seam 1
 		if from1.x == to1.x: # Seam 1 is vertical
 			offset = abs(y - from1.y)
@@ -166,13 +166,13 @@ def transpose(x, y, mapping):
 
 		# transpose to seam 2
 		if from2.x == to2.x: # Seam 2 is vertical
-			print("transpose to seam 2 (vertical)")
+			prt("transpose to seam 2 (vertical)")
 			if from2.y > to2.y: 
 				return Vec2(from2.x, from2.y - offset)
 			else: 
 				return Vec2(from2.x, from2.y + offset)
 		else: # Seam 2 is horizontal
-			print("transpose to seam 2 (horizontal)")
+			prt("transpose to seam 2 (horizontal)")
 			if from2.x > to2.x: 
 				return Vec2(from2.x - offset, from2.y)
 			else: 
@@ -184,7 +184,7 @@ def transpose(x, y, mapping):
 		x <= max(from2.x, to2.x) and 
 		y >= min(from2.y, to2.y) and 
 		y <= max(from2.y, to2.y)): 
-		print("On seam 2")
+		prt("On seam 2")
 		# Get offset on seam 2
 		if from2.x == to2.x: # Seam 2 is vertical
 			offset = abs(y - from2.y)
@@ -193,20 +193,20 @@ def transpose(x, y, mapping):
 
 		# Transpose to seam 1
 		if from1.x == to1.x: # Seam 1 is vertical
-			print("transpose to seam 1 (vertical)")
+			prt("transpose to seam 1 (vertical)")
 			if from1.y > to1.y: 
 				return Vec2(from1.x, from1.y - offset)
 			else: 
 				return Vec2(from1.x, from1.y + offset)
 		else: # Seam 1 is horizontal
-			print("transpose to seam 1 (horizontal)")
+			prt("transpose to seam 1 (horizontal)")
 			if from1.x > to1.x: 
 				return Vec2(from1.x - offset, from1.y)
 			else: 
 				return Vec2(from1.x + offset, from1.y)
 
 	else: 
-		print("Something's fucky")
+		prt("Something's fucky")
 
 def move_horizontal(dist): 
 	step = 1 if dist > 0 else -1
@@ -230,11 +230,11 @@ def move_horizontal(dist):
 			if movement in transpose_mapping.keys(): 
 				temp_pos = deepcopy(valid_pos)
 				trail.append([valid_pos.x, valid_pos.y, facing])
-				print("move_horizontal:", temp_pos, valid_pos, movement)
+				prt("move_horizontal:", temp_pos, valid_pos, movement)
 				# Transpose
 				mapping = transpose_mapping[movement][1]
 				temp_pos = transpose(valid_pos.x, valid_pos.y, mapping)
-				print("temp_pos:", temp_pos)
+				prt("temp_pos:", temp_pos)
 
 				if temp_pos == None: 
 					draw_board()
@@ -247,8 +247,8 @@ def move_horizontal(dist):
 					path.insert(0, abs(dist) - distance_moved)
 					for r in rotation: 
 						path.insert(0, r)
-					print("safe move", path[0:len(rotation) + 1])
-					print("—————")
+					prt("safe move", path[0:len(rotation) + 1])
+					prt("—————")
 					return temp_pos
 		face = face2
 
@@ -287,11 +287,11 @@ def move_vertical(dist):
 			if movement in transpose_mapping.keys(): 
 				temp_pos = deepcopy(valid_pos)
 				trail.append([valid_pos.x, valid_pos.y, facing])
-				print("move_vertical:", temp_pos, valid_pos, movement)
+				prt("move_vertical:", temp_pos, valid_pos, movement)
 				# Transpose
 				mapping = transpose_mapping[movement][1]
 				temp_pos = transpose(valid_pos.x, valid_pos.y, mapping)
-				print("temp_pos:", temp_pos)
+				prt("temp_pos:", temp_pos)
 
 				if temp_pos == None: 
 					draw_board()
@@ -304,8 +304,8 @@ def move_vertical(dist):
 					path.insert(0, abs(dist) - distance_moved)
 					for r in rotation: 
 						path.insert(0, r)
-					print("safe move", path[0:len(rotation) + 1])
-					print("—————")
+					prt("safe move", path[0:len(rotation) + 1])
+					prt("—————")
 					return temp_pos
 		face = face2
 
