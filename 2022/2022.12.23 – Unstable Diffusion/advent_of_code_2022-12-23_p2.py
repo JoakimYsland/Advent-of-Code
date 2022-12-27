@@ -55,6 +55,17 @@ def move_elf(elf, x, y):
 	elf.x = x
 	elf.y = y
 
+def get_elf_bounds(): 
+	min_x, min_y, max_x, max_y = math.inf, math.inf, 0, 0
+
+	for elf in elves: 
+		min_x = min(min_x, elf.x)
+		min_y = min(min_y, elf.y)
+		max_x = max(max_x, elf.x)
+		max_y = max(max_y, elf.y)
+
+	return min_x, min_y, max_x, max_y
+
 # Scan pattern
 neighbors = [
 	[ 0,-1], # N
@@ -95,11 +106,19 @@ for i, line in enumerate(input_file):
 			elves.append(new_elf)
 			scan[i][x] = new_elf
 
-# Rounds
-for r in range(10): 
+elf_moved = True
+rounds = 0
 
-	pad()
+while elf_moved: 
 
+	# Pad if there is no border around the scan
+	min_x, min_y, max_x, max_y = get_elf_bounds()
+	if (min_x < 1 or min_y < 1 or 
+		max_x > len(scan[0]) - 2 or 
+		max_y > len(scan) - 2): 
+		pad()
+
+	elf_moved = False
 	proposed_movement = {}
 
 	# First half of the round
@@ -124,25 +143,18 @@ for r in range(10):
 		x, y = (int(i) for i in k.split(','))
 		elf = v[0]
 		move_elf(elf, x, y)
+		elf_moved = True
 
 	# Move first arc to the back of the queue
 	arcs.insert(len(arcs), arcs.pop(0))
 
-print_scan()
+	# print("proposed_movements:", len(proposed_movement))
 
-# Calculate bounding box empty tiles
-min_x, min_y, max_x, max_y = math.inf, math.inf, 0, 0
+	# Count rounds
+	rounds += 1
 
-for elf in elves: 
-	min_x = min(min_x, elf.x)
-	min_y = min(min_y, elf.y)
-	max_x = max(max_x, elf.x)
-	max_y = max(max_y, elf.y)
-
-width = (max_x - min_x) + 1
-height = (max_y - min_y) + 1
-empty_tiles = (width * height) - len(elves)
-print("empty_tiles:", empty_tiles)
+# print_scan()
+print("rounds:", rounds)
 
 end_time_ms = round(time.time() * 1000)
 print("End time:", get_time_now())
