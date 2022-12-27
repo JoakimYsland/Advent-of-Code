@@ -92,12 +92,15 @@ def move_horizontal(dist):
 		if tile == '#': 
 			trail.append([valid_pos.x, valid_pos.y, facing])
 			return valid_pos
-		else: 
-			
-			if tile == '.': 
-				trail.append([valid_pos.x, valid_pos.y, facing])
-				valid_pos.x = temp_pos.x
-				distance_moved += 1
+		# else: 
+		# 	if tile == '.': 
+		# 		trail.append([valid_pos.x, valid_pos.y, facing])
+		# 		valid_pos.x = temp_pos.x
+		# 		distance_moved += 1
+		elif tile == '.': 
+			trail.append([valid_pos.x, valid_pos.y, facing])
+			valid_pos.x = temp_pos.x
+			distance_moved += 1
 	return valid_pos
 
 def move_vertical(dist): 
