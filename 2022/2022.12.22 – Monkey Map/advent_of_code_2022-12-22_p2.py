@@ -75,49 +75,57 @@ for end, c in enumerate(path_raw):
 def move_horizontal(dist): 
 	step = 1 if dist > 0 else -1
 	distance_moved = 0
-	x = position.x
-	valid_x = x
+	temp_pos = Vec2(position.x, position.y)
+	valid_pos = Vec2(position.x, position.y)
 	row_length = len(board[position.y])
+	face = get_face(position.x, position.y)
 
 	while distance_moved < abs(dist): 
-		x += step
-		if x >= row_length: 
-			x = 0
-		elif x < 0: 
-			x = row_length - 1
-		tile = board[position.y][x]
+		temp_pos.x += step
+		if temp_pos.x >= row_length: 
+			temp_pos.x = 0
+		elif temp_pos.x < 0: 
+			temp_pos.x = row_length - 1
+
+		tile = board[temp_pos.y][temp_pos.x]
+
 		if tile == '#': 
-			trail.append([valid_x, position.y, facing])
-			return valid_x
-		elif tile == '.': 
-			trail.append([valid_x, position.y, facing])
-			valid_x = x
-			distance_moved += 1
-	return valid_x
+			trail.append([valid_pos.x, valid_pos.y, facing])
+			return valid_pos
+		else: 
+			
+			if tile == '.': 
+				trail.append([valid_pos.x, valid_pos.y, facing])
+				valid_pos.x = temp_pos.x
+				distance_moved += 1
+	return valid_pos
 
 def move_vertical(dist): 
 	step = 1 if dist > 0 else -1
 	distance_moved = 0
-	y = position.y
-	valid_y = y
+	temp_pos = Vec2(position.x, position.y)
+	valid_pos = Vec2(position.x, position.y)
 
 	while distance_moved < abs(dist): 
-		y += step
-		if y >= len(board): 
-			y = 0
-		elif y < 0: 
-			y = len(board) - 1
-		if position.x >= len(board[y]): 
+		temp_pos.y += step
+		if temp_pos.y >= len(board): 
+			temp_pos.y = 0
+		elif temp_pos.y < 0: 
+			temp_pos.y = len(board) - 1
+
+		if temp_pos.x >= len(board[temp_pos.y]): 
 			continue # Row is not long enough
-		tile = board[y][position.x]
+
+		tile = board[temp_pos.y][temp_pos.x]
+
 		if tile == '#': 
-			trail.append([position.x, valid_y, facing])
-			return valid_y
+			trail.append([valid_pos.x, valid_pos.y, facing])
+			return valid_pos
 		elif tile == '.': 
-			trail.append([position.x, valid_y, facing])
-			valid_y = y
+			trail.append([valid_pos.x, valid_pos.y, facing])
+			valid_pos.y = temp_pos.y
 			distance_moved += 1
-	return valid_y
+	return valid_pos
 
 while len(path) > 0: 
 
@@ -125,10 +133,10 @@ while len(path) > 0:
 
 	if type(cmd) == int: 
 		dist = cmd
-		if 	 facing == 'R': position.x = move_horizontal(dist)
-		elif facing == 'D': position.y = move_vertical(dist)
-		elif facing == 'L': position.x = move_horizontal(-dist)
-		elif facing == 'U': position.y = move_vertical(-dist)
+		if 	 facing == 'R': position = move_horizontal(dist)
+		elif facing == 'D': position = move_vertical(dist)
+		elif facing == 'L': position = move_horizontal(-dist)
+		elif facing == 'U': position = move_vertical(-dist)
 	else: 
 		if 	 facing == 'R': facing = 'D' if cmd == 'R' else 'U'
 		elif facing == 'D': facing = 'L' if cmd == 'R' else 'R'
