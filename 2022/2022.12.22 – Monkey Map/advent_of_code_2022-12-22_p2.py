@@ -25,73 +25,82 @@ class Vec2:
 	def __add__(self, v): 
 		return Vec2(self.x + v.x, self.y + v.y)
 
-# ————— Test input —————
-input_file = open('test_input2.txt', 'r').readlines()
-face_mapping = {
-	"B3": [Vec2(8,4), Vec2(11,7)], 
-	"C3": [Vec2(8,0), Vec2(11,3)], 
-	"A3": [Vec2(8,8), Vec2(11,11)], 
-	"A4": [Vec2(12,8), Vec2(15,11)], 
-	"B2": [Vec2(4,4), Vec2(7,7)], 
-	"B1": [Vec2(0,4), Vec2(3,7)], 
-}
-
-transpose_mapping = {
-	"B3R": [['R'], [Vec2(11,4), Vec2(11,7), Vec2(15,8), Vec2(12,8)]], 
-	"A4U": [['L'], [Vec2(11,4), Vec2(11,7), Vec2(15,8), Vec2(12,8)]], 
-
-	"C3R": [['L', 'L'], [Vec2(11,0), Vec2(11,4), Vec2(15,11), Vec2(15,8)]], 
-	"A4R": [['R', 'R'], [Vec2(11,0), Vec2(11,4), Vec2(15,11), Vec2(15,8)]], 
-
-	"A4D": [['L'], [Vec2(12,11), Vec2(15,11), Vec2(0,7), Vec2(0,4)]], 
-	"B1L": [['R'], [Vec2(12,11), Vec2(15,11), Vec2(0,7), Vec2(0,4)]], 
-
-	"C3L": [['L'], [Vec2(8,0), Vec2(8,3), Vec2(4,4), Vec2(7,4)]], 
-	"B2U": [['R'], [Vec2(8,0), Vec2(8,3), Vec2(4,4), Vec2(7,4)]], 
-
-	"C3U": [['L', 'L'], [Vec2(8,0), Vec2(11,0), Vec2(3,4), Vec2(0,4)]], 
-	"B1U": [['R', 'R'], [Vec2(8,0), Vec2(11,0), Vec2(3,4), Vec2(0,4)]], 
-
-	"A3L": [['R'], [Vec2(8,8), Vec2(8,11), Vec2(7,7), Vec2(4,7)]], 
-	"B2D": [['L'], [Vec2(8,8), Vec2(8,11), Vec2(7,7), Vec2(4,7)]], 
-
-	"A3D": [['L', 'L'], [Vec2(8,11), Vec2(11,11), Vec2(3,7), Vec2(0,7)]], 
-	"B1D": [['R', 'R'], [Vec2(8,11), Vec2(11,11), Vec2(3,7), Vec2(0,7)]], 
-}
-
-# # ————— Real input —————
-# input_file = open('input.txt', 'r').readlines()
+# # ————— Test input —————
+# input_file = open('test_input.txt', 'r').readlines()
 # face_mapping = {
-# 	"D2": [Vec2(50,0), Vec2(99,49)], 
-# 	"D3": [Vec2(100,0), Vec2(149,49)], 
-# 	"C2": [Vec2(50,50), Vec2(99,99)], 
-# 	"B1": [Vec2(0,100), Vec2(49,149)], 
-# 	"B2": [Vec2(50,100), Vec2(99,149)], 
-# 	"A1": [Vec2(0,150), Vec2(49,199)], 
+# 	"B3": [Vec2(8,4), Vec2(11,7)], 
+# 	"C3": [Vec2(8,0), Vec2(11,3)], 
+# 	"A3": [Vec2(8,8), Vec2(11,11)], 
+# 	"A4": [Vec2(12,8), Vec2(15,11)], 
+# 	"B2": [Vec2(4,4), Vec2(7,7)], 
+# 	"B1": [Vec2(0,4), Vec2(3,7)], 
 # }
 
+# # Refer to Blender file for IDs
+# # The first list defines what sort of rotation 
+# # you need to perform after moving to the new face. 
+# # The second list defines the seams between them. 
 # transpose_mapping = {
-# 	"D2U": [['R'], [Vec2(50,0), Vec2(99,0), Vec2(0,150), Vec2(0,199)]], 
-# 	"A1L": [['L'], [Vec2(50,0), Vec2(99,0), Vec2(0,150), Vec2(0,199)]], 
+# 	"B3R": [['R'], [Vec2(11,4), Vec2(11,7), Vec2(15,8), Vec2(12,8)]], 
+# 	"A4U": [['L'], [Vec2(11,4), Vec2(11,7), Vec2(15,8), Vec2(12,8)]], 
 
-# 	"D2L": [['R', 'R'], [Vec2(50,0), Vec2(50,49), Vec2(0,149), Vec2(0,100)]], 
-# 	"B1L": [['L', 'L'], [Vec2(50,0), Vec2(50,49), Vec2(0,149), Vec2(0,100)]], 
+# 	"C3R": [['L', 'L'], [Vec2(11,0), Vec2(11,4), Vec2(15,11), Vec2(15,8)]], 
+# 	"A4R": [['R', 'R'], [Vec2(11,0), Vec2(11,4), Vec2(15,11), Vec2(15,8)]], 
 
-# 	"D3U": [[], [Vec2(100,0), Vec2(149,0), Vec2(0,199), Vec2(49,199)]], 
-# 	"A1D": [[], [Vec2(100,0), Vec2(149,0), Vec2(0,199), Vec2(49,199)]], 
+# 	"A4D": [['L'], [Vec2(12,11), Vec2(15,11), Vec2(0,7), Vec2(0,4)]], 
+# 	"B1L": [['R'], [Vec2(12,11), Vec2(15,11), Vec2(0,7), Vec2(0,4)]], 
 
-# 	"D3R": [['R', 'R'], [Vec2(149,0), Vec2(149,49), Vec2(99,149), Vec2(99,100)]], 
-# 	"B2R": [['L', 'L'], [Vec2(149,0), Vec2(149,49), Vec2(99,149), Vec2(99,100)]],
+# 	"C3L": [['L'], [Vec2(8,0), Vec2(8,3), Vec2(4,4), Vec2(7,4)]], 
+# 	"B2U": [['R'], [Vec2(8,0), Vec2(8,3), Vec2(4,4), Vec2(7,4)]], 
 
-# 	"D3D": [['R'], [Vec2(100,49), Vec2(149,49), Vec2(99,50), Vec2(99,99)]], 
-# 	"C2R": [['L'], [Vec2(100,49), Vec2(149,49), Vec2(99,50), Vec2(99,99)]], 
+# 	"C3U": [['L', 'L'], [Vec2(8,0), Vec2(11,0), Vec2(3,4), Vec2(0,4)]], 
+# 	"B1U": [['R', 'R'], [Vec2(8,0), Vec2(11,0), Vec2(3,4), Vec2(0,4)]], 
 
-# 	"C2L": [['L'], [Vec2(50,50), Vec2(50,99), Vec2(0,100), Vec2(49,100)]], 
-# 	"B1U": [['R'], [Vec2(50,50), Vec2(50,99), Vec2(0,100), Vec2(49,100)]], 
+# 	"A3L": [['R'], [Vec2(8,8), Vec2(8,11), Vec2(7,7), Vec2(4,7)]], 
+# 	"B2D": [['L'], [Vec2(8,8), Vec2(8,11), Vec2(7,7), Vec2(4,7)]], 
 
-# 	"B2D": [['R'], [Vec2(50,149), Vec2(99,149), Vec2(49,150), Vec2(49,199)]], 
-# 	"A1R": [['L'], [Vec2(50,149), Vec2(99,149), Vec2(49,150), Vec2(49,199)]], 
+# 	"A3D": [['L', 'L'], [Vec2(8,11), Vec2(11,11), Vec2(3,7), Vec2(0,7)]], 
+# 	"B1D": [['R', 'R'], [Vec2(8,11), Vec2(11,11), Vec2(3,7), Vec2(0,7)]], 
 # }
+
+
+# ————— Real input —————
+input_file = open('input.txt', 'r').readlines()
+face_mapping = {
+	"D2": [Vec2(50,0), Vec2(99,49)], 
+	"D3": [Vec2(100,0), Vec2(149,49)], 
+	"C2": [Vec2(50,50), Vec2(99,99)], 
+	"B1": [Vec2(0,100), Vec2(49,149)], 
+	"B2": [Vec2(50,100), Vec2(99,149)], 
+	"A1": [Vec2(0,150), Vec2(49,199)], 
+}
+
+# Refer to Blender file for IDs
+# The first list defines what sort of rotation 
+# you need to perform after moving to the new face. 
+# The second list defines the seams between them. 
+transpose_mapping = {
+	"D2U": [['R'], [Vec2(50,0), Vec2(99,0), Vec2(0,150), Vec2(0,199)]], 
+	"A1L": [['L'], [Vec2(50,0), Vec2(99,0), Vec2(0,150), Vec2(0,199)]], 
+
+	"D2L": [['R', 'R'], [Vec2(50,0), Vec2(50,49), Vec2(0,149), Vec2(0,100)]], 
+	"B1L": [['L', 'L'], [Vec2(50,0), Vec2(50,49), Vec2(0,149), Vec2(0,100)]], 
+
+	"D3U": [[], [Vec2(100,0), Vec2(149,0), Vec2(0,199), Vec2(49,199)]], 
+	"A1D": [[], [Vec2(100,0), Vec2(149,0), Vec2(0,199), Vec2(49,199)]], 
+
+	"D3R": [['R', 'R'], [Vec2(149,0), Vec2(149,49), Vec2(99,149), Vec2(99,100)]], 
+	"B2R": [['L', 'L'], [Vec2(149,0), Vec2(149,49), Vec2(99,149), Vec2(99,100)]],
+
+	"D3D": [['R'], [Vec2(100,49), Vec2(149,49), Vec2(99,50), Vec2(99,99)]], 
+	"C2R": [['L'], [Vec2(100,49), Vec2(149,49), Vec2(99,50), Vec2(99,99)]], 
+
+	"C2L": [['L'], [Vec2(50,50), Vec2(50,99), Vec2(0,100), Vec2(49,100)]], 
+	"B1U": [['R'], [Vec2(50,50), Vec2(50,99), Vec2(0,100), Vec2(49,100)]], 
+
+	"B2D": [['R'], [Vec2(50,149), Vec2(99,149), Vec2(49,150), Vec2(49,199)]], 
+	"A1R": [['L'], [Vec2(50,149), Vec2(99,149), Vec2(49,150), Vec2(49,199)]], 
+}
 
 start_time_ms = round(time.time() * 1000)
 print("Start time:", get_time_now())
@@ -132,7 +141,7 @@ for end, c in enumerate(path_raw):
 		start = end + 1
 		path.append(int(number))
 		path.append(c)
-		
+
 # Catch the last number
 if start < len(path_raw): 
 	path.append(int(path_raw[start:]))
@@ -145,6 +154,7 @@ def get_face(x, y):
 			y >= face_min.y and
 			y <= face_max.y): 
 			return k
+	return None
 
 def transpose(x, y, mapping): 
 
@@ -219,10 +229,6 @@ def move_horizontal(dist):
 
 	while distance_moved < abs(dist): 
 		temp_pos.x += step
-		if temp_pos.x >= row_length: 
-			temp_pos.x = 0
-		elif temp_pos.x < 0: 
-			temp_pos.x = row_length - 1
 
 		# Moved to a new face
 		face2 = get_face(temp_pos.x, temp_pos.y)
@@ -251,7 +257,7 @@ def move_horizontal(dist):
 					prt("safe move", path[0:len(rotation) + 1])
 					prt("—————")
 					return temp_pos
-		face = face2
+		face = get_face(valid_pos.x, valid_pos.y)
 
 		tile = board[temp_pos.y][temp_pos.x]
 
@@ -274,13 +280,6 @@ def move_vertical(dist):
 
 	while distance_moved < abs(dist): 
 		temp_pos.y += step
-		if temp_pos.y >= len(board): 
-			temp_pos.y = 0
-		elif temp_pos.y < 0: 
-			temp_pos.y = len(board) - 1
-
-		if temp_pos.x >= len(board[temp_pos.y]): 
-			continue # Row is not long enough
 
 		# Moved to a new face
 		face2 = get_face(temp_pos.x, temp_pos.y)
@@ -309,7 +308,7 @@ def move_vertical(dist):
 					prt("safe move", path[0:len(rotation) + 1])
 					prt("—————")
 					return temp_pos
-		face = face2
+		face = get_face(valid_pos.x, valid_pos.y)
 
 		tile = board[temp_pos.y][temp_pos.x]
 
@@ -368,7 +367,6 @@ elif facing == 'U': f = 3
 
 password = r+c+f
 print("password:", password)
-# 135099 => Too high
 
 end_time_ms = round(time.time() * 1000)
 print("End time:", get_time_now())
