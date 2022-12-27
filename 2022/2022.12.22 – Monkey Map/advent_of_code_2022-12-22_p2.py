@@ -132,10 +132,10 @@ for end, c in enumerate(path_raw):
 		start = end + 1
 		path.append(int(number))
 		path.append(c)
-
-	# Catch the last number
-	if end == len(path_raw) - 1: 
-		path.append(int(number))
+		
+# Catch the last number
+if start < len(path_raw): 
+	path.append(int(path_raw[start:]))
 
 def get_face(x, y): 
 	for k, v in face_mapping.items(): 
@@ -209,6 +209,7 @@ def transpose(x, y, mapping):
 		prt("Something's fucky")
 
 def move_horizontal(dist): 
+	
 	step = 1 if dist > 0 else -1
 	distance_moved = 0
 	temp_pos = Vec2(position.x, position.y)
@@ -264,6 +265,7 @@ def move_horizontal(dist):
 	return valid_pos
 
 def move_vertical(dist): 
+	
 	step = 1 if dist > 0 else -1
 	distance_moved = 0
 	temp_pos = Vec2(position.x, position.y)
