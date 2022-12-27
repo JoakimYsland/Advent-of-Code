@@ -24,7 +24,7 @@ class Monkey:
 		self.get_math_operation = None
 	def get_value(self): 
 		if self.base_value != None: 
-			return self.base_value
+			return int(self.base_value)
 		else: 
 			return int(self.get_math_operation())
 	def get_ref_values(self): 
@@ -79,8 +79,25 @@ for i, line in enumerate(input_file):
 		elif line[2] == '/': 
 			new_monkey.get_math_operation = new_monkey.get_math_div
 
-riddle_answer = monkeys["root"].get_value()
-print("riddle_answer:", riddle_answer)
+def get_root_diff(): 
+	root_v1, root_v2 = monkeys["root"].get_ref_values()
+	return root_v1 - root_v2
+
+# Brute force baby
+print("————— Brute force —————")
+n = 10000000000000
+humn = monkeys["humn"]
+humn.base_value = n
+while get_root_diff() != 0: 
+	if get_root_diff() < 0: # To high
+		humn.base_value -= n / 10
+		if get_root_diff() > 0: # If we are now too low, we have found a digit
+			n /= 10
+	elif get_root_diff() > 0: # Too low
+		humn.base_value += n
+		print(int(humn.base_value))
+print("————— Done! —————")
+print("humn for root equality check:", int(humn.base_value))
 
 end_time_ms = round(time.time() * 1000)
 print("End time:", get_time_now())
